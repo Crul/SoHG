@@ -301,3 +301,6 @@ __pycache__/
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
+
+# Kronnect Grids2D propietary code
+Assets/Lib/Grids2D/
