@@ -1,6 +1,6 @@
 ﻿using Sohg.CrossCutting;
 using Sohg.CrossCutting.Factories;
-using Sohg.Grids2D.Contracts;
+using Sohg.GameAgg.Contracts;
 using UnityEngine;
 
 namespace Sohg.GameAgg
@@ -9,12 +9,17 @@ namespace Sohg.GameAgg
     {
         public SohgFactoryScript sohgFactory;
         public Canvas BoardCanvas;
-        
-        private IGrid grid;
 
+        private IRunnableGame gameEngine;
+
+        public void Awake()
+        {
+            sohgFactory.SetCanvas(BoardCanvas);
+        }
+        
         public void Start()
         {
-            grid = sohgFactory.CreateGrid(BoardCanvas);
+            gameEngine = sohgFactory.CreateGameEngine();
         }
     }
 }
