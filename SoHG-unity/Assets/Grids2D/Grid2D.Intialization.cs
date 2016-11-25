@@ -2,6 +2,7 @@
 using Sohg.Grids2D.Contracts;
 using System.Linq;
 using UnityEngine;
+using System;
 
 namespace Grids2D
 {
@@ -10,6 +11,11 @@ namespace Grids2D
         public int TerritoryCount
         {
             get { return territories.Count; }
+        }
+
+        public void AddOnCellClick(Action<ICell> onCellClick)
+        {
+            OnCellClick += cellIndex => onCellClick(cells[cellIndex]);
         }
 
         public void InitializeBoard(ISohgFactory sohgFactory)

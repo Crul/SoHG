@@ -22,5 +22,10 @@ namespace Sohg.GameAgg
             gameEngine = sohgFactory.CreateGameEngine();
             gameEngine.Start();
         }
+
+        public void FixedUpdate()
+        {
+            gameEngine.FixedUpdate();
+        }
     }
 }

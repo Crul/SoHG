@@ -25,7 +25,7 @@ namespace Grids2D
         public void Initialize(int cellIndex)
         {
             CellIndex = cellIndex;
-            cellType = (visible ? CellType.Sea : CellType.TerritoryUnassigned);
+            cellType = (visible ? CellType.TerritoryUnassigned : CellType.Sea);
             visible = true;
         }
 
