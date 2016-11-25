@@ -20,6 +20,16 @@ namespace Sohg.CrossCutting.Factories
             return new GameEngine(this, grid);
         }
 
+        public ITerritory CreateTerritory()
+        {
+            var grid = GetGrid();
+            var territoryIndex = grid.TerritoryCount;
+            var territory = new Territory(territoryIndex);
+            grid.AddTerritory(territory);
+
+            return territory;
+        }
+
         public void SetCanvas(Canvas boardCanvas)
         {
             this.boardCanvas = boardCanvas;

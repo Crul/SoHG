@@ -20,6 +20,7 @@ namespace Sohg.GameAgg
         public void Start()
         {
             gameEngine = sohgFactory.CreateGameEngine();
+            gameEngine.Start();
         }
     }
 }
