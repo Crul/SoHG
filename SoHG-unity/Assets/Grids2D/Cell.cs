@@ -1,5 +1,4 @@
 ﻿using Sohg.Grids2D.Contracts;
-using UnityEngine;
 
 namespace Grids2D
 {
@@ -8,13 +7,24 @@ namespace Grids2D
         Undefined,
         Sea,
         TerritoryUnassigned,
-        TerritoryAssigned
+        SocietyUnassigned,
+        SocietyAssigned
     }
 
     public partial class Cell : ICell
     {
         public int CellIndex { get; private set; }
-        
+
+        public bool IsSocietyAssigned
+        {
+            get { return cellType == CellType.SocietyAssigned; }
+        }
+
+        public bool IsSocietyUnassigned
+        {
+            get { return cellType == CellType.SocietyUnassigned; }
+        }
+
         public bool IsTerritoryUnassigned
         {
             get { return cellType == CellType.TerritoryUnassigned; }
@@ -29,10 +39,14 @@ namespace Grids2D
             visible = true;
         }
 
+        public void SetSocietyAssigned()
+        {
+            cellType = CellType.SocietyAssigned;
+        }
+
         public void SetTerritoryAssigned()
         {
-            cellType = CellType.TerritoryAssigned;
+            cellType = CellType.SocietyUnassigned;
         }
-        
     }
 }

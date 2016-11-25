@@ -17,7 +17,10 @@ namespace Sohg.GameAgg.Stages
 
         private void SetStartPoints(ISelectStartPlayable game, ICell cell)
         {
-            // TODO SetStartPoints
+            if (cell.IsSocietyUnassigned)
+            {
+                game.CreateSocieties(cell);
+            }
         }
     }
 }
