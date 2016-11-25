@@ -1,4 +1,4 @@
-﻿using Sohg.CrossCutting.Factories.Contracts;
+﻿using Sohg.CrossCutting.Contracts;
 using Sohg.Grids2D.Contracts;
 using System.Linq;
 using UnityEngine;

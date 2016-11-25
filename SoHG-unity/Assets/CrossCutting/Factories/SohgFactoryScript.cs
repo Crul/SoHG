@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using Sohg.CrossCutting.Factories.Contracts;
+using Sohg.CrossCutting.Contracts;
 using Sohg.Grids2D.Contracts;
 using Sohg.GameAgg.Contracts;
 using Grids2D;

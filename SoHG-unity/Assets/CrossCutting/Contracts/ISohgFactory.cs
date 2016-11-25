@@ -2,7 +2,7 @@ using Sohg.GameAgg.Contracts;
 using Sohg.Grids2D.Contracts;
 using UnityEngine;
 
-namespace Sohg.CrossCutting.Factories.Contracts
+namespace Sohg.CrossCutting.Contracts
 {
     public interface ISohgFactory
     {

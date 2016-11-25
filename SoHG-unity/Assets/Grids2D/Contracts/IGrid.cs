@@ -1,4 +1,4 @@
-﻿using Sohg.CrossCutting.Factories.Contracts;
+﻿using Sohg.CrossCutting.Contracts;
 using System;
 
 namespace Sohg.Grids2D.Contracts
