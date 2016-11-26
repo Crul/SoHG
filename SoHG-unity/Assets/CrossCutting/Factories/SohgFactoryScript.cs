@@ -28,10 +28,10 @@ namespace Sohg.CrossCutting.Factories
         public IRunnableGame CreateGameEngine()
         {
             var grid = GetGrid();
-            PrefabFactory.InstantiateGrid(boardCanvas);
 
             return new GameEngine(this, grid, GameDefinition);
         }
+
         public ITerritory CreateTerritory(params ICell[] cells)
         {
             var grid = GetGrid();
