@@ -35,6 +35,7 @@ namespace Grids2D
         public Dictionary<ICell, ICell> GetInvadableCells(ITerritory territory1, ITerritory territory2)
         {
             return ((Territory)territory1).cells
+                .Where(cell => !cell.IsInvolvedInAttack)
                 .Select(cell => new
                 {
                     Cell = cell,
@@ -110,7 +111,9 @@ namespace Grids2D
 
         private bool IsCellOfTerritoryInvadable(Cell cell, ITerritory territory)
         {
-            return cell.CanBeInvaded && cell.territoryIndex == territory.TerritoryIndex;
+            return cell.CanBeInvaded 
+                && !cell.IsInvolvedInAttack
+                && cell.territoryIndex == territory.TerritoryIndex;
         }
 
         private void AddNeighbour(Cell[] cellList,

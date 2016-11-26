@@ -34,7 +34,7 @@ namespace Sohg.SocietyAgg.UI
             OnExit();
         }
 
-        public void FixedUpdate()
+        public void Update()
         {
             var isActive = (gameObject.activeSelf && society != null);
             if (isActive)

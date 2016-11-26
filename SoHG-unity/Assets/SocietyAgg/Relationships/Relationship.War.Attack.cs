@@ -21,8 +21,6 @@ namespace Sohg.SocietyAgg.Relationships
 
         private void Attack(IWarPlayable game)
         {
-            Debug.Log(string.Format("{0} attacking {1}", We.Name, Them.Name));
-
             var attackableCells = game.GetAttackableCells(this);
             var attacksAvailables = (We.State.MaximumAttacks - currentAttacks);
             if (attackableCells.Count > attacksAvailables)
@@ -31,9 +29,12 @@ namespace Sohg.SocietyAgg.Relationships
                     .ToDictionary(x => x.Key, x => x.Value);
             }
             
-            attackableCells.ToList()
-                .ForEach(cells =>
-                    game.CreateFight(cells.Key, cells.Value, () => ResolveAttack(game, cells.Key, cells.Value)));
+            attackableCells.ToList().ForEach(cells =>
+                {
+                    cells.Key.IsInvolvedInAttack = true;
+                    cells.Value.IsInvolvedInAttack = true;
+                    game.CreateFight(cells.Key, cells.Value, () => ResolveAttack(game, cells.Key, cells.Value));
+                });
 
             currentAttacks += attackableCells.Count;
         }
@@ -62,6 +63,8 @@ namespace Sohg.SocietyAgg.Relationships
             // TODO update stats on fight
 
             currentAttacks--;
+            from.IsInvolvedInAttack = false;
+            target.IsInvolvedInAttack = false;
         }
 
         private AttackResult GetResult(float damageRate, float attackDamageTieRateTheshold)

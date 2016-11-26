@@ -18,6 +18,7 @@ namespace Grids2D
         public int CellIndex { get; private set; }
         public Vector3 WorldPosition { get; private set; }
         public bool CanBeInvaded { get; set; }
+        public bool IsInvolvedInAttack { get; set; }
 
         public bool IsSocietyAssigned
         {
