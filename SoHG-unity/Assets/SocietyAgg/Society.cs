@@ -3,6 +3,7 @@ using Sohg.Grids2D.Contracts;
 using Sohg.SocietyAgg.Contracts;
 using UnityEngine;
 using Sohg.CrossCutting.Contracts;
+using System.Linq;
 
 namespace Sohg.SocietyAgg
 {
@@ -32,6 +33,12 @@ namespace Sohg.SocietyAgg
         {
             var newRelationship = sohgFactory.CreateRelationship(this, otherSociety);
             relationships.Add(newRelationship);
+        }
+
+        public void RemoveRelationship(ISociety society)
+        {
+            var relationshipToRemove = relationships.Single(relationship => relationship.Them == society);
+            relationships.Remove(relationshipToRemove);
         }
 
         public void SetNeighbours(List<ISociety> neighbourSocieties)

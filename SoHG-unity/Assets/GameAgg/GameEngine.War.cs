@@ -3,6 +3,8 @@ using Sohg.GameAgg.Contracts;
 using Sohg.Grids2D.Contracts;
 using Sohg.SocietyAgg.Relationships;
 using System;
+using Sohg.SocietyAgg.Contracts;
+using System.Linq;
 
 namespace Sohg.GameAgg
 {
@@ -36,7 +38,17 @@ namespace Sohg.GameAgg
             var invadedTerritory = grid.GetTerritory(target);
             if (invadedTerritory.CellCount == 0)
             {
+                KillSociety(invadedTerritory.Society);
             }
+        }
+
+        private void KillSociety(ISociety deathSociety)
+        {
+            Societies // remove relationships first to prevent pointing to removed societies
+                .Where(society => society != deathSociety).ToList()
+                .ForEach(society => society.RemoveRelationship(deathSociety));
+
+            Societies.Remove(deathSociety);
         }
     }
 }

@@ -13,6 +13,7 @@ namespace Sohg.SocietyAgg.Contracts
         Color Color { get; }
 
         void AddRelationship(ISociety society);
+        void RemoveRelationship(ISociety deathSociety);
         void SetNeighbours(List<ISociety> neighbourSocieties);
 
         void Initialize();
