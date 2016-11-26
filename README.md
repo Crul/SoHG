@@ -4,6 +4,12 @@ An (almost) open source videogame.
 
 Work in progress...
 
+
+## Creative Commons content
+
+- [Pointing hand cursor vector](https://commons.wikimedia.org/wiki/File:Pointing_hand_cursor_vector.svg)
+
+
 ## Dependencies
 
 - **[Unity3D 5.4.3f1](http://unity3d.com/)**
