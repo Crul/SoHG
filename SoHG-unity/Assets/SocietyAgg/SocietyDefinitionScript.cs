@@ -13,8 +13,11 @@ namespace Sohg.SocietyAgg
         private string societyName;
         [SerializeField]
         private SpeciesDefinitionScript species;
+        [SerializeField]
+        private Color color;
 
         public string Name { get { return societyName; } }
         public ISpeciesDefinition Species { get { return species; } }
+        public Color Color { get { return color; } }
     }
 }

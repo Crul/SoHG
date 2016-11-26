@@ -1,5 +1,8 @@
-﻿using Sohg.Grids2D.Contracts;
+﻿using System;
+using Sohg.Grids2D.Contracts;
 using Sohg.SocietyAgg.Contracts;
+using UnityEngine;
+using System.Linq;
 
 namespace Grids2D
 {
@@ -12,6 +15,15 @@ namespace Grids2D
             : this(territoryIndex.ToString())
         {
             TerritoryIndex = territoryIndex;
+        }
+
+        public Vector2 GetCenter()
+        {
+            return new Vector2
+            (
+                cells.Sum(cell => cell.WorldPosition.x) / cells.Count,
+                cells.Sum(cell => cell.WorldPosition.y) / cells.Count
+            );
         }
 
         public void SetSociety(ISociety society)

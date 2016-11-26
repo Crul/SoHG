@@ -68,10 +68,12 @@ namespace Sohg.CrossCutting.Factories
                 };
             }
 
-
             var territory = CreateTerritory(cells);
             var society = new Society(societyDefinition, territory);
             territory.SetSociety(society);
+
+            var societyMarker = PrefabFactory.InstantiateSocietyMarker(boardCanvas, society.Name);
+            societyMarker.Initialize(society);
 
             cells.ToList().ForEach(cell => cell.SetSocietyAssigned());
 

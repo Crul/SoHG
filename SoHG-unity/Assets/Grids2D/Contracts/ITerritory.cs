@@ -1,4 +1,5 @@
 ﻿using Sohg.SocietyAgg.Contracts;
+using UnityEngine;
 
 namespace Sohg.Grids2D.Contracts
 {
@@ -7,6 +8,7 @@ namespace Sohg.Grids2D.Contracts
         int TerritoryIndex { get; }
         ISociety Society { get; }
 
+        Vector2 GetCenter();
         void SetSociety(ISociety society);
     }
 }

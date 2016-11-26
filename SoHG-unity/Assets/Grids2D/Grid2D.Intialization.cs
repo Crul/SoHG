@@ -54,7 +54,8 @@ namespace Grids2D
 
         private void InitializeCell(int cellIndex)
         {
-            cells[cellIndex].Initialize(cellIndex);
+            var cellWorldPosition = CellGetPosition(cellIndex);
+            cells[cellIndex].Initialize(cellIndex, cellWorldPosition);
             CellToggleRegionSurface(cellIndex, true, canvasTexture);
         }
     }

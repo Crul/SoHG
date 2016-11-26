@@ -46,7 +46,14 @@ namespace Grids2D
 
         private void TexturizeTerritory(int territoryIndex)
         {
-            var color = new Color(1, 1, 1, 0.3f);
+            var color = new Color(1, 1, 1);
+            var society = territories[territoryIndex].Society;
+            if (society != null)
+            {
+                color = society.Color;
+            }
+            color.a = 0.2f;
+
             TerritoryToggleRegionSurface(territoryIndex, true, color, false, null);
         }
     }

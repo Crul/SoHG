@@ -1,4 +1,5 @@
 ﻿using Sohg.SpeciesAgg.Contracts;
+using UnityEngine;
 
 namespace Sohg.SocietyAgg.Contracts
 {
@@ -6,5 +7,6 @@ namespace Sohg.SocietyAgg.Contracts
     {
         string Name { get; }
         ISpeciesDefinition Species { get; }
+        Color Color { get; }
     }
 }
