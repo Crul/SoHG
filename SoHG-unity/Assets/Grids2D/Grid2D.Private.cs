@@ -37,24 +37,5 @@ namespace Grids2D
         {
             canvasTexture = Resources.Load<Texture2D>(texturePath);
         }
-
-        private void RedrawTerritories()
-        {
-            Redraw();
-            GetTerritoryIndexRange().ForEach(territoryIndex => TexturizeTerritory(territoryIndex));
-        }
-
-        private void TexturizeTerritory(int territoryIndex)
-        {
-            var color = new Color(1, 1, 1);
-            var society = territories[territoryIndex].Society;
-            if (society != null)
-            {
-                color = society.Color;
-            }
-            color.a = 0.2f;
-
-            TerritoryToggleRegionSurface(territoryIndex, true, color, false, null);
-        }
     }
 }

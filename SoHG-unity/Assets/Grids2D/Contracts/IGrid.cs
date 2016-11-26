@@ -7,11 +7,10 @@ namespace Sohg.Grids2D.Contracts
     {
         int TerritoryCount { get; }
 
+        void AddOnCellClick(Action<ICell> onCellClick);
         void AddTerritory(ITerritory territory, params ICell[] cells);
         ICell GetRandomCell(Func<ICell, bool> cellFilter);
-
-        void AddOnCellClick(Action<ICell> onCellClick);
-        void InitializeBoard(ISohgFactory sohgFactory);
         void ExpandSocietiesTerritories();
+        void InitializeBoard(ISohgFactory sohgFactory);
     }
 }

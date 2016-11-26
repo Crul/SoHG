@@ -20,6 +20,7 @@ namespace Sohg.GameAgg.Stages
             if (cell.IsSocietyUnassigned)
             {
                 game.CreateSocieties(cell);
+                game.NextStage();
             }
         }
     }

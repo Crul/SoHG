@@ -10,7 +10,7 @@ namespace Sohg.GameAgg
 
         public void Start()
         {
-            grid.InitializeBoard(sohgFactory);
+            grid.InitializeBoard(SohgFactory);
             currentStageIndex = -1;
             NextStage();
         }
@@ -25,19 +25,6 @@ namespace Sohg.GameAgg
         {
             if (currentStage != null)
                 currentStage.OnCellClick(cell);
-        }
-
-        private void NextStage()
-        {
-            currentStageIndex++;
-            if (currentStageIndex >= gameDefinition.Stages.Length)
-            {
-                throw new System.Exception("GameEngine.NextStage() - Not enough stages");
-            }
-
-            currentStage = gameDefinition.Stages[currentStageIndex];
-            currentStage.SetGame(this);
-            currentStage.Start();
         }
     }
 }

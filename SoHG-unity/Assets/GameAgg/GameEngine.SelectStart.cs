@@ -1,7 +1,6 @@
 ﻿using Sohg.GameAgg.Contracts;
 using Sohg.Grids2D.Contracts;
 using Sohg.SocietyAgg.Contracts;
-using System.Linq;
 using System.Collections.Generic;
 
 namespace Sohg.GameAgg
@@ -10,21 +9,23 @@ namespace Sohg.GameAgg
     {
         public void CreateSocieties(ICell humanInitialCell)
         {
-            societies = new List<ISociety>();
+            Societies = new List<ISociety>();
 
             CreateSociety(gameDefinition.PlayerSociety, humanInitialCell);
-            for (var i = 0; i < sohgFactory.Config.NonPlayerSocietyCount; i++)
+            for (var i = 0; i < SohgFactory.Config.NonPlayerSocietyCount; i++)
             {
                 CreateSociety(gameDefinition.NonPlayerSociety);
             }
 
             grid.ExpandSocietiesTerritories();
+
+            Societies.ForEach(society => society.Initialize());
         }
         
         private void CreateSociety(ISocietyDefinition societyDefinition, params ICell[] initialCells)
         {
-            var newSociety = sohgFactory.CreateSociety(societyDefinition, initialCells);
-            societies.Add(newSociety);
+            var newSociety = SohgFactory.CreateSociety(this, societyDefinition, initialCells);
+            Societies.Add(newSociety);
         }
     }
 }

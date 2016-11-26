@@ -8,5 +8,8 @@ namespace Sohg.SocietyAgg.Contracts
         string Name { get; }
         ISpeciesDefinition Species { get; }
         Color Color { get; }
+
+        float InitialAggressivityRate { get; }
+        float InitialTechnologyLevelRate { get; }
     }
 }

@@ -1,26 +1,33 @@
-﻿using Sohg.CrossCutting.Contracts;
+﻿using Sohg.CrossCutting;
+using Sohg.CrossCutting.Contracts;
+using Sohg.CrossCutting.Factories;
 using Sohg.GameAgg.Contracts;
 using Sohg.Grids2D.Contracts;
 using Sohg.SocietyAgg.Contracts;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Sohg.GameAgg
 {
-    public partial class GameEngine
+    [DisallowMultipleComponent]
+    public partial class GameEngine : BaseComponent
     {
+        [SerializeField]
+        private SohgFactoryScript sohgFactory;
+        [SerializeField]
+        private Canvas boardCanvas;
+
+        public List<ISociety> Societies { get; private set; }
+        public ISohgFactory SohgFactory { get { return sohgFactory; } }
+
         private IGameDefinition gameDefinition;
         private IGrid grid;
-        private ISohgFactory sohgFactory;
-
-        private List<ISociety> societies;
-
-        public GameEngine(ISohgFactory sohgFactory,
-            IGrid grid, IGameDefinition gameDefinition)
+        
+        public void Awake()
         {
-            this.gameDefinition = gameDefinition;
-            this.grid = grid;
-            this.sohgFactory = sohgFactory;
-
+            SohgFactory.SetCanvas(boardCanvas);
+            gameDefinition = SohgFactory.GameDefinition;
+            grid = SohgFactory.GetGrid();
             grid.AddOnCellClick(cell => OnGridCellClick(cell));
         }
     }

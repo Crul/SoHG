@@ -7,6 +7,7 @@ namespace Sohg.Grids2D.Contracts
     {
         int TerritoryIndex { get; }
         ISociety Society { get; }
+        int CellCount { get; }
 
         Vector2 GetCenter();
         void SetSociety(ISociety society);
