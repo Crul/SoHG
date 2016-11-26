@@ -1,4 +1,6 @@
-﻿using Sohg.SocietyAgg.Contracts;
+﻿using System;
+using Sohg.SocietyAgg.Contracts;
+using Sohg.CrossCutting.Contracts;
 
 namespace Sohg.SocietyAgg
 {
@@ -14,9 +16,14 @@ namespace Sohg.SocietyAgg
 
             public float Power
             {
-                get { return populationAmount * aggressivityRate * technologyLevelRate; }
+                get { return Math.Max(1, populationAmount * aggressivityRate * technologyLevelRate); }
             }
-            
+
+            public int MaximumAttacks
+            {
+                get { return Math.Max(1, Convert.ToInt32(Power / 10000)); } // TODO calculate MaximumAttacks
+            }
+
             public SocietyState(ISocietyDefinition definition)
             {
                 aggressivityRate = definition.InitialAggressivityRate;
@@ -28,6 +35,22 @@ namespace Sohg.SocietyAgg
             public void SetInitialPopulation(long populationAmount)
             {
                 this.populationAmount = populationAmount;
+            }
+
+            public void Kill(float damageRate)
+            {
+                // TODO Kill configuration to SohgConfig
+                float deathRate;
+                if (damageRate < 1)
+                { // we win
+                    deathRate = ((10000 - damageRate) / 10000);
+                }
+                else
+                { // we loose
+                    deathRate = 1 / ((9 + damageRate) / 10);
+                }
+
+                populationAmount = Convert.ToInt64(populationAmount * deathRate);
             }
         }
 

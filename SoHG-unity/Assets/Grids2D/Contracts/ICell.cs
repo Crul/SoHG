@@ -6,6 +6,7 @@ namespace Sohg.Grids2D.Contracts
     {
         bool IsSocietyAssigned { get; }
         bool IsSocietyUnassigned { get; }
+        int TerritoryIndex { get; }
 
         void Initialize(int cellIndex, Vector3 worldPosition);
         void SetSocietyAssigned();

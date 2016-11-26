@@ -18,6 +18,11 @@ namespace Grids2D
             OnCellClick += cellIndex => onCellClick(cells[cellIndex]);
         }
 
+        public ITerritory GetTerritory(ICell cell)
+        {
+            return territories[cell.TerritoryIndex];
+        }
+
         public void InitializeBoard(ISohgFactory sohgFactory)
         {
             gridTopology = GRID_TOPOLOGY.Hexagonal;

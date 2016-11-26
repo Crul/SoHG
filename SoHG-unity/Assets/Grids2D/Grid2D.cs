@@ -6,6 +6,8 @@ namespace Grids2D
 {
     public partial class Grid2D : IGrid
     {
+        private bool territoriesHaveChanged = false;
+
         public void AddTerritory(ITerritory territory, params ICell[] cells)
         {
             territories.Add((Territory)territory);

@@ -6,6 +6,15 @@ namespace Grids2D
 {
     public partial class Grid2D : IGrid
     {
+        public void RedrawIfChanged()
+        {
+            if (territoriesHaveChanged)
+            {
+                RedrawTerritories();
+                territoriesHaveChanged = false;
+            }
+        }
+
         private void RedrawTerritories()
         {
             Redraw();
@@ -14,6 +23,9 @@ namespace Grids2D
                 TexturizeTerritory(territoryIndex);
                 SetSocietyNeighbours(territoryIndex);
             });
+            
+            cells.Where(cell => cell.territoryIndex > -1).ToList()
+                .ForEach(cell => cell.CanBeInvaded = CanCellBeInvaded(cell));
         }
 
         private void SetSocietyNeighbours(int territoryIndex)
