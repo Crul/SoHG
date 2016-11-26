@@ -1,3 +1,4 @@
+using Sohg.Grids2D.Contracts;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,15 +12,20 @@ namespace Grids2D
             return Enumerable.Range(0, cells.Count).ToList();
         }
 
+        private Territory GetTerritory(Cell cell)
+        {
+            return territories[cell.territoryIndex];
+        }
+
         private List<int> GetTerritoryIndexRange()
         {
             return Enumerable.Range(0, territories.Count).ToList();
         }
 
-        private void SetCellTerritory(Cell cell, Territory territory)
+        private void SetCellTerritory(ICell cell, ITerritory territory)
         {
-            CellSetTerritory(cell.CellIndex, territory.TerritoryIndex);
-            territory.cells.Add(cell);
+            CellSetTerritory(((Cell)cell).CellIndex, ((Territory)territory).TerritoryIndex);
+            ((Territory)territory).cells.Add((Cell)cell);
         }
 
         private void SetMask(string maskPath)
@@ -40,7 +46,14 @@ namespace Grids2D
 
         private void TexturizeTerritory(int territoryIndex)
         {
-            var color = new Color(1, 1, 1, 0.3f);
+            var color = new Color(1, 1, 1);
+            var society = territories[territoryIndex].Society;
+            if (society != null)
+            {
+                color = society.Color;
+            }
+            color.a = 0.2f;
+
             TerritoryToggleRegionSurface(territoryIndex, true, color, false, null);
         }
     }

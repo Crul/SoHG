@@ -3,5 +3,6 @@
     public interface IRunnableGame
     {
         void Start();
+        void FixedUpdate();
     }
 }

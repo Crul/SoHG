@@ -4,6 +4,13 @@ An (almost) open source videogame.
 
 Work in progress...
 
+
+## Creative Commons content
+
+- [World Map](https://es.m.wikipedia.org/wiki/Archivo:WorldMap-A_non-Frame.png)
+- [Pointing hand cursor vector](https://commons.wikimedia.org/wiki/File:Pointing_hand_cursor_vector.svg)
+
+
 ## Dependencies
 
 - **[Unity3D 5.4.3f1](http://unity3d.com/)**

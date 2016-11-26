@@ -1,7 +1,8 @@
-﻿using Sohg.CrossCutting.Factories.Contracts;
+﻿using Sohg.CrossCutting.Contracts;
 using Sohg.Grids2D.Contracts;
 using System.Linq;
 using UnityEngine;
+using System;
 
 namespace Grids2D
 {
@@ -10,6 +11,11 @@ namespace Grids2D
         public int TerritoryCount
         {
             get { return territories.Count; }
+        }
+
+        public void AddOnCellClick(Action<ICell> onCellClick)
+        {
+            OnCellClick += cellIndex => onCellClick(cells[cellIndex]);
         }
 
         public void InitializeBoard(ISohgFactory sohgFactory)
@@ -48,7 +54,8 @@ namespace Grids2D
 
         private void InitializeCell(int cellIndex)
         {
-            cells[cellIndex].Initialize(cellIndex);
+            var cellWorldPosition = CellGetPosition(cellIndex);
+            cells[cellIndex].Initialize(cellIndex, cellWorldPosition);
             CellToggleRegionSurface(cellIndex, true, canvasTexture);
         }
     }
