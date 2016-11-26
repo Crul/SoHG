@@ -7,6 +7,7 @@ Work in progress...
 
 ## Creative Commons content
 
+- [World Map](https://es.m.wikipedia.org/wiki/Archivo:WorldMap-A_non-Frame.png)
 - [Pointing hand cursor vector](https://commons.wikimedia.org/wiki/File:Pointing_hand_cursor_vector.svg)
 
 
