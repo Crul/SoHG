@@ -1,7 +1,6 @@
 ﻿using Sohg.Grids2D.Contracts;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 using UnityEngine;
 
 namespace Grids2D
@@ -34,13 +33,16 @@ namespace Grids2D
 
         public Dictionary<ICell, ICell> GetInvadableCells(ITerritory territory1, ITerritory territory2)
         {
+            // TODO invade less connected cells first?
             return ((Territory)territory1).cells
                 .Where(cell => !cell.IsInvolvedInAttack)
                 .Select(cell => new
                 {
                     Cell = cell,
                     Neighbour = CellGetNeighbours(cell)
-                        .FirstOrDefault(neighbour => IsCellOfTerritoryInvadable(neighbour, territory2))
+                        .Where(neighbour => IsCellOfTerritoryInvadable(neighbour, territory2))
+                        .OrderBy(pair => Random.Range(0f, 1f))
+                        .FirstOrDefault()
                 })
                 .Where(pair => pair.Neighbour != null)
                 .ToDictionary(pair => (ICell)pair.Cell, pair => (ICell)pair.Neighbour);

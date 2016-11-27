@@ -9,7 +9,7 @@ namespace Sohg.GameAgg.Contracts
     {
         Dictionary<ICell, ICell> GetAttackableCells(Relationship relationship);
         void EvolveWar(int time);
-        void CreateFight(ICell from, ICell target, Action onEnd);
+        void CreateFight(ICell from, ICell target, Action resolveAttack);
         void Invade(ICell from, ICell target);
     }
 }

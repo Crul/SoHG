@@ -1,3 +1,4 @@
+using System;
 using Sohg.GameAgg.Contracts;
 using Sohg.Grids2D.Contracts;
 using Sohg.SocietyAgg;
@@ -11,6 +12,7 @@ namespace Sohg.CrossCutting.Contracts
         ISohgConfig Config { get; }
         IGameDefinition GameDefinition { get; }
 
+        void CreateFight(ICell from, ICell target, Action resolveAttack);
         IRelationship CreateRelationship(Society we, ISociety them);
         ISociety CreateSociety(IRunningGame game, ISocietyDefinition societyDefinition, ICell[] cells);
         ITerritory CreateTerritory(params ICell[] cells);

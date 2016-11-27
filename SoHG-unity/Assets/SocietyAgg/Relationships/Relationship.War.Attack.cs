@@ -1,6 +1,5 @@
 ﻿using Sohg.GameAgg.Contracts;
 using Sohg.Grids2D.Contracts;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -25,7 +24,9 @@ namespace Sohg.SocietyAgg.Relationships
             var attacksAvailables = (We.State.MaximumAttacks - currentAttacks);
             if (attackableCells.Count > attacksAvailables)
             {
-                attackableCells = attackableCells.Take(attacksAvailables)
+                attackableCells = attackableCells
+                    .OrderBy(pair => Random.Range(0f, 1f))
+                    .Take(attacksAvailables)
                     .ToDictionary(x => x.Key, x => x.Value);
             }
             
@@ -69,7 +70,7 @@ namespace Sohg.SocietyAgg.Relationships
 
         private AttackResult GetResult(float damageRate, float attackDamageTieRateTheshold)
         {
-            if (Math.Abs(1 - damageRate) < attackDamageTieRateTheshold)
+            if (System.Math.Abs(1 - damageRate) < attackDamageTieRateTheshold)
                 return AttackResult.Tie;
 
             if (damageRate > 1)

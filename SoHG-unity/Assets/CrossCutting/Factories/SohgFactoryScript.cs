@@ -27,6 +27,12 @@ namespace Sohg.CrossCutting.Factories
         public ISohgConfig Config { get { return sohgConfig; } }
         public IGameDefinition GameDefinition { get { return gameDefinition; } }
 
+        public void CreateFight(ICell from, ICell target, Action resolveAttack)
+        {
+            var fight = prefabFactory.InstantiateFight(boardCanvas, "Fight");
+            fight.Initialize(from, target, Config.FightDuration, resolveAttack);
+        }
+
         public IRelationship CreateRelationship(Society we, ISociety them)
         {
             return new Relationship(we, them);

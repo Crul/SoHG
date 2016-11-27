@@ -8,6 +8,7 @@
         int WarActionsTimeInterval { get; }
 
         float AttackDamageTieRateThreshold { get; }
+        int FightDuration { get; }
         float FriendshipRangeBottomThresholdForAttack { get; }
         float PowerBalanceThresholdForAttack { get; }
     }

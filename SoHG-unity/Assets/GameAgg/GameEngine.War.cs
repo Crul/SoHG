@@ -10,10 +10,9 @@ namespace Sohg.GameAgg
 {
     public partial class GameEngine : IWarPlayable
     {
-        public void CreateFight(ICell from, ICell target, Action onEnd)
+        public void CreateFight(ICell from, ICell target, Action resolveAttack)
         {
-            // TODO animate fight
-            onEnd();
+            SohgFactory.CreateFight(from, target, resolveAttack);
         }
 
         public void EvolveWar(int time)
