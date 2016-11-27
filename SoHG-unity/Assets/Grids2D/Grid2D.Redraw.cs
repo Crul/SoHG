@@ -57,7 +57,7 @@ namespace Grids2D
             {
                 color = society.Color;
             }
-            color.a = 0.2f;
+            color.a = 0.1f;
 
             TerritoryToggleRegionSurface(territoryIndex, true, color, false, null);
         }
