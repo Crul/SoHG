@@ -1,5 +1,6 @@
 ﻿using Sohg.CrossCutting.Contracts;
 using System;
+using System.Collections.Generic;
 
 namespace Sohg.Grids2D.Contracts
 {
@@ -7,11 +8,14 @@ namespace Sohg.Grids2D.Contracts
     {
         int TerritoryCount { get; }
 
-        void AddTerritory(ITerritory territory, params ICell[] cells);
-        ICell GetRandomCell(Func<ICell, bool> cellFilter);
-
         void AddOnCellClick(Action<ICell> onCellClick);
-        void InitializeBoard(ISohgFactory sohgFactory);
+        void AddTerritory(ITerritory territory, params ICell[] cells);
+        Dictionary<ICell, ICell> GetInvadableCells(ITerritory territory1, ITerritory territory2);
+        ICell GetRandomCell(Func<ICell, bool> cellFilter);
+        ITerritory GetTerritory(ICell cell);
         void ExpandSocietiesTerritories();
+        void InitializeBoard(ISohgFactory sohgFactory);
+        void RedrawIfChanged();
+        void InvadeTerritory(ICell from, ICell target);
     }
 }

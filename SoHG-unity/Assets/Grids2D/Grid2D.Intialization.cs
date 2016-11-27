@@ -18,6 +18,11 @@ namespace Grids2D
             OnCellClick += cellIndex => onCellClick(cells[cellIndex]);
         }
 
+        public ITerritory GetTerritory(ICell cell)
+        {
+            return territories[cell.TerritoryIndex];
+        }
+
         public void InitializeBoard(ISohgFactory sohgFactory)
         {
             gridTopology = GRID_TOPOLOGY.Hexagonal;
@@ -30,6 +35,8 @@ namespace Grids2D
             colorizeTerritories = true;
             allowTerritoriesInsideTerritories = true;
             territoryHighlightColor = new Color(1, 1, 1, 0.3f);
+            cellBorderColor = new Color(0, 0, 0, 0.1f);
+            territoryFrontiersColor = new Color(0, 0, 0, 0.3f);
 
             territories.Clear();
             SetMask("Textures/worldMask");

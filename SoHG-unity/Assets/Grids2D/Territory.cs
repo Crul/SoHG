@@ -11,6 +11,8 @@ namespace Grids2D
         public int TerritoryIndex { get; private set; }
         public ISociety Society { get; private set; }
 
+        public int CellCount { get { return cells.Count; } }
+
         public Territory(int territoryIndex)
             : this(territoryIndex.ToString())
         {

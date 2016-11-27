@@ -21,10 +21,10 @@ namespace Grids2D
                 CheckSocietiesTerritoriesExpansion(expadedCellCount, unassignedSocietyCells);
             }
 
+            RedrawTerritories();
+
             societyTerritories.SelectMany(territory => territory.cells)
                 .ToList().ForEach(cell => cell.SetSocietyAssigned());
-
-            RedrawTerritories();
 
             // highlightMode = HIGHLIGHT_MODE.Territories; // TODO ?
         }

@@ -34,11 +34,20 @@ namespace Sohg.SocietyAgg.UI
             OnExit();
         }
 
-        public void FixedUpdate()
+        public void Update()
         {
-            if (gameObject.activeSelf && society != null)
+            var isActive = (gameObject.activeSelf && society != null);
+            if (isActive)
             {
-                SetPosition(society.Territory.GetCenter());
+                var hasSocietyDied = (society.Territory.CellCount == 0);
+                if (hasSocietyDied)
+                {
+                    Destroy(gameObject);
+                }
+                else
+                {
+                    SetPosition(society.Territory.GetCenter());
+                }
             }
         }
 
