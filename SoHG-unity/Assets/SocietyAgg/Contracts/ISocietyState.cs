@@ -2,8 +2,8 @@
 {
     public interface ISocietyState
     {
-        float FriendshipRange { get; }
         int MaximumAttacks { get; }
+        long PopulationAmount { get; }
         float Power { get; }
 
         void Kill(float damageRate);

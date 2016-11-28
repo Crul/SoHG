@@ -8,5 +8,6 @@ namespace Sohg.GameAgg.Contracts
 
         ISocietyDefinition PlayerSociety { get; }
         ISocietyDefinition NonPlayerSociety { get; }
+        ISocietyAction[] SocietyActions { get; }
     }
 }

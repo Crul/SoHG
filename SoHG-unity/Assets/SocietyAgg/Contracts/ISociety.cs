@@ -12,6 +12,9 @@ namespace Sohg.SocietyAgg.Contracts
         ITerritory Territory { get; }
         Color Color { get; }
 
+        Dictionary<ISocietyAction, bool> IsActionEnabled { get; }
+        Dictionary<ISocietyAction, bool> IsEffectActive { get; }
+
         void AddRelationship(ISociety society);
         void RemoveRelationship(ISociety deathSociety);
         void SetNeighbours(List<ISociety> neighbourSocieties);
@@ -20,6 +23,5 @@ namespace Sohg.SocietyAgg.Contracts
         void Evolve(IWarPlayable game);
 
         bool ShouldWeAttack(ISociety them);
-        bool WillingToAttack();
     }
 }

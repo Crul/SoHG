@@ -1,7 +1,9 @@
-﻿namespace Sohg.SocietyAgg.Contracts
+﻿using Sohg.GameAgg.Contracts;
+
+namespace Sohg.SocietyAgg.Contracts
 {
     public interface ISocietyMarker
     {
-        void Initialize(ISociety society);
+        void Initialize(IRunningGame game, ISociety society);
     }
 }

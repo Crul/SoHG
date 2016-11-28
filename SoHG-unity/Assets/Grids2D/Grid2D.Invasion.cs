@@ -62,8 +62,6 @@ namespace Grids2D
             SetCellTerritory(target, territoryInvader);
 
             territoriesHaveChanged = true;
-
-            Debug.Log(string.Format("{0} INVADED {1}", territoryInvader.Society.Name, territoryToBeInvaded.Society.Name));
         }
 
         private bool CanCellBeInvaded(ICell cell)

@@ -9,6 +9,7 @@ using Sohg.SocietyAgg.Contracts;
 using Sohg.SocietyAgg;
 using System;
 using Sohg.SocietyAgg.Relationships;
+using Sohg.SocietyAgg.UI;
 
 namespace Sohg.CrossCutting.Factories
 {
@@ -52,8 +53,8 @@ namespace Sohg.CrossCutting.Factories
             var society = new Society(this, societyDefinition, territory);
             territory.SetSociety(society);
 
-            var societyMarker = prefabFactory.InstantiateSocietyMarker(boardCanvas, society.Name);
-            societyMarker.Initialize(society);
+            var societyMarker = prefabFactory.InstantiateSocietyMarker(boardCanvas, society.Name + "Marker");
+            societyMarker.Initialize(game, society);
 
             cells.ToList().ForEach(cell => cell.SetSocietyAssigned());
 
@@ -64,6 +65,40 @@ namespace Sohg.CrossCutting.Factories
             });
 
             return society;
+        }
+
+        public ISocietyActionButton CreateSocietyActionButton(ISocietyAction action, ISocietyInfo societyInfo)
+        {
+            var actionButton = prefabFactory.InstantiateSocietyActionButton(societyInfo.ActionsPanel, "SocietyActionButton"); // TODO SocietyActionButtonName
+            actionButton.Initialize(action, societyInfo);
+
+            return actionButton;
+        }
+
+        public ISocietyEffectIcon CreateSocietyEffectIcon(ISocietyAction action, ISocietyInfo societyInfo)
+        {
+            var effectIcon = prefabFactory.InstantiateSocietyEffectIcon(societyInfo.EffectsPanel, "SocietyEffectIcon"); // TODO SocietyActionEffect
+            effectIcon.Initialize(action, societyInfo);
+
+            return effectIcon;
+        }
+
+        public ISocietyInfo CreateSocietyInfo(IRunningGame game)
+        {
+            var societyInfo = prefabFactory.InstantiateSocietyInfo(boardCanvas, "SocietyInfo");
+            societyInfo.Initialize(game);
+
+            return societyInfo;
+        }
+
+        public ISocietyPropertyInfo CreateSocietyPropertyInfo(SocietyProperty property, SocietyInfo societyInfo)
+        {
+            var societyPropertyInfo = prefabFactory
+                .InstantiateSocietyPropertyInfo(societyInfo.PropertiesPanel, "SocietyProperty" + property.ToString());
+
+            societyPropertyInfo.Initialize(property);
+
+            return societyPropertyInfo;
         }
 
         public ITerritory CreateTerritory(params ICell[] cells)

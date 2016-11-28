@@ -6,6 +6,7 @@ using Sohg.Grids2D.Contracts;
 using Sohg.SocietyAgg.Contracts;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Sohg.GameAgg
 {
@@ -22,13 +23,18 @@ namespace Sohg.GameAgg
 
         private IGameDefinition gameDefinition;
         private IGrid grid;
+        private ISocietyInfo societyInfo;
         
         public void Awake()
         {
             SohgFactory.SetCanvas(boardCanvas);
+
             gameDefinition = SohgFactory.GameDefinition;
+
+            societyInfo = SohgFactory.CreateSocietyInfo(this);
+
             grid = SohgFactory.GetGrid();
-            grid.AddOnCellClick(cell => OnGridCellClick(cell));
+            grid.AddOnCellClick(cell => OnGridCellClick(cell)); // TODO fix non-blocking grid click
         }
     }
 }
