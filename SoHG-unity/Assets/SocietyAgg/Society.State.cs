@@ -1,6 +1,5 @@
 ﻿using System;
 using Sohg.SocietyAgg.Contracts;
-using Sohg.CrossCutting.Contracts;
 
 namespace Sohg.SocietyAgg
 {
@@ -9,14 +8,14 @@ namespace Sohg.SocietyAgg
         public struct SocietyState : ISocietyState
         {
             private float aggressivityRate;
-            private long populationAmount;
             private float technologyLevelRate;
 
             public float FriendshipRange { get; private set; }
+            public long PopulationAmount { get; private set; }
 
             public float Power
             {
-                get { return Math.Max(1, populationAmount * aggressivityRate * technologyLevelRate); }
+                get { return Math.Max(1, PopulationAmount * aggressivityRate * technologyLevelRate); }
             }
 
             public int MaximumAttacks
@@ -28,29 +27,18 @@ namespace Sohg.SocietyAgg
             {
                 aggressivityRate = definition.InitialAggressivityRate;
                 technologyLevelRate = definition.InitialTechnologyLevelRate;
-                populationAmount = 0;
+                PopulationAmount = 0;
                 FriendshipRange = 0.5f;
             }
 
             public void SetInitialPopulation(long populationAmount)
             {
-                this.populationAmount = populationAmount;
+                PopulationAmount = populationAmount;
             }
 
-            public void Kill(float damageRate)
+            public void Kill(float deathRate)
             {
-                // TODO Kill configuration to SohgConfig
-                float deathRate;
-                if (damageRate < 1)
-                { // we win
-                    deathRate = ((10000 - damageRate) / 10000);
-                }
-                else
-                { // we loose
-                    deathRate = 1 / ((9 + damageRate) / 10);
-                }
-
-                populationAmount = Convert.ToInt64(populationAmount * deathRate);
+                PopulationAmount = Convert.ToInt64(PopulationAmount * (1 - deathRate));
             }
         }
 

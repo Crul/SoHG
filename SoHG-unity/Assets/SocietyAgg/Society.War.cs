@@ -15,10 +15,5 @@ namespace Sohg.SocietyAgg
         {
             return (State.Power / them.State.Power) > config.PowerBalanceThresholdForAttack;
         }
-
-        public bool WillingToAttack()
-        {
-            return Random.Range(0, State.FriendshipRange) < config.FriendshipRangeBottomThresholdForAttack;
-        }
     }
 }

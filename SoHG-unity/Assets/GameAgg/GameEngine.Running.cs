@@ -1,9 +1,18 @@
-﻿using Sohg.GameAgg.Contracts;
+﻿using System.Collections;
+using Sohg.GameAgg.Contracts;
+using Sohg.SocietyAgg.Contracts;
 
 namespace Sohg.GameAgg
 {
     public partial class GameEngine : IRunningGame
     {
+        public IGameDefinition Definition { get { return gameDefinition; } }
+
+        public void ExecuteAction(IEnumerator actionExecution)
+        {
+            StartCoroutine(actionExecution);
+        }
+
         public bool IsPaused()
         {
             return false;
@@ -20,6 +29,11 @@ namespace Sohg.GameAgg
             currentStage = gameDefinition.Stages[currentStageIndex];
             currentStage.SetGame(this);
             currentStage.Start();
+        }
+
+        public void OpenSocietyInfo(ISociety society)
+        {
+            societyInfo.Show(society);
         }
     }
 }

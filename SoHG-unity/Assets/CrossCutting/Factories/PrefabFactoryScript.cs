@@ -12,31 +12,65 @@ namespace Sohg.CrossCutting.Factories
         // TODO instantiate prefabs into "folder objects" to avoid canvas-children-hell
 
         [SerializeField]
-        private Grid2D GridPrefab;
+        private Grid2D gridPrefab;
         [SerializeField]
-        private SocietyMarker SocietyMarkerPrefab;
+        private SocietyMarker societyMarkerPrefab;
         [SerializeField]
-        private Fight FightPrefab;
+        private SocietyInfo societyInfoPrefab;
+        [SerializeField]
+        private SocietyActionButton societyActionButtonPrefab;
+        [SerializeField]
+        private SocietyEffectIcon societyEffectIconPrefab;
+        [SerializeField]
+        private SocietyPropertyInfo societyPropertyInfoPrefab;
+        [SerializeField]
+        private Fight fightPrefab;
 
         public IGrid InstantiateGrid(Canvas canvas)
         {
-            return InstantiateInto(GridPrefab, canvas, "Grid2D");
+            return InstantiateIntoCanvas(gridPrefab, canvas, "Grid2D");
         }
 
         public ISocietyMarker InstantiateSocietyMarker(Canvas canvas, string name)
         {
-            return InstantiateInto(SocietyMarkerPrefab, canvas, name);
+            return InstantiateIntoCanvas(societyMarkerPrefab, canvas, name);
         }
 
         public IFight InstantiateFight(Canvas canvas, string name)
         {
-            return InstantiateInto(FightPrefab, canvas, name);
+            return InstantiateIntoCanvas(fightPrefab, canvas, name);
         }
 
-        private T InstantiateInto<T>(T original, Canvas canvas, string name = "")
+        public ISocietyInfo InstantiateSocietyInfo(Canvas canvas, string name)
+        {
+            return InstantiateIntoCanvas(societyInfoPrefab, canvas, name);
+        }
+
+        public ISocietyActionButton InstantiateSocietyActionButton(GameObject gameObject, string name)
+        {
+            return InstantiateInto(societyActionButtonPrefab, gameObject, name);
+        }
+
+        public ISocietyEffectIcon InstantiateSocietyEffectIcon(GameObject gameObject, string name)
+        {
+            return InstantiateInto(societyEffectIconPrefab, gameObject, name);
+        }
+
+        public ISocietyPropertyInfo InstantiateSocietyPropertyInfo(GameObject gameObject, string name)
+        {
+            return InstantiateInto(societyPropertyInfoPrefab, gameObject, name);
+        }
+
+        private T InstantiateIntoCanvas<T>(T original, Canvas canvas, string name = "")
             where T : Component
         {
-            var newGameObject = (T)Instantiate(original, canvas.transform);
+            return InstantiateInto(original, canvas.gameObject, name);
+        }
+
+        private T InstantiateInto<T>(T original, GameObject gameObject, string name = "")
+            where T : Component
+        {
+            var newGameObject = (T)Instantiate(original, gameObject.transform);
             if (!string.IsNullOrEmpty(name))
             {
                 newGameObject.name = name;

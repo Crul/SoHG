@@ -11,7 +11,7 @@ namespace Sohg.SocietyAgg.Relationships
                 return;
             }
             
-            if (We.WillingToAttack())
+            if (WillingToAttack(game))
             {
                 if (We.ShouldWeAttack(Them))
                 {

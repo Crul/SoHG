@@ -1,29 +1,30 @@
 ﻿using Sohg.CrossCutting;
+using Sohg.GameAgg.Contracts;
 using Sohg.SocietyAgg.Contracts;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Sohg.SocietyAgg.UI
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(BoxCollider2D))]
     [RequireComponent(typeof(CanvasGroup))]
     public class SocietyMarker : BaseComponent, ISocietyMarker
     {
         [SerializeField]
         private Text SocietyName;
-        [SerializeField]
-        private Image Background;
-
+        
         private ISociety society;
+
         private CanvasGroup canvasGroup;
         private static float transparency = 0.85f; // TODO
 
-        public void Initialize(ISociety society)
+        public void Initialize(IRunningGame game, ISociety society)
         {
             this.society = society;
             canvasGroup = gameObject.GetComponent<CanvasGroup>();
+            gameObject.GetComponent<Image>().color = society.Color;
             SocietyName.text = society.Name;
-            Background.color = society.Color;
             SocietyName.color = new Color
             (
                 society.Color.r / 3,
@@ -31,7 +32,10 @@ namespace Sohg.SocietyAgg.UI
                 society.Color.b / 3
             );
 
-            OnExit();
+            DisableHighlight();
+
+            gameObject.GetComponent<Button>().onClick
+                .AddListener(() => game.OpenSocietyInfo(society));
         }
 
         public void Update()
@@ -53,24 +57,24 @@ namespace Sohg.SocietyAgg.UI
 
         public void OnMouseOver()
         {
-            OnOver();
+            Highlight();
         }
 
         public void OnMouseExit()
         {
-            OnExit();
+            DisableHighlight();
         }
 
-        private void OnOver()
-        {
-            canvasGroup.alpha = 1;
-            SocietyName.gameObject.SetActive(true);
-        }
-
-        private void OnExit()
+        private void DisableHighlight()
         {
             canvasGroup.alpha = transparency;
             SocietyName.gameObject.SetActive(false);
+        }
+
+        private void Highlight()
+        {
+            canvasGroup.alpha = 1;
+            SocietyName.gameObject.SetActive(true);
         }
 
         private void SetPosition(Vector2 position)

@@ -40,14 +40,39 @@ namespace Sohg.SocietyAgg.Relationships
             currentAttacks += attackableCells.Count;
         }
 
-        
+        private AttackResult GetResult(float damageRate, float attackDamageTieRateTheshold)
+        {
+            if (System.Math.Abs(1 - damageRate) < attackDamageTieRateTheshold)
+                return AttackResult.Tie;
+
+            if (damageRate > 1)
+                return AttackResult.Win;
+
+            return AttackResult.Loose;
+        }
+
         private void ResolveAttack(IWarPlayable game, ICell from, ICell target)
         {
             var damageRate = (We.State.Power / Them.State.Power); // TODO randomize
             var result = GetResult(damageRate, game.SohgFactory.Config.AttackDamageTieRateThreshold); // TODO randomize
 
-            Them.State.Kill(damageRate);
-            We.State.Kill(1 / damageRate);
+            var ourDeathRate = 0f;
+            var theirDeathRate = 0f;
+            
+            // TODO Kill configuration to SohgConfig
+            if (damageRate > 1)
+            { // we win
+                ourDeathRate = 0;
+                theirDeathRate = (damageRate / (damageRate + 100));
+            }
+            else
+            { // we loose
+                ourDeathRate = damageRate;
+                theirDeathRate = (damageRate / (damageRate + 100));
+            }
+            
+            We.State.Kill(ourDeathRate);
+            Them.State.Kill(theirDeathRate);
 
             switch (result)
             {
@@ -68,15 +93,9 @@ namespace Sohg.SocietyAgg.Relationships
             target.IsInvolvedInAttack = false;
         }
 
-        private AttackResult GetResult(float damageRate, float attackDamageTieRateTheshold)
+        public bool WillingToAttack(IWarPlayable game)
         {
-            if (System.Math.Abs(1 - damageRate) < attackDamageTieRateTheshold)
-                return AttackResult.Tie;
-
-            if (damageRate > 1)
-                return AttackResult.Win;
-
-            return AttackResult.Loose;
+            return friendshipRange < game.SohgFactory.Config.FriendshipRangeBottomThresholdForAttack; // TODO randomize WillingToAttack
         }
     }
 }

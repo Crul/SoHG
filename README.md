@@ -10,6 +10,7 @@ Work in progress...
 - [World Map](https://es.m.wikipedia.org/wiki/Archivo:WorldMap-A_non-Frame.png)
 - [Pointing hand cursor vector](https://commons.wikimedia.org/wiki/File:Pointing_hand_cursor_vector.svg)
 - Smoke plume animation from [Smoke animation pack](http://powstudios.com/content/smoke-animation-pack-1)
+- [Bacteria](https://pixabay.com/en/bacteria-virus-illness-bacterium-156869/)
 
 
 ## Dependencies
