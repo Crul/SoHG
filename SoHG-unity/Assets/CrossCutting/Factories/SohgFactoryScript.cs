@@ -28,10 +28,25 @@ namespace Sohg.CrossCutting.Factories
         public ISohgConfig Config { get { return sohgConfig; } }
         public IGameDefinition GameDefinition { get { return gameDefinition; } }
 
+        public IEndGame CreateEndGame()
+        {
+            return prefabFactory.InstantiateEndGame(boardCanvas);
+        }
+
         public void CreateFight(ICell from, ICell target, Action resolveAttack)
         {
             var fight = prefabFactory.InstantiateFight(boardCanvas, "Fight");
             fight.Initialize(from, target, Config.FightDuration, resolveAttack);
+        }
+
+        public IGrid CreateGrid()
+        {
+            return prefabFactory.InstantiateGrid(boardCanvas);
+        }
+
+        public IInstructions CreateInstructions()
+        {
+            return prefabFactory.InstantiateInstructions(boardCanvas);
         }
 
         public IRelationship CreateRelationship(Society we, ISociety them)
@@ -113,13 +128,7 @@ namespace Sohg.CrossCutting.Factories
 
         public IGrid GetGrid()
         {
-            var grid = (IGrid)Grid2D.instance;
-            if (grid == null)
-            {
-                grid = prefabFactory.InstantiateGrid(boardCanvas);
-            }
-
-            return grid;
+            return (IGrid)Grid2D.instance;
         }
 
         public void SetCanvas(Canvas boardCanvas)

@@ -21,19 +21,23 @@ namespace Sohg.GameAgg
         public List<ISociety> Societies { get; private set; }
         public ISohgFactory SohgFactory { get { return sohgFactory; } }
 
+        private IEndGame endGame;
         private IGameDefinition gameDefinition;
         private IGrid grid;
+        private IInstructions instructions;
+        private ISociety playerSociety;
         private ISocietyInfo societyInfo;
-        
+
         public void Awake()
         {
             SohgFactory.SetCanvas(boardCanvas);
 
             gameDefinition = SohgFactory.GameDefinition;
-
+            endGame = SohgFactory.CreateEndGame();
+            instructions = SohgFactory.CreateInstructions();
             societyInfo = SohgFactory.CreateSocietyInfo(this);
 
-            grid = SohgFactory.GetGrid();
+            grid = SohgFactory.CreateGrid();
             grid.AddOnCellClick(cell => OnGridCellClick(cell)); // TODO fix non-blocking grid click
         }
     }

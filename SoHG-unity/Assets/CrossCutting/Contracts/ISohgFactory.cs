@@ -13,7 +13,10 @@ namespace Sohg.CrossCutting.Contracts
         ISohgConfig Config { get; }
         IGameDefinition GameDefinition { get; }
 
+        IEndGame CreateEndGame();
         void CreateFight(ICell from, ICell target, Action resolveAttack);
+        IGrid CreateGrid();
+        IInstructions CreateInstructions();
         IRelationship CreateRelationship(Society we, ISociety them);
         ISociety CreateSociety(IRunningGame game, ISocietyDefinition societyDefinition, ICell[] cells);
         ISocietyActionButton CreateSocietyActionButton(ISocietyAction action, ISocietyInfo societyInfo);

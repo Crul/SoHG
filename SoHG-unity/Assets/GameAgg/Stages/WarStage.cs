@@ -11,8 +11,12 @@ namespace Sohg.GameAgg.Stages
         public override void Start()
         {
             time = 0;
+            game.OpenInstructions(
+                "The Stories begin" + System.Environment.NewLine +
+                "The human species has born and they are not alone." + System.Environment.NewLine +
+                System.Environment.NewLine +
+                "Good luck!");
         }
-
 
         public override void FixedUpdate()
         {

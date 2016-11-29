@@ -3,6 +3,8 @@ using Grids2D;
 using Sohg.Grids2D.Contracts;
 using UnityEngine;
 using Sohg.SocietyAgg.Contracts;
+using Sohg.GameAgg.UI;
+using Sohg.GameAgg.Contracts;
 
 namespace Sohg.CrossCutting.Factories
 {
@@ -13,6 +15,10 @@ namespace Sohg.CrossCutting.Factories
 
         [SerializeField]
         private Grid2D gridPrefab;
+        [SerializeField]
+        private EndGame endGamePrefab;
+        [SerializeField]
+        private Instructions instructionsPrefab;
         [SerializeField]
         private SocietyMarker societyMarkerPrefab;
         [SerializeField]
@@ -29,6 +35,16 @@ namespace Sohg.CrossCutting.Factories
         public IGrid InstantiateGrid(Canvas canvas)
         {
             return InstantiateIntoCanvas(gridPrefab, canvas, "Grid2D");
+        }
+
+        public IEndGame InstantiateEndGame(Canvas canvas)
+        {
+            return InstantiateIntoCanvas(endGamePrefab, canvas, "EndGame");
+        }
+
+        public IInstructions InstantiateInstructions(Canvas canvas)
+        {
+            return InstantiateIntoCanvas(instructionsPrefab, canvas, "Instructions");
         }
 
         public ISocietyMarker InstantiateSocietyMarker(Canvas canvas, string name)

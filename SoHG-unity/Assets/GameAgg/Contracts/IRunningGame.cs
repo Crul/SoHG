@@ -14,6 +14,7 @@ namespace Sohg.GameAgg.Contracts
         void ExecuteAction(IEnumerator actionExecution);
         bool IsPaused();
         void NextStage();
+        void OpenInstructions(string instructionsText);
         void OpenSocietyInfo(ISociety society);
     }
 }

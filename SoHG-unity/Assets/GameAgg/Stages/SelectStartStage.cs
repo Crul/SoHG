@@ -7,6 +7,14 @@ namespace Sohg.GameAgg.Stages
     [CreateAssetMenu(fileName = "SelectStartStage", menuName = "SoHG/Stages/Select Start")]
     public class SelectStartStage : GameStage<ISelectStartPlayable>
     {
+        public override void Start()
+        {
+            game.OpenInstructions(
+                "The human species are just going to start existing, and it's not the only hominid species in the world." + System.Environment.NewLine +
+                System.Environment.NewLine +
+                "First of all, select the start point for the humans.");
+        }
+
         public override void OnCellClick(ICell cell)
         {
             if (!game.IsPaused())

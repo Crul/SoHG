@@ -23,6 +23,8 @@ namespace Sohg.GameAgg
             }
 
             grid.RedrawIfChanged();
+
+            CheckWinOrLoose();
         }
 
         public Dictionary<ICell, ICell> GetAttackableCells(Relationship relationship)
@@ -32,12 +34,29 @@ namespace Sohg.GameAgg
 
         public void Invade(ICell from, ICell target)
         {
+            var invadedTerritory = grid.GetTerritory(target);
             grid.InvadeTerritory(from, target);
 
-            var invadedTerritory = grid.GetTerritory(target);
             if (invadedTerritory.CellCount == 0)
             {
                 KillSociety(invadedTerritory.Society);
+            }
+        }
+
+        private void CheckWinOrLoose()
+        {
+            var hasPlayerLosen = (playerSociety.Territory.CellCount == 0);
+            if (hasPlayerLosen)
+            {
+                endGame.Show(false);
+            }
+            else
+            {
+                var hasPlayerWon = (Societies.Count == 1);
+                if (hasPlayerWon)
+                {
+                    endGame.Show(true);
+                }
             }
         }
 
