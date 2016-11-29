@@ -54,7 +54,10 @@ namespace Sohg.CrossCutting.Factories
 
         public IFight InstantiateFight(Canvas canvas, string name)
         {
-            return InstantiateIntoCanvas(fightPrefab, canvas, name);
+            var fight = fightPrefab.GetPooledInstance<Fight>(canvas);
+            fight.name = name;
+
+            return fight;
         }
 
         public ISocietyInfo InstantiateSocietyInfo(Canvas canvas, string name)
