@@ -37,7 +37,7 @@ namespace Sohg.GameAgg
             instructions = SohgFactory.CreateInstructions();
             societyInfo = SohgFactory.CreateSocietyInfo(this);
 
-            grid = SohgFactory.GetGrid();
+            grid = SohgFactory.CreateGrid();
             grid.AddOnCellClick(cell => OnGridCellClick(cell)); // TODO fix non-blocking grid click
         }
     }

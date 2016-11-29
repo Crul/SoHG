@@ -39,6 +39,11 @@ namespace Sohg.CrossCutting.Factories
             fight.Initialize(from, target, Config.FightDuration, resolveAttack);
         }
 
+        public IGrid CreateGrid()
+        {
+            return prefabFactory.InstantiateGrid(boardCanvas);
+        }
+
         public IInstructions CreateInstructions()
         {
             return prefabFactory.InstantiateInstructions(boardCanvas);
@@ -123,13 +128,7 @@ namespace Sohg.CrossCutting.Factories
 
         public IGrid GetGrid()
         {
-            var grid = (IGrid)Grid2D.instance;
-            if (grid == null)
-            {
-                grid = prefabFactory.InstantiateGrid(boardCanvas);
-            }
-
-            return grid;
+            return (IGrid)Grid2D.instance;
         }
 
         public void SetCanvas(Canvas boardCanvas)
