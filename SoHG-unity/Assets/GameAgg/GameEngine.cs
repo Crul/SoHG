@@ -23,14 +23,15 @@ namespace Sohg.GameAgg
 
         private IGameDefinition gameDefinition;
         private IGrid grid;
+        private IInstructions instructions;
         private ISocietyInfo societyInfo;
-        
+
         public void Awake()
         {
             SohgFactory.SetCanvas(boardCanvas);
 
             gameDefinition = SohgFactory.GameDefinition;
-
+            instructions = SohgFactory.CreateInstructions();
             societyInfo = SohgFactory.CreateSocietyInfo(this);
 
             grid = SohgFactory.GetGrid();

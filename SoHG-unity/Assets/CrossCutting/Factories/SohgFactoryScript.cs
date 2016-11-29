@@ -34,6 +34,11 @@ namespace Sohg.CrossCutting.Factories
             fight.Initialize(from, target, Config.FightDuration, resolveAttack);
         }
 
+        public IInstructions CreateInstructions()
+        {
+            return prefabFactory.InstantiateInstructions(boardCanvas);
+        }
+
         public IRelationship CreateRelationship(Society we, ISociety them)
         {
             return new Relationship(we, them);

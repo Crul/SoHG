@@ -15,7 +15,7 @@ namespace Sohg.GameAgg
 
         public bool IsPaused()
         {
-            return false;
+            return instructions.IsOpened();
         }
 
         public void NextStage()
@@ -29,6 +29,11 @@ namespace Sohg.GameAgg
             currentStage = gameDefinition.Stages[currentStageIndex];
             currentStage.SetGame(this);
             currentStage.Start();
+        }
+
+        public void OpenInstructions(string instructionsText)
+        {
+            instructions.Show(instructionsText);
         }
 
         public void OpenSocietyInfo(ISociety society)
