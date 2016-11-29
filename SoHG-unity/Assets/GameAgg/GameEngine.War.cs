@@ -32,9 +32,9 @@ namespace Sohg.GameAgg
 
         public void Invade(ICell from, ICell target)
         {
+            var invadedTerritory = grid.GetTerritory(target);
             grid.InvadeTerritory(from, target);
 
-            var invadedTerritory = grid.GetTerritory(target);
             if (invadedTerritory.CellCount == 0)
             {
                 KillSociety(invadedTerritory.Society);
