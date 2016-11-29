@@ -16,6 +16,8 @@ namespace Sohg.CrossCutting.Factories
         [SerializeField]
         private Grid2D gridPrefab;
         [SerializeField]
+        private EndGame endGamePrefab;
+        [SerializeField]
         private Instructions instructionsPrefab;
         [SerializeField]
         private SocietyMarker societyMarkerPrefab;
@@ -33,6 +35,11 @@ namespace Sohg.CrossCutting.Factories
         public IGrid InstantiateGrid(Canvas canvas)
         {
             return InstantiateIntoCanvas(gridPrefab, canvas, "Grid2D");
+        }
+
+        public IEndGame InstantiateEndGame(Canvas canvas)
+        {
+            return InstantiateIntoCanvas(endGamePrefab, canvas, "EndGame");
         }
 
         public IInstructions InstantiateInstructions(Canvas canvas)

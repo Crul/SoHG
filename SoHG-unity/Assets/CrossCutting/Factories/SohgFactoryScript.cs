@@ -28,6 +28,11 @@ namespace Sohg.CrossCutting.Factories
         public ISohgConfig Config { get { return sohgConfig; } }
         public IGameDefinition GameDefinition { get { return gameDefinition; } }
 
+        public IEndGame CreateEndGame()
+        {
+            return prefabFactory.InstantiateEndGame(boardCanvas);
+        }
+
         public void CreateFight(ICell from, ICell target, Action resolveAttack)
         {
             var fight = prefabFactory.InstantiateFight(boardCanvas, "Fight");

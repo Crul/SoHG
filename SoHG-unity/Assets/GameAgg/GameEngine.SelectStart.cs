@@ -11,7 +11,7 @@ namespace Sohg.GameAgg
         {
             Societies = new List<ISociety>();
 
-            CreateSociety(gameDefinition.PlayerSociety, humanInitialCell);
+            playerSociety = CreateSociety(gameDefinition.PlayerSociety, humanInitialCell);
             for (var i = 0; i < SohgFactory.Config.NonPlayerSocietyCount; i++)
             {
                 CreateSociety(gameDefinition.NonPlayerSociety);
@@ -22,10 +22,12 @@ namespace Sohg.GameAgg
             Societies.ForEach(society => society.Initialize());
         }
         
-        private void CreateSociety(ISocietyDefinition societyDefinition, params ICell[] initialCells)
+        private ISociety CreateSociety(ISocietyDefinition societyDefinition, params ICell[] initialCells)
         {
             var newSociety = SohgFactory.CreateSociety(this, societyDefinition, initialCells);
             Societies.Add(newSociety);
+
+            return newSociety;
         }
     }
 }
