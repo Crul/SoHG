@@ -26,6 +26,14 @@ namespace Grids2D
             
             cells.Where(cell => cell.territoryIndex > -1).ToList()
                 .ForEach(cell => cell.CanBeInvaded = CanCellBeInvaded(cell));
+
+            // TODO: resolve ring corner cases (still problem with multiple rings)
+            territories
+                .Where(territory => (territory.cells.Count > 0  
+                    && territory.cells.Count(cell => cell.CanBeInvaded) == 0))
+                .SelectMany(territory => territory.cells)
+                .ToList()
+                .ForEach(cell => cell.CanBeInvaded = true);
         }
 
         private void SetSocietyNeighbours(int territoryIndex)
