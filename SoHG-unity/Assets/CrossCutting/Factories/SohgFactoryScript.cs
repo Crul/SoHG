@@ -49,7 +49,7 @@ namespace Sohg.CrossCutting.Factories
             return prefabFactory.InstantiateInstructions(boardCanvas);
         }
 
-        public IRelationship CreateRelationship(Society we, ISociety them)
+        public IRelationship CreateRelationship(ISociety we, ISociety them)
         {
             return new Relationship(we, them);
         }

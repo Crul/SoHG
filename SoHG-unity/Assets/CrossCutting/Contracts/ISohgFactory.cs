@@ -1,7 +1,6 @@
 using System;
 using Sohg.GameAgg.Contracts;
 using Sohg.Grids2D.Contracts;
-using Sohg.SocietyAgg;
 using Sohg.SocietyAgg.Contracts;
 using Sohg.SocietyAgg.UI;
 using UnityEngine;
@@ -17,7 +16,7 @@ namespace Sohg.CrossCutting.Contracts
         void CreateFight(ICell from, ICell target, Action resolveAttack);
         IGrid CreateGrid();
         IInstructions CreateInstructions();
-        IRelationship CreateRelationship(Society we, ISociety them);
+        IRelationship CreateRelationship(ISociety we, ISociety them);
         ISociety CreateSociety(IRunningGame game, ISocietyDefinition societyDefinition, ICell[] cells);
         ISocietyActionButton CreateSocietyActionButton(ISocietyAction action, ISocietyInfo societyInfo);
         ISocietyEffectIcon CreateSocietyEffectIcon(ISocietyAction action, ISocietyInfo societyInfo);
