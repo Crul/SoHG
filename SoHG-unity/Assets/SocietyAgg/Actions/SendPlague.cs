@@ -8,14 +8,19 @@ namespace Sohg.SocietyAgg.Actions
     public class SendPlague : SocietyAction
     {
         [SerializeField]
+        private int faithCost;
+        [SerializeField]
         private float plagueKillRate;
 
         private int secondsForRespawn = 3; // TODO move SendPlague.secondsForRespawn to config?
 
         public override void Execute(ISociety society)
         {
-            game.ExecuteAction(ExecutePlague(society));
-            game.Log("Plague sent to {0}", society.Name);
+            if (game.ConsumeFaith(faithCost))
+            {
+                game.ExecuteAction(ExecutePlague(society));
+                game.Log("Plague sent to {0}", society.Name);
+            }
         }
 
         private IEnumerator ExecutePlague(ISociety society)

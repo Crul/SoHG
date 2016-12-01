@@ -21,5 +21,8 @@ namespace Sohg.GameAgg.Contracts
         void NextStage();
         void OpenInstructions(string instructionsText);
         void OpenSocietyInfo(ISociety society);
+
+        void AddFaith(int faithAmount);
+        bool ConsumeFaith(int faithAmount);
     }
 }

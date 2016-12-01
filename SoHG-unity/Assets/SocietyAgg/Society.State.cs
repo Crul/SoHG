@@ -1,5 +1,5 @@
-﻿using System;
-using Sohg.SocietyAgg.Contracts;
+﻿using Sohg.SocietyAgg.Contracts;
+using UnityEngine;
 
 namespace Sohg.SocietyAgg
 {
@@ -15,12 +15,12 @@ namespace Sohg.SocietyAgg
 
             public float Power
             {
-                get { return Math.Max(1, PopulationAmount * aggressivityRate * technologyLevelRate); }
+                get { return System.Math.Max(1, PopulationAmount * aggressivityRate * technologyLevelRate); }
             }
 
             public int MaximumAttacks
             {
-                get { return Math.Max(1, Convert.ToInt32(Power / 10000)); } // TODO calculate MaximumAttacks
+                get { return System.Math.Max(1, System.Convert.ToInt32(Power / 10000)); } // TODO calculate MaximumAttacks
             }
 
             public SocietyState(ISocietyDefinition definition)
@@ -38,7 +38,16 @@ namespace Sohg.SocietyAgg
 
             public void Kill(float deathRate)
             {
-                PopulationAmount = Convert.ToInt64(PopulationAmount * (1 - deathRate));
+                PopulationAmount = System.Convert.ToInt64(PopulationAmount * (1 - deathRate));
+            }
+
+            public int GetFaithEmitted()
+            {
+                // TODO Society.State.GetFaithEmitted() configuration
+                var isFaithEmitted = Random.Range(0f, 1f) > 0.1;
+                var faithEmitted = (isFaithEmitted ? Random.Range(2, 10) : 0);
+
+                return faithEmitted;
             }
         }
 

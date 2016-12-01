@@ -6,10 +6,10 @@ using System.Linq;
 using Sohg.GameAgg.Definition;
 using Sohg.CrossCutting.Contracts;
 using Sohg.SocietyAgg.Contracts;
-using Sohg.SocietyAgg;
 using System;
 using Sohg.SocietyAgg.Relationships;
 using Sohg.SocietyAgg.UI;
+using Sohg.SocietyAgg;
 
 namespace Sohg.CrossCutting.Factories
 {
@@ -33,10 +33,20 @@ namespace Sohg.CrossCutting.Factories
             return prefabFactory.InstantiateEndGame(boardCanvas);
         }
 
-        public void CreateFight(ICell from, ICell target, Action resolveAttack)
+        public IFaithRecolectable CreateFaith(IWarPlayable game, ICell faithCell, int faithAmount)
+        {
+            var faithRecolectable = prefabFactory.InstantiateFaithRecolectable(boardCanvas, "FaithRecolectable");
+            faithRecolectable.Initialize(game, faithCell, faithAmount);
+
+            return faithRecolectable;
+        }
+
+        public IFight CreateFight(ICell from, ICell target, Action resolveAttack)
         {
             var fight = prefabFactory.InstantiateFight(boardCanvas, "Fight");
             fight.Initialize(from, target, Config.FightDuration, resolveAttack);
+
+            return fight;
         }
 
         public IGrid CreateGrid()

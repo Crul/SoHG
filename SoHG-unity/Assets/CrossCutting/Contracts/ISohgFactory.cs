@@ -13,7 +13,8 @@ namespace Sohg.CrossCutting.Contracts
         IGameDefinition GameDefinition { get; }
 
         IEndGame CreateEndGame();
-        void CreateFight(ICell from, ICell target, Action resolveAttack);
+        IFaithRecolectable CreateFaith(IWarPlayable game, ICell faithCell, int faithAmount);
+        IFight CreateFight(ICell from, ICell target, Action resolveAttack);
         IGrid CreateGrid();
         IInstructions CreateInstructions();
         IRelationship CreateRelationship(ISociety we, ISociety them);

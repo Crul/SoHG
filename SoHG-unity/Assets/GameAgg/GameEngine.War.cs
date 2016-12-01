@@ -20,6 +20,7 @@ namespace Sohg.GameAgg
             if (time % SohgFactory.Config.WarActionsTimeInterval == 0)
             {
                 Societies.ForEach(society => society.Evolve(this));
+                EmitFaith(PlayerSociety);
             }
 
             grid.RedrawIfChanged();
