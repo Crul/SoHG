@@ -78,6 +78,7 @@ namespace Sohg.SocietyAgg.Relationships
             {
                 case AttackResult.Win:
                     game.Invade(from, target);
+                    game.Log("{0} has invaded {1}", We.Name, Them.Name);
                     // TODO update stats on win
                     break;
                 case AttackResult.Loose:

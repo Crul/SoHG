@@ -13,6 +13,7 @@ namespace Sohg.GameAgg.Stages
                 "The human species are just going to start existing, and it's not the only hominid species in the world." + System.Environment.NewLine +
                 System.Environment.NewLine +
                 "First of all, select the start point for the humans.");
+            game.Log("Select start point");
         }
 
         public override void OnCellClick(ICell cell)

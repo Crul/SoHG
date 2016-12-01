@@ -45,7 +45,7 @@ namespace Sohg.GameAgg
 
         private void CheckWinOrLoose()
         {
-            var hasPlayerLosen = (playerSociety.Territory.CellCount == 0);
+            var hasPlayerLosen = (PlayerSociety.Territory.CellCount == 0);
             if (hasPlayerLosen)
             {
                 endGame.Show(false);

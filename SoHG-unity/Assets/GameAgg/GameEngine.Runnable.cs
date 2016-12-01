@@ -11,6 +11,8 @@ namespace Sohg.GameAgg
         public void Start()
         {
             grid.InitializeBoard(SohgFactory);
+            FaithPower = 0;
+            TotalFaith = 0;
             currentStageIndex = -1;
             NextStage();
         }
@@ -18,13 +20,25 @@ namespace Sohg.GameAgg
         public void FixedUpdate()
         {
             if (currentStage != null)
+            {
                 currentStage.FixedUpdate();
+            }
         }
-        
+
+        public void Update()
+        {
+            if (!IsPaused() && PlayerSociety != null)
+            {
+                GameInfoPanel.GameStatusInfo.SetValues(this);
+            }
+        }
+
         private void OnGridCellClick(ICell cell)
         {
             if (currentStage != null)
+            {
                 currentStage.OnCellClick(cell);
+            }
         }
     }
 }

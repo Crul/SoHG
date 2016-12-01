@@ -7,12 +7,17 @@ namespace Sohg.GameAgg.Contracts
 {
     public interface IRunningGame
     {
-        IGameDefinition Definition { get; }
+        IGameDefinition GameDefinition { get; }
         List<ISociety> Societies { get; }
         ISohgFactory SohgFactory { get; }
 
+        ISociety PlayerSociety { get; }
+        int FaithPower { get; }
+        int TotalFaith { get; }
+
         void ExecuteAction(IEnumerator actionExecution);
         bool IsPaused();
+        void Log(string log, params object[] logParams);
         void NextStage();
         void OpenInstructions(string instructionsText);
         void OpenSocietyInfo(ISociety society);

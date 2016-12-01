@@ -16,6 +16,7 @@ namespace Sohg.GameAgg.Stages
                 "The human species has born and they are not alone." + System.Environment.NewLine +
                 System.Environment.NewLine +
                 "Good luck!");
+            game.Log("Hominid war has started!");
         }
 
         public override void FixedUpdate()

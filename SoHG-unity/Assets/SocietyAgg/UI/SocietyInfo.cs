@@ -52,7 +52,7 @@ namespace Sohg.SocietyAgg.UI
             rectTransform = gameObject.GetComponent<RectTransform>();
             boxCollider2D = gameObject.GetComponent<BoxCollider2D>();
 
-            game.Definition.SocietyActions.ToList()
+            game.GameDefinition.SocietyActions.ToList()
                 .ForEach(action => InitializeAction(game, action));
 
             societyProperties.ToList()

@@ -1,7 +1,6 @@
 ﻿using Sohg.SocietyAgg.Contracts;
-using Sohg.CrossCutting;
 using UnityEngine;
-using UnityEngine.UI;
+using Sohg.CrossCutting.UI;
 
 namespace Sohg.SocietyAgg.UI
 {
@@ -13,20 +12,15 @@ namespace Sohg.SocietyAgg.UI
     };
 
     [DisallowMultipleComponent]
-    public class SocietyPropertyInfo : BaseComponent, ISocietyPropertyInfo
+    public class SocietyPropertyInfo : ValueInfo, ISocietyPropertyInfo
     {
-        [SerializeField]
-        private Text titleText;
-        [SerializeField]
-        private Text valueText;
-
         private SocietyProperty societyProperty;
         private ISociety society;
         
         public void Initialize(SocietyProperty societyProperty)
         {
             this.societyProperty = societyProperty;
-            titleText.text = GetTitle();
+            SetTitle(GetTitle());
         }
 
         public void SetSociety(ISociety society)
@@ -38,7 +32,7 @@ namespace Sohg.SocietyAgg.UI
         {
             if (gameObject.activeSelf && society != null)
             {
-                valueText.text = GetValue(society);
+                SetValue(GetValue(society));
             }
         }
         

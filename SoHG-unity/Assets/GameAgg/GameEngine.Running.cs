@@ -6,8 +6,6 @@ namespace Sohg.GameAgg
 {
     public partial class GameEngine : IRunningGame
     {
-        public IGameDefinition Definition { get { return gameDefinition; } }
-
         public void ExecuteAction(IEnumerator actionExecution)
         {
             StartCoroutine(actionExecution);
@@ -15,18 +13,24 @@ namespace Sohg.GameAgg
 
         public bool IsPaused()
         {
-            return instructions.IsOpened();
+            // TODO fix pause, now is not working with Fight animation (and execution)
+            return GameInfoPanel.PausedPanel.IsVisible() || instructions.IsOpened();
+        }
+
+        public void Log(string log, params object[] logParams)
+        {
+            GameInfoPanel.LogOutput(string.Format(log, logParams));
         }
 
         public void NextStage()
         {
             currentStageIndex++;
-            if (currentStageIndex >= gameDefinition.Stages.Length)
+            if (currentStageIndex >= GameDefinition.Stages.Length)
             {
                 throw new System.Exception("GameEngine.NextStage() - Not enough stages");
             }
 
-            currentStage = gameDefinition.Stages[currentStageIndex];
+            currentStage = GameDefinition.Stages[currentStageIndex];
             currentStage.SetGame(this);
             currentStage.Start();
         }
