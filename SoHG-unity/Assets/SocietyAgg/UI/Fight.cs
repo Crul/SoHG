@@ -1,7 +1,6 @@
 ﻿using Sohg.CrossCutting.Pooling;
 using Sohg.Grids2D.Contracts;
 using Sohg.SocietyAgg.Contracts;
-using System;
 using UnityEngine;
 
 namespace Sohg.SocietyAgg.UI
@@ -11,11 +10,11 @@ namespace Sohg.SocietyAgg.UI
         private int time;
         private ICell from;
         private ICell target;
-        private Action resolveAttack;
+        private System.Action resolveAttack;
 
         public void Awake()
         {
-            time = 16;
+            time = 10 + Random.Range(0, 6);
         }
 
         public void FixedUpdate()
@@ -35,7 +34,7 @@ namespace Sohg.SocietyAgg.UI
             }
         }
 
-        public void Initialize(ICell from, ICell target, int time, Action resolveAttack)
+        public void Initialize(ICell from, ICell target, int time, System.Action resolveAttack)
         {
             this.from = from;
             this.target = target;
