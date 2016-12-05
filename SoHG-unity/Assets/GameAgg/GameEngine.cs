@@ -17,6 +17,10 @@ namespace Sohg.GameAgg
         [SerializeField]
         private Canvas boardCanvas;
         [SerializeField]
+        private Canvas boardOverCanvas;
+        [SerializeField]
+        private Canvas fixedOverCanvas;
+        [SerializeField]
         private GameInfoPanel gameInfoPanel;
         [SerializeField]
         private SohgFactoryScript sohgFactory;
@@ -38,15 +42,18 @@ namespace Sohg.GameAgg
 
         public void Awake()
         {
-            SohgFactory.SetCanvas(boardCanvas);
+            SohgFactory.SetCanvas(boardCanvas, boardOverCanvas, fixedOverCanvas);
             
             GameDefinition = SohgFactory.GameDefinition;
+            // TODO remove single-instance-using unity prefabs from prefabFactory
             endGame = SohgFactory.CreateEndGame();
             instructions = SohgFactory.CreateInstructions();
             societyInfo = SohgFactory.CreateSocietyInfo(this);
 
             grid = SohgFactory.CreateGrid();
             grid.AddOnCellClick(cell => OnGridCellClick(cell)); // TODO fix non-blocking grid click
+
+            gameInfoPanel.TechnologyPanel.Initialize(this);
         }
     }
 }

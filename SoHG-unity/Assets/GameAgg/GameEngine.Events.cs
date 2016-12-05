@@ -3,7 +3,7 @@ using Sohg.Grids2D.Contracts;
 
 namespace Sohg.GameAgg
 {
-    public partial class GameEngine : IRunnableGame
+    public partial class GameEngine
     {
         private int currentStageIndex;
         private IGameStage currentStage;

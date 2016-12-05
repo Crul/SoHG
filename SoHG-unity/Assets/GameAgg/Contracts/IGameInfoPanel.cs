@@ -4,6 +4,7 @@
     {
         IPausedPanel PausedPanel { get; }
         IGameStatusInfo GameStatusInfo { get; }
+        ITechnologyPanel TechnologyPanel { get; }
 
         void LogOutput(string log);
     }

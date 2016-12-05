@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using Sohg.GameAgg.Contracts;
+using Sohg.GameAgg.UI;
 using Sohg.SocietyAgg.Contracts;
+using System.Linq;
 
 namespace Sohg.GameAgg
 {
@@ -14,7 +16,9 @@ namespace Sohg.GameAgg
         public bool IsPaused()
         {
             // TODO fix pause, now is not working with Fight animation (and execution)
-            return GameInfoPanel.PausedPanel.IsVisible() || instructions.IsOpened();
+            return GameInfoPanel.PausedPanel.IsVisible() 
+                || GameInfoPanel.TechnologyPanel.IsVisible()
+                || instructions.IsOpened();
         }
 
         public void Log(string log, params object[] logParams)
@@ -35,9 +39,23 @@ namespace Sohg.GameAgg
             currentStage.Start();
         }
 
-        public void OpenInstructions(string instructionsText)
+        public void OnTechnologyActivated(ITechnology technology)
+        {
+            ConsumeFaith(technology.FaithCost);
+
+            // TODO make society action technology requirement properly
+            var activatedSocietyActions = GameDefinition.SocietyActions
+                .Where(action => action.Requires(technology));
+
+            activatedSocietyActions.ToList()
+                .ForEach(action => societyInfo.AddAction(action));
+        }
+
+        public IInstructions OpenInstructions(string instructionsText)
         {
             instructions.Show(instructionsText);
+
+            return instructions;
         }
 
         public void OpenSocietyInfo(ISociety society)

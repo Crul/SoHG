@@ -6,6 +6,7 @@ using Sohg.SocietyAgg.Contracts;
 using Sohg.GameAgg.UI;
 using Sohg.GameAgg.Contracts;
 using Sohg.CrossCutting.Pooling;
+using System;
 
 namespace Sohg.CrossCutting.Factories
 {
@@ -19,9 +20,13 @@ namespace Sohg.CrossCutting.Factories
         [SerializeField]
         private EndGame endGamePrefab;
         [SerializeField]
+        private Instructions instructionsPrefab;
+
+        [SerializeField]
         private FaithRecolectable faithRecolectablePrefab;
         [SerializeField]
-        private Instructions instructionsPrefab;
+        private Fight fightPrefab;
+
         [SerializeField]
         private SocietyMarker societyMarkerPrefab;
         [SerializeField]
@@ -32,8 +37,9 @@ namespace Sohg.CrossCutting.Factories
         private SocietyEffectIcon societyEffectIconPrefab;
         [SerializeField]
         private SocietyPropertyInfo societyPropertyInfoPrefab;
+
         [SerializeField]
-        private Fight fightPrefab;
+        private TechnologyButton technologyButtonPrefab;
 
         public IGrid InstantiateGrid(Canvas canvas)
         {
@@ -83,6 +89,11 @@ namespace Sohg.CrossCutting.Factories
         public ISocietyPropertyInfo InstantiateSocietyPropertyInfo(GameObject gameObject, string name)
         {
             return InstantiateInto(societyPropertyInfoPrefab, gameObject, name);
+        }
+
+        public ITechnologyButton InstantiateTechnologyButton(GameObject gameObject, string name)
+        {
+            return InstantiateInto(technologyButtonPrefab, gameObject, name);
         }
 
         public T InstantiatePooledIntoCanvas<T>(T prefab, Canvas canvas, string name = "")

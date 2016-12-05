@@ -21,12 +21,15 @@ namespace Sohg.GameAgg.UI
         private GameStatusInfo gameStatusInfo;
         [SerializeField]
         private PausedPanel pausedPanel;
+        [SerializeField]
+        private TechnologyPanel technologyPanel;
 
         private int outputTextLines = 4; // TOOO read output text lines from scene
         private int newLineLength = Environment.NewLine.Length;
 
         public IPausedPanel PausedPanel { get { return pausedPanel; } }
         public IGameStatusInfo GameStatusInfo { get { return gameStatusInfo; } }
+        public ITechnologyPanel TechnologyPanel { get { return technologyPanel; } }
 
         public void Awake()
         {
@@ -36,6 +39,7 @@ namespace Sohg.GameAgg.UI
 
             pauseButton.onClick.AddListener(() => PausedPanel.ShowPause());
             menuButton.onClick.AddListener(() => PausedPanel.ShowMenu());
+            technologyButton.onClick.AddListener(() => technologyPanel.Open());
         }
 
         public void LogOutput(string log)

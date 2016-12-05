@@ -5,6 +5,7 @@ using Sohg.SocietyAgg.Contracts;
 using UnityEngine;
 using Sohg.SocietyAgg;
 using Sohg.SocietyAgg.Actions;
+using Sohg.GameAgg.Technologies;
 
 namespace Sohg.GameAgg.Definition
 {
@@ -13,7 +14,9 @@ namespace Sohg.GameAgg.Definition
     {
         [SerializeField]
         private GameStageScript[] stages;
-        
+        [SerializeField]
+        private Technology[] technologies;
+
         [Header("Society")]
         [SerializeField]
         private SocietyDefinitionScript playerSociety;
@@ -24,6 +27,7 @@ namespace Sohg.GameAgg.Definition
         private SocietyAction[] societyActions;
 
         public IGameStage[] Stages { get { return stages; } }
+        public ITechnology[] Technologies { get { return technologies; } }
         public ISocietyDefinition PlayerSociety { get { return playerSociety; } }
         public ISocietyDefinition NonPlayerSociety { get { return nonPlayerSociety; } }
         public ISocietyAction[] SocietyActions { get { return societyActions; } }
