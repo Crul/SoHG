@@ -21,7 +21,17 @@ namespace Sohg.GameAgg
 
             Societies.ForEach(society => society.Initialize());
         }
-        
+
+        public void SetGridSelectionToCell()
+        {
+            grid.SetGridSelectionToCell();
+        }
+
+        public void SetGridSelectionToNone()
+        {
+            grid.SetGridSelectionToNone();
+        }
+
         private ISociety CreateSociety(ISocietyDefinition societyDefinition, params ICell[] initialCells)
         {
             var newSociety = SohgFactory.CreateSociety(this, societyDefinition, initialCells);

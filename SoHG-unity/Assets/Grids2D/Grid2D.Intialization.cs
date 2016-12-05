@@ -26,6 +26,7 @@ namespace Grids2D
         public void InitializeBoard(ISohgFactory sohgFactory)
         {
             gridTopology = GRID_TOPOLOGY.Hexagonal;
+            highlightMode = HIGHLIGHT_MODE.None;
 
             // TODO configure in MapSettings:
             numTerritories = 1;
