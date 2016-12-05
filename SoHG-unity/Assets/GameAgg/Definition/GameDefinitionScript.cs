@@ -5,7 +5,8 @@ using Sohg.SocietyAgg.Contracts;
 using UnityEngine;
 using Sohg.SocietyAgg;
 using Sohg.SocietyAgg.Actions;
-using Sohg.GameAgg.Technologies;
+using Sohg.TechnologyAgg;
+using Sohg.TechnologyAgg.Contracts;
 
 namespace Sohg.GameAgg.Definition
 {

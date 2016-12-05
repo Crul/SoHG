@@ -1,4 +1,5 @@
 ﻿using Sohg.SocietyAgg.Contracts;
+using Sohg.TechnologyAgg.Contracts;
 
 namespace Sohg.GameAgg.Contracts
 {

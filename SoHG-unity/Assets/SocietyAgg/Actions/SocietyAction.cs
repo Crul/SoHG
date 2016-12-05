@@ -2,8 +2,9 @@
 using Sohg.GameAgg.Contracts;
 using Sohg.SocietyAgg.Contracts;
 using UnityEngine;
-using Sohg.GameAgg.Technologies;
 using System.Linq;
+using Sohg.TechnologyAgg;
+using Sohg.TechnologyAgg.Contracts;
 
 namespace Sohg.SocietyAgg.Actions
 {
@@ -20,6 +21,7 @@ namespace Sohg.SocietyAgg.Actions
 
         public Sprite ActionIcon { get { return actionIcon; } }
         public int FaithCost { get { return faithCost; } }
+        public ITechnology[] RequiredTechnologies { get { return requiredTechnologies; } }
 
         public void Initialize(IRunningGame game)
         {
@@ -30,7 +32,7 @@ namespace Sohg.SocietyAgg.Actions
 
         public bool Requires(ITechnology technology)
         {
-            return requiredTechnologies.Contains(technology);
+            return RequiredTechnologies.Contains(technology);
         }
     }
 }

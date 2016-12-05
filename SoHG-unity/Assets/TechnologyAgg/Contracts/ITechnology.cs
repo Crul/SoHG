@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Sohg.GameAgg.Contracts
+namespace Sohg.TechnologyAgg.Contracts
 {
     public interface ITechnology
     {

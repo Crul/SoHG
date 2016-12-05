@@ -7,6 +7,8 @@ using Sohg.GameAgg.UI;
 using Sohg.GameAgg.Contracts;
 using Sohg.CrossCutting.Pooling;
 using System;
+using Sohg.TechnologyAgg.Contracts;
+using Sohg.TechnologyAgg.UI;
 
 namespace Sohg.CrossCutting.Factories
 {

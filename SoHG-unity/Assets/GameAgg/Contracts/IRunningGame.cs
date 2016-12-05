@@ -2,7 +2,7 @@
 using Sohg.SocietyAgg.Contracts;
 using System.Collections.Generic;
 using System.Collections;
-using Sohg.GameAgg.UI;
+using Sohg.TechnologyAgg.Contracts;
 
 namespace Sohg.GameAgg.Contracts
 {

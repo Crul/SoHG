@@ -1,8 +1,8 @@
 ﻿using Sohg.CrossCutting;
-using Sohg.GameAgg.Contracts;
+using Sohg.TechnologyAgg.Contracts;
 using UnityEngine;
 
-namespace Sohg.GameAgg.Technologies
+namespace Sohg.TechnologyAgg
 {
     public abstract class Technology : ScriptableBaseObject, ITechnology
     {

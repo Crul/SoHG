@@ -1,12 +1,13 @@
 ﻿using Sohg.CrossCutting;
 using Sohg.CrossCutting.Contracts;
 using Sohg.GameAgg.Contracts;
+using Sohg.TechnologyAgg.Contracts;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Sohg.GameAgg.UI
+namespace Sohg.TechnologyAgg.UI
 {
     public class TechnologyPanel : BaseComponent, ITechnologyPanel
     {

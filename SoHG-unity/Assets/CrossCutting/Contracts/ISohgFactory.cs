@@ -4,6 +4,7 @@ using Sohg.Grids2D.Contracts;
 using Sohg.SocietyAgg.Contracts;
 using Sohg.SocietyAgg.UI;
 using UnityEngine;
+using Sohg.TechnologyAgg.Contracts;
 
 namespace Sohg.CrossCutting.Contracts
 {

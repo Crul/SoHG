@@ -1,10 +1,10 @@
 ﻿using Sohg.CrossCutting;
 using Sohg.GameAgg.Contracts;
-using Sohg.SocietyAgg.Contracts;
+using Sohg.TechnologyAgg.Contracts;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Sohg.GameAgg.UI
+namespace Sohg.TechnologyAgg.UI
 {
     [RequireComponent(typeof(Button))]
     public class TechnologyButton : BaseComponent, ITechnologyButton

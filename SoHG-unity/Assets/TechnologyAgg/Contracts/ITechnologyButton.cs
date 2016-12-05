@@ -1,4 +1,6 @@
-﻿namespace Sohg.GameAgg.Contracts
+﻿using Sohg.GameAgg.Contracts;
+
+namespace Sohg.TechnologyAgg.Contracts
 {
     public interface ITechnologyButton
     {

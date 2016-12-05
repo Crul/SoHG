@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using Sohg.GameAgg.Contracts;
-using Sohg.GameAgg.UI;
 using Sohg.SocietyAgg.Contracts;
 using System.Linq;
+using Sohg.TechnologyAgg.Contracts;
 
 namespace Sohg.GameAgg
 {

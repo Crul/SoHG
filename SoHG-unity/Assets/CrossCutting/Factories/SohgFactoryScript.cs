@@ -10,6 +10,7 @@ using System;
 using Sohg.SocietyAgg.Relationships;
 using Sohg.SocietyAgg.UI;
 using Sohg.SocietyAgg;
+using Sohg.TechnologyAgg.Contracts;
 
 namespace Sohg.CrossCutting.Factories
 {

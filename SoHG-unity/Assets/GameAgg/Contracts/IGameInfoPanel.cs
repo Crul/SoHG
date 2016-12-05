@@ -1,4 +1,6 @@
-﻿namespace Sohg.GameAgg.Contracts
+﻿using Sohg.TechnologyAgg.Contracts;
+
+namespace Sohg.GameAgg.Contracts
 {
     public interface IGameInfoPanel
     {
