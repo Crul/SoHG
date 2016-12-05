@@ -1,6 +1,5 @@
 ﻿using Sohg.GameAgg.Contracts;
 using Sohg.SocietyAgg.Contracts;
-using UnityEngine;
 
 namespace Sohg.SocietyAgg
 {

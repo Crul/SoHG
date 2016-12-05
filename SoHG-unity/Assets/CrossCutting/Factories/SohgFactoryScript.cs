@@ -6,10 +6,10 @@ using System.Linq;
 using Sohg.GameAgg.Definition;
 using Sohg.CrossCutting.Contracts;
 using Sohg.SocietyAgg.Contracts;
-using Sohg.SocietyAgg;
 using System;
 using Sohg.SocietyAgg.Relationships;
 using Sohg.SocietyAgg.UI;
+using Sohg.SocietyAgg;
 
 namespace Sohg.CrossCutting.Factories
 {
@@ -24,6 +24,8 @@ namespace Sohg.CrossCutting.Factories
         private GameDefinitionScript gameDefinition;
 
         private Canvas boardCanvas;
+        private Canvas boardOverCanvas;
+        private Canvas fixedOverCanvas;
 
         public ISohgConfig Config { get { return sohgConfig; } }
         public IGameDefinition GameDefinition { get { return gameDefinition; } }
@@ -33,10 +35,20 @@ namespace Sohg.CrossCutting.Factories
             return prefabFactory.InstantiateEndGame(boardCanvas);
         }
 
-        public void CreateFight(ICell from, ICell target, Action resolveAttack)
+        public IFaithRecolectable CreateFaith(IWarPlayable game, ICell faithCell, int faithAmount)
         {
-            var fight = prefabFactory.InstantiateFight(boardCanvas, "Fight");
+            var faithRecolectable = prefabFactory.InstantiateFaithRecolectable(boardOverCanvas, "FaithRecolectable");
+            faithRecolectable.Initialize(game, faithCell, faithAmount);
+
+            return faithRecolectable;
+        }
+
+        public IFight CreateFight(ICell from, ICell target, Action resolveAttack)
+        {
+            var fight = prefabFactory.InstantiateFight(boardOverCanvas, "Fight");
             fight.Initialize(from, target, Config.FightDuration, resolveAttack);
+
+            return fight;
         }
 
         public IGrid CreateGrid()
@@ -46,10 +58,10 @@ namespace Sohg.CrossCutting.Factories
 
         public IInstructions CreateInstructions()
         {
-            return prefabFactory.InstantiateInstructions(boardCanvas);
+            return prefabFactory.InstantiateInstructions(fixedOverCanvas);
         }
 
-        public IRelationship CreateRelationship(Society we, ISociety them)
+        public IRelationship CreateRelationship(ISociety we, ISociety them)
         {
             return new Relationship(we, them);
         }
@@ -68,7 +80,7 @@ namespace Sohg.CrossCutting.Factories
             var society = new Society(this, societyDefinition, territory);
             territory.SetSociety(society);
 
-            var societyMarker = prefabFactory.InstantiateSocietyMarker(boardCanvas, society.Name + "Marker");
+            var societyMarker = prefabFactory.InstantiateSocietyMarker(boardOverCanvas, society.Name + "Marker");
             societyMarker.Initialize(game, society);
 
             cells.ToList().ForEach(cell => cell.SetSocietyAssigned());
@@ -100,13 +112,13 @@ namespace Sohg.CrossCutting.Factories
 
         public ISocietyInfo CreateSocietyInfo(IRunningGame game)
         {
-            var societyInfo = prefabFactory.InstantiateSocietyInfo(boardCanvas, "SocietyInfo");
+            var societyInfo = prefabFactory.InstantiateSocietyInfo(boardOverCanvas, "SocietyInfo");
             societyInfo.Initialize(game);
 
             return societyInfo;
         }
 
-        public ISocietyPropertyInfo CreateSocietyPropertyInfo(SocietyProperty property, SocietyInfo societyInfo)
+        public ISocietyPropertyInfo CreateSocietyPropertyInfo(SocietyProperty property, ISocietyInfo societyInfo)
         {
             var societyPropertyInfo = prefabFactory
                 .InstantiateSocietyPropertyInfo(societyInfo.PropertiesPanel, "SocietyProperty" + property.ToString());
@@ -114,6 +126,14 @@ namespace Sohg.CrossCutting.Factories
             societyPropertyInfo.Initialize(property);
 
             return societyPropertyInfo;
+        }
+
+        public ITechnologyButton CreateTechnologyButton(IRunningGame game, GameObject technologyPanel, ITechnology technology)
+        {
+            var technologyButton = prefabFactory.InstantiateTechnologyButton(technologyPanel, technology.Name);
+            technologyButton.Initialize(game, technology);
+
+            return technologyButton;
         }
 
         public ITerritory CreateTerritory(params ICell[] cells)
@@ -128,12 +148,14 @@ namespace Sohg.CrossCutting.Factories
 
         public IGrid GetGrid()
         {
-            return (IGrid)Grid2D.instance;
+            return Grid2D.instance;
         }
 
-        public void SetCanvas(Canvas boardCanvas)
+        public void SetCanvas(Canvas boardCanvas, Canvas boardOverCanvas, Canvas fixedOverCanvas)
         {
             this.boardCanvas = boardCanvas;
+            this.boardOverCanvas = boardOverCanvas;
+            this.fixedOverCanvas = fixedOverCanvas;
         }
     }
 }

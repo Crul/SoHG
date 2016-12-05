@@ -9,10 +9,15 @@ namespace Sohg.GameAgg.Stages
     {
         public override void Start()
         {
-            game.OpenInstructions(
+            game.OpenInstructions
+            (
                 "The human species are just going to start existing, and it's not the only hominid species in the world." + System.Environment.NewLine +
                 System.Environment.NewLine +
-                "First of all, select the start point for the humans.");
+                "First of all, select the start point for the humans."
+            )
+            .OnClose(() => game.SetGridSelectionToCell());
+
+            game.Log("Select start point");
         }
 
         public override void OnCellClick(ICell cell)
@@ -28,6 +33,7 @@ namespace Sohg.GameAgg.Stages
             if (cell.IsSocietyUnassigned)
             {
                 game.CreateSocieties(cell);
+                game.SetGridSelectionToNone();
                 game.NextStage();
             }
         }

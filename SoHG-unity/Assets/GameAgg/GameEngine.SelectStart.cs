@@ -11,17 +11,27 @@ namespace Sohg.GameAgg
         {
             Societies = new List<ISociety>();
 
-            playerSociety = CreateSociety(gameDefinition.PlayerSociety, humanInitialCell);
+            PlayerSociety = CreateSociety(GameDefinition.PlayerSociety, humanInitialCell);
             for (var i = 0; i < SohgFactory.Config.NonPlayerSocietyCount; i++)
             {
-                CreateSociety(gameDefinition.NonPlayerSociety);
+                CreateSociety(GameDefinition.NonPlayerSociety);
             }
 
             grid.ExpandSocietiesTerritories();
 
             Societies.ForEach(society => society.Initialize());
         }
-        
+
+        public void SetGridSelectionToCell()
+        {
+            grid.SetGridSelectionToCell();
+        }
+
+        public void SetGridSelectionToNone()
+        {
+            grid.SetGridSelectionToNone();
+        }
+
         private ISociety CreateSociety(ISocietyDefinition societyDefinition, params ICell[] initialCells)
         {
             var newSociety = SohgFactory.CreateSociety(this, societyDefinition, initialCells);

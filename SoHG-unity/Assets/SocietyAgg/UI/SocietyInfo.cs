@@ -28,6 +28,7 @@ namespace Sohg.SocietyAgg.UI
         [SerializeField]
         private SocietyProperty[] societyProperties;
 
+        private IRunningGame game;
         private int colliderMargin = 10; // TODO move to SocietyInfo.colliderMargin config/inspector prop?
         private Image background;
         private RectTransform rectTransform;
@@ -48,17 +49,28 @@ namespace Sohg.SocietyAgg.UI
             effectIcons = new List<ISocietyEffectIcon>();
             propertyInfos = new List<ISocietyPropertyInfo>();
 
+            this.game = game;
+
             background = gameObject.GetComponent<Image>();
             rectTransform = gameObject.GetComponent<RectTransform>();
             boxCollider2D = gameObject.GetComponent<BoxCollider2D>();
-
-            game.Definition.SocietyActions.ToList()
-                .ForEach(action => InitializeAction(game, action));
 
             societyProperties.ToList()
                 .ForEach(property => InitializeProperty(game, property));
             
             Hide();
+        }
+
+        public void AddAction(ISocietyAction action)
+        {
+            action.Initialize(game);
+
+            var actionButton = game.SohgFactory.CreateSocietyActionButton(action, this);
+            actionButtons.Add(actionButton);
+
+            // TODO add action effect icon on enabled (effect icons pool?)
+            var effectIcon = game.SohgFactory.CreateSocietyEffectIcon(action, this);
+            effectIcons.Add(effectIcon);
         }
 
         public void Hide()
@@ -104,26 +116,20 @@ namespace Sohg.SocietyAgg.UI
             if (gameObject.activeSelf && Society != null)
             {
                 // TODO change this with actionButton.SetSociety like propertyInfo
-                actionButtons.ForEach(actionButton =>
-                    actionButton.SetEnable(Society.IsActionEnabled[actionButton.SocietyAction]));
+                actionButtons.ForEach(actionButton => 
+                {
+                    var isActionButtonEnabled = (game.FaithPower > actionButton.SocietyAction.FaithCost
+                        && Society.IsActionEnabled[actionButton.SocietyAction]);
+
+                    actionButton.SetEnable(isActionButtonEnabled);
+                });
 
                 // TODO change this with effectIcon.SetSociety like propertyInfo
                 effectIcons.ForEach(effectIcon =>
                     effectIcon.SetEnable(Society.IsEffectActive[effectIcon.SocietyAction]));
             }
         }
-
-        private void InitializeAction(IRunningGame game, ISocietyAction action)
-        {
-            action.Initialize(game);
-
-            var actionButton = game.SohgFactory.CreateSocietyActionButton(action, this);
-            actionButtons.Add(actionButton);
-
-            var effectIcon = game.SohgFactory.CreateSocietyEffectIcon(action, this);
-            effectIcons.Add(effectIcon);
-        }
-
+        
         private void InitializeProperty(IRunningGame game, SocietyProperty property)
         {
             var propertyInfo = game.SohgFactory.CreateSocietyPropertyInfo(property, this);

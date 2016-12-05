@@ -20,6 +20,7 @@ namespace Sohg.GameAgg
             if (time % SohgFactory.Config.WarActionsTimeInterval == 0)
             {
                 Societies.ForEach(society => society.Evolve(this));
+                EmitFaith(PlayerSociety);
             }
 
             grid.RedrawIfChanged();
@@ -45,7 +46,7 @@ namespace Sohg.GameAgg
 
         private void CheckWinOrLoose()
         {
-            var hasPlayerLosen = (playerSociety.Territory.CellCount == 0);
+            var hasPlayerLosen = (PlayerSociety.Territory.CellCount == 0);
             if (hasPlayerLosen)
             {
                 endGame.Show(false);

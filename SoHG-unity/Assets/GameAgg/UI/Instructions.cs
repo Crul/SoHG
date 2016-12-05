@@ -1,4 +1,5 @@
-﻿using Sohg.CrossCutting;
+﻿using System;
+using Sohg.CrossCutting;
 using Sohg.GameAgg.Contracts;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,9 +13,11 @@ namespace Sohg.GameAgg.UI
         [SerializeField]
         private Text instructionsText;
 
+        private Action onCloseAction;
+
         public void Awake()
         {
-            closeButton.onClick.AddListener(() => gameObject.SetActive(false));
+            closeButton.onClick.AddListener(() => Close());
         }
 
         public bool IsOpened()
@@ -22,11 +25,27 @@ namespace Sohg.GameAgg.UI
             return gameObject.activeSelf;
         }
 
+        public void OnClose(Action onCloseAction)
+        {
+            this.onCloseAction = onCloseAction;
+        }
+
         public void Show(string text)
         {
             instructionsText.text = text;
             transform.SetAsLastSibling();
             gameObject.SetActive(true);
+        }
+
+        private void Close()
+        {
+            if (onCloseAction != null)
+            {
+                onCloseAction();
+                onCloseAction = null;
+            }
+
+            gameObject.SetActive(false);
         }
     }
 }

@@ -10,6 +10,7 @@ namespace Sohg.SocietyAgg.Contracts
         GameObject PropertiesPanel { get; }
         ISociety Society { get; }
 
+        void AddAction(ISocietyAction action);
         void Initialize(IRunningGame game);
         void Hide();
         void Show(ISociety society);

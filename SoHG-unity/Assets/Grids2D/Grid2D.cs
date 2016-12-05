@@ -22,5 +22,15 @@ namespace Grids2D
 
             return filteredCells.ElementAt(randomIndex);
         }
+
+        public void SetGridSelectionToNone()
+        {
+            highlightMode = HIGHLIGHT_MODE.None;
+        }
+
+        public void SetGridSelectionToCell()
+        {
+            highlightMode = HIGHLIGHT_MODE.Cells;
+        }
     }
 }

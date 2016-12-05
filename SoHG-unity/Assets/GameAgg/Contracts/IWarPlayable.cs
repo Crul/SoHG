@@ -1,7 +1,7 @@
 ﻿using Sohg.Grids2D.Contracts;
 using Sohg.SocietyAgg.Relationships;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 
 namespace Sohg.GameAgg.Contracts
 {

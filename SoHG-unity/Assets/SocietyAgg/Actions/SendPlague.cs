@@ -1,6 +1,7 @@
 ﻿using Sohg.SocietyAgg.Contracts;
 using System.Collections;
 using UnityEngine;
+using System;
 
 namespace Sohg.SocietyAgg.Actions
 {
@@ -11,10 +12,14 @@ namespace Sohg.SocietyAgg.Actions
         private float plagueKillRate;
 
         private int secondsForRespawn = 3; // TODO move SendPlague.secondsForRespawn to config?
-
+        
         public override void Execute(ISociety society)
         {
-            game.ExecuteAction(ExecutePlague(society));
+            if (game.ConsumeFaith(FaithCost))
+            {
+                game.ExecuteAction(ExecutePlague(society));
+                game.Log("Plague sent to {0}", society.Name);
+            }
         }
 
         private IEnumerator ExecutePlague(ISociety society)

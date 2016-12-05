@@ -5,6 +5,8 @@ using UnityEngine;
 using Sohg.SocietyAgg.Contracts;
 using Sohg.GameAgg.UI;
 using Sohg.GameAgg.Contracts;
+using Sohg.CrossCutting.Pooling;
+using System;
 
 namespace Sohg.CrossCutting.Factories
 {
@@ -19,6 +21,12 @@ namespace Sohg.CrossCutting.Factories
         private EndGame endGamePrefab;
         [SerializeField]
         private Instructions instructionsPrefab;
+
+        [SerializeField]
+        private FaithRecolectable faithRecolectablePrefab;
+        [SerializeField]
+        private Fight fightPrefab;
+
         [SerializeField]
         private SocietyMarker societyMarkerPrefab;
         [SerializeField]
@@ -29,12 +37,18 @@ namespace Sohg.CrossCutting.Factories
         private SocietyEffectIcon societyEffectIconPrefab;
         [SerializeField]
         private SocietyPropertyInfo societyPropertyInfoPrefab;
+
         [SerializeField]
-        private Fight fightPrefab;
+        private TechnologyButton technologyButtonPrefab;
 
         public IGrid InstantiateGrid(Canvas canvas)
         {
             return InstantiateIntoCanvas(gridPrefab, canvas, "Grid2D");
+        }
+
+        public IFaithRecolectable InstantiateFaithRecolectable(Canvas canvas, string name)
+        {
+            return InstantiatePooledIntoCanvas(faithRecolectablePrefab, canvas, name);
         }
 
         public IEndGame InstantiateEndGame(Canvas canvas)
@@ -54,10 +68,7 @@ namespace Sohg.CrossCutting.Factories
 
         public IFight InstantiateFight(Canvas canvas, string name)
         {
-            var fight = fightPrefab.GetPooledInstance<Fight>(canvas);
-            fight.name = name;
-
-            return fight;
+            return InstantiatePooledIntoCanvas(fightPrefab, canvas, name);
         }
 
         public ISocietyInfo InstantiateSocietyInfo(Canvas canvas, string name)
@@ -80,23 +91,37 @@ namespace Sohg.CrossCutting.Factories
             return InstantiateInto(societyPropertyInfoPrefab, gameObject, name);
         }
 
-        private T InstantiateIntoCanvas<T>(T original, Canvas canvas, string name = "")
-            where T : Component
+        public ITechnologyButton InstantiateTechnologyButton(GameObject gameObject, string name)
         {
-            return InstantiateInto(original, canvas.gameObject, name);
+            return InstantiateInto(technologyButtonPrefab, gameObject, name);
         }
 
-        private T InstantiateInto<T>(T original, GameObject gameObject, string name = "")
+        public T InstantiatePooledIntoCanvas<T>(T prefab, Canvas canvas, string name = "")
+            where T : PooledObject
+        {
+            var pooledObject = prefab.GetPooledInstance<T>(canvas);
+            pooledObject.name = name;
+
+            return pooledObject;
+        }
+
+        private T InstantiateIntoCanvas<T>(T prefab, Canvas canvas, string name = "")
             where T : Component
         {
-            var newGameObject = (T)Instantiate(original, gameObject.transform);
+            return InstantiateInto(prefab, canvas.gameObject, name);
+        }
+
+        private T InstantiateInto<T>(T prefab, GameObject gameObject, string name = "")
+            where T : Component
+        {
+            var newGameObject = (T)Instantiate(prefab, gameObject.transform);
             if (!string.IsNullOrEmpty(name))
             {
                 newGameObject.name = name;
             }
             else
             {
-                newGameObject.name = original.name;
+                newGameObject.name = prefab.name;
             }
 
             return newGameObject;
