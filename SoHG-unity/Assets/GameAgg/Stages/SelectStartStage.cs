@@ -9,6 +9,8 @@ namespace Sohg.GameAgg.Stages
     {
         public override void Start()
         {
+            game.Reset();
+
             game.OpenInstructions
             (
                 "The human species are just going to start existing, and it's not the only hominid species in the world." + System.Environment.NewLine +

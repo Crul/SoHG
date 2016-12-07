@@ -3,7 +3,6 @@ using Sohg.CrossCutting;
 using Sohg.CrossCutting.Contracts;
 using Sohg.GameAgg.Contracts;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,12 +29,11 @@ namespace Sohg.TechnologyAgg.UI
             backButton.onClick.AddListener(() => gameObject.SetActive(false));
         }
 
-        public void Initialize(IRunningGame game)
+        public void Initialize(IRunningGame game, List<ITechnologyCategory> technologyCategories)
         {
             this.game = game;
 
-            game.GameDefinition.TechnologyCategories.ToList()
-                .ForEach(technologyCategory => AddTechnologyCategory(game.SohgFactory, technologyCategory));
+            technologyCategories.ForEach(technologyCategory => AddTechnologyCategory(game.SohgFactory, technologyCategory));
         }
 
         public bool IsVisible()

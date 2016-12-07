@@ -8,6 +8,7 @@ namespace Sohg.SocietyAgg.Contracts
     {
         Sprite ActionIcon { get; }
         int FaithCost { get; }
+        bool IsActive { get; }
 
         void Initialize(IRunningGame game);
         void Execute(ISociety society);

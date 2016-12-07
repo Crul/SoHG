@@ -3,15 +3,16 @@ using Sohg.GameAgg.Contracts;
 using Sohg.GameAgg.Stages;
 using Sohg.SocietyAgg.Contracts;
 using UnityEngine;
-using Sohg.SocietyAgg;
 using Sohg.SocietyAgg.Actions;
 using Sohg.TechnologyAgg;
 using Sohg.TechnologyAgg.Contracts;
+using Sohg.SpeciesAgg;
+using Sohg.SpeciesAgg.Contracts;
 
-namespace Sohg.GameAgg.Definition
+namespace Sohg.GameAgg
 {
     [CreateAssetMenu(fileName = "GameDefinition", menuName = "SoHG/Game Definition")]
-    public class GameDefinitionScript : ScriptableBaseObject, IGameDefinition
+    public class GameDefinition : ScriptableBaseObject, IGameDefinition
     {
         [SerializeField]
         private GameStageScript[] stages;
@@ -20,17 +21,17 @@ namespace Sohg.GameAgg.Definition
 
         [Header("Society")]
         [SerializeField]
-        private SocietyDefinitionScript playerSociety;
+        private Species playerSpecies;
         [SerializeField]
-        private SocietyDefinitionScript nonPlayerSociety;
+        private Species[] nonPlayerSpecies;
         [Space]
         [SerializeField]
         private SocietyAction[] societyActions;
 
         public IGameStage[] Stages { get { return stages; } }
         public ITechnologyCategory[] TechnologyCategories { get { return technologyCategories; } }
-        public ISocietyDefinition PlayerSociety { get { return playerSociety; } }
-        public ISocietyDefinition NonPlayerSociety { get { return nonPlayerSociety; } }
+        public ISpecies PlayerSpecies { get { return playerSpecies; } }
+        public ISpecies[] NonPlayerSpecies { get { return nonPlayerSpecies; } }
         public ISocietyAction[] SocietyActions { get { return societyActions; } }
     }
 }

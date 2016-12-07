@@ -19,8 +19,8 @@ namespace Sohg.GameAgg
         {
             if (time % SohgFactory.Config.WarActionsTimeInterval == 0)
             {
-                Societies.ForEach(society => society.Evolve(this));
-                EmitFaith(PlayerSociety);
+                Species.ForEach(species => species.Evolve(this));
+                EmitFaith(PlayerSpecies);
             }
 
             grid.RedrawIfChanged();
@@ -46,14 +46,14 @@ namespace Sohg.GameAgg
 
         private void CheckWinOrLoose()
         {
-            var hasPlayerLosen = (PlayerSociety.Territory.CellCount == 0);
+            var hasPlayerLosen = (PlayerSpecies.Societies.Sum(society => society.Territory.CellCount) == 0);
             if (hasPlayerLosen)
             {
                 endGame.Show(false);
             }
             else
             {
-                var hasPlayerWon = (Societies.Count == 1);
+                var hasPlayerWon = (Species.Count == 1);
                 if (hasPlayerWon)
                 {
                     endGame.Show(true);
@@ -63,11 +63,17 @@ namespace Sohg.GameAgg
 
         private void KillSociety(ISociety deathSociety)
         {
-            Societies // remove relationships first to prevent pointing to removed societies
+            Species.SelectMany(species => species.Societies)
+                // remove relationships first to prevent pointing to removed societies
                 .Where(society => society != deathSociety).ToList()
                 .ForEach(society => society.RemoveRelationship(deathSociety));
 
-            Societies.Remove(deathSociety);
+            deathSociety.Species.Societies.Remove(deathSociety);
+
+            if (deathSociety.Species.Societies.Count == 0)
+            {
+                Species.Remove(deathSociety.Species);
+            }
         }
     }
 }

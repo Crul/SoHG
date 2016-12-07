@@ -1,7 +1,8 @@
 ﻿using Sohg.GameAgg.Contracts;
 using Sohg.Grids2D.Contracts;
 using Sohg.SocietyAgg.Contracts;
-using System.Collections.Generic;
+using Sohg.SpeciesAgg.Contracts;
+using System.Linq;
 
 namespace Sohg.GameAgg
 {
@@ -9,17 +10,19 @@ namespace Sohg.GameAgg
     {
         public void CreateSocieties(ICell humanInitialCell)
         {
-            Societies = new List<ISociety>();
+            CreateSociety(gameDefinition.PlayerSpecies, humanInitialCell);
 
-            PlayerSociety = CreateSociety(GameDefinition.PlayerSociety, humanInitialCell);
+            var nonPlayerSpeciesCount = gameDefinition.NonPlayerSpecies.Length;
             for (var i = 0; i < SohgFactory.Config.NonPlayerSocietyCount; i++)
             {
-                CreateSociety(GameDefinition.NonPlayerSociety);
+                var species = gameDefinition.NonPlayerSpecies[i % (nonPlayerSpeciesCount - 1)];
+                CreateSociety(species);
             }
 
             grid.ExpandSocietiesTerritories();
 
-            Societies.ForEach(society => society.Initialize());
+            Species.SelectMany(species => species.Societies).ToList()
+                .ForEach(society => society.Initialize());
         }
 
         public void SetGridSelectionToCell()
@@ -32,12 +35,9 @@ namespace Sohg.GameAgg
             grid.SetGridSelectionToNone();
         }
 
-        private ISociety CreateSociety(ISocietyDefinition societyDefinition, params ICell[] initialCells)
+        private void CreateSociety(ISpecies species, params ICell[] initialCells)
         {
-            var newSociety = SohgFactory.CreateSociety(this, societyDefinition, initialCells);
-            Societies.Add(newSociety);
-
-            return newSociety;
+            SohgFactory.CreateSociety(this, species, initialCells);
         }
     }
 }

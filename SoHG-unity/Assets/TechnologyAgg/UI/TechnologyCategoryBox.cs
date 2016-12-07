@@ -38,7 +38,7 @@ namespace Sohg.TechnologyAgg.UI
 
         public void SetState(IRunningGame game)
         {
-            technologyBoxes.ForEach(technologyBox => technologyBox.SetState(game.FaithPower));
+            technologyBoxes.ForEach(technologyBox => technologyBox.SetState(game.PlayerSpecies.FaithPower));
         }
     }
 }

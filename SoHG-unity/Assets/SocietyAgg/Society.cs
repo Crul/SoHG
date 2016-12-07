@@ -4,6 +4,7 @@ using Sohg.SocietyAgg.Contracts;
 using UnityEngine;
 using Sohg.CrossCutting.Contracts;
 using System.Linq;
+using Sohg.SpeciesAgg.Contracts;
 
 namespace Sohg.SocietyAgg
 {
@@ -11,6 +12,7 @@ namespace Sohg.SocietyAgg
     {
         public string Name { get; private set; }
         public Color Color { get; private set; }
+        public ISpecies Species { get; private set; }
         public ITerritory Territory { get; private set; }
 
         public Dictionary<ISocietyAction, bool> IsActionEnabled { get; private set; }
@@ -21,17 +23,17 @@ namespace Sohg.SocietyAgg
 
         private ISohgConfig config { get { return sohgFactory.Config; } }
 
-        public Society(ISohgFactory sohgFactory,
-            ISocietyDefinition societyDefinition, ITerritory territory)
+        public Society(ISohgFactory sohgFactory, ISpecies species, ITerritory territory)
         {
             relationships = new List<IRelationship>();
             IsActionEnabled = new Dictionary<ISocietyAction, bool>();
             IsEffectActive = new Dictionary<ISocietyAction, bool>();
 
-            Name = societyDefinition.Name;
-            Color = societyDefinition.Color;
+            Name = species.Name;
+            Color = species.Color;
             this.sohgFactory = sohgFactory;
-            State = new SocietyState(societyDefinition);
+            Species = species;
+            State = new SocietyState(species);
             Territory = territory;
 
             sohgFactory.GameDefinition.SocietyActions

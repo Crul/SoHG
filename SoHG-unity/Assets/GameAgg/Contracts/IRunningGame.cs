@@ -3,18 +3,16 @@ using Sohg.SocietyAgg.Contracts;
 using System.Collections.Generic;
 using System.Collections;
 using Sohg.TechnologyAgg.Contracts;
+using Sohg.SpeciesAgg.Contracts;
 
 namespace Sohg.GameAgg.Contracts
 {
     public interface IRunningGame
     {
-        IGameDefinition GameDefinition { get; }
         ISohgFactory SohgFactory { get; }
 
-        ISociety PlayerSociety { get; }
-        List<ISociety> Societies { get; }
-        int FaithPower { get; }
-        int TotalFaith { get; }
+        ISpecies PlayerSpecies { get; }
+        List<ISpecies> Species { get; }
 
         void ExecuteAction(IEnumerator actionExecution);
         bool IsPaused();
@@ -23,8 +21,5 @@ namespace Sohg.GameAgg.Contracts
         void OnTechnologyActivated(ITechnology technology);
         IInstructions OpenInstructions(string instructionsText);
         void OpenSocietyInfo(ISociety society);
-
-        void AddFaith(int faithAmount);
-        bool ConsumeFaith(int faithAmount);
     }
 }

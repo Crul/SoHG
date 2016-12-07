@@ -3,7 +3,6 @@ using Sohg.Grids2D.Contracts;
 using Sohg.GameAgg.Contracts;
 using Grids2D;
 using System.Linq;
-using Sohg.GameAgg.Definition;
 using Sohg.CrossCutting.Contracts;
 using Sohg.SocietyAgg.Contracts;
 using System;
@@ -11,6 +10,8 @@ using Sohg.SocietyAgg.Relationships;
 using Sohg.SocietyAgg.UI;
 using Sohg.SocietyAgg;
 using Sohg.TechnologyAgg.Contracts;
+using Sohg.SpeciesAgg.Contracts;
+using Sohg.GameAgg;
 
 namespace Sohg.CrossCutting.Factories
 {
@@ -22,7 +23,7 @@ namespace Sohg.CrossCutting.Factories
         [SerializeField]
         private SohgConfigScript sohgConfig;
         [SerializeField]
-        private GameDefinitionScript gameDefinition;
+        private GameDefinition gameDefinition;
 
         private Canvas boardCanvas;
         private Canvas boardOverCanvas;
@@ -67,7 +68,7 @@ namespace Sohg.CrossCutting.Factories
             return new Relationship(we, them);
         }
 
-        public ISociety CreateSociety(IRunningGame game, ISocietyDefinition societyDefinition, ICell[] cells)
+        public void CreateSociety(IRunningGame game, ISpecies species, ICell[] cells)
         {
             if (cells.Length == 0)
             {
@@ -78,7 +79,7 @@ namespace Sohg.CrossCutting.Factories
             }
 
             var territory = CreateTerritory(cells);
-            var society = new Society(this, societyDefinition, territory);
+            var society = new Society(this, species, territory);
             territory.SetSociety(society);
 
             var societyMarker = prefabFactory.InstantiateSocietyMarker(boardOverCanvas, society.Name + "Marker");
@@ -86,13 +87,14 @@ namespace Sohg.CrossCutting.Factories
 
             cells.ToList().ForEach(cell => cell.SetSocietyAssigned());
 
-            game.Societies.ForEach(otherSociety =>
-            {
-                otherSociety.AddRelationship(society);
-                society.AddRelationship(otherSociety);
-            });
+            game.Species.SelectMany(otherSpecies => otherSpecies.Societies).ToList()
+                .ForEach(otherSociety =>
+                {
+                    otherSociety.AddRelationship(society);
+                    society.AddRelationship(otherSociety);
+                });
 
-            return society;
+            species.Societies.Add(society);
         }
 
         public ISocietyActionButton CreateSocietyActionButton(ISocietyAction action, ISocietyInfo societyInfo)

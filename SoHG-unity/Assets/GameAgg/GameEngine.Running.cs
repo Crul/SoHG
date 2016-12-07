@@ -29,22 +29,22 @@ namespace Sohg.GameAgg
         public void NextStage()
         {
             currentStageIndex++;
-            if (currentStageIndex >= GameDefinition.Stages.Length)
+            if (currentStageIndex >= gameDefinition.Stages.Length)
             {
                 throw new System.Exception("GameEngine.NextStage() - Not enough stages");
             }
 
-            currentStage = GameDefinition.Stages[currentStageIndex];
+            currentStage = gameDefinition.Stages[currentStageIndex];
             currentStage.SetGame(this);
             currentStage.Start();
         }
 
         public void OnTechnologyActivated(ITechnology technology)
         {
-            ConsumeFaith(technology.FaithCost);
+            PlayerSpecies.ConsumeFaith(technology.FaithCost);
 
             // TODO make society action technology requirement properly
-            var activatedSocietyActions = GameDefinition.SocietyActions
+            var activatedSocietyActions = gameDefinition.SocietyActions
                 .Where(action => action.Requires(technology));
 
             activatedSocietyActions.ToList()

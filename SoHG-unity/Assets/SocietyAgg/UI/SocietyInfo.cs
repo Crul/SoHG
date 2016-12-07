@@ -118,7 +118,7 @@ namespace Sohg.SocietyAgg.UI
                 // TODO change this with actionButton.SetSociety like propertyInfo
                 actionButtons.ForEach(actionButton => 
                 {
-                    var isActionButtonEnabled = (game.FaithPower > actionButton.SocietyAction.FaithCost
+                    var isActionButtonEnabled = (game.PlayerSpecies.FaithPower > actionButton.SocietyAction.FaithCost
                         && Society.IsActionEnabled[actionButton.SocietyAction]);
 
                     actionButton.SetEnable(isActionButtonEnabled);

@@ -1,4 +1,5 @@
 ﻿using Sohg.SocietyAgg.Contracts;
+using Sohg.SpeciesAgg.Contracts;
 using UnityEngine;
 
 namespace Sohg.SocietyAgg
@@ -23,10 +24,10 @@ namespace Sohg.SocietyAgg
                 get { return System.Math.Max(1, System.Convert.ToInt32(Power / 10000)); } // TODO calculate MaximumAttacks
             }
 
-            public SocietyState(ISocietyDefinition definition)
+            public SocietyState(ISpecies species)
             {
-                aggressivityRate = definition.InitialAggressivityRate;
-                technologyLevelRate = definition.InitialTechnologyLevelRate;
+                aggressivityRate = species.InitialAggressivityRate;
+                technologyLevelRate = species.InitialTechnologyLevelRate;
                 PopulationAmount = 0;
                 FriendshipRange = 0.5f;
             }

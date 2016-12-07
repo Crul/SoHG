@@ -2,12 +2,14 @@
 using Sohg.Grids2D.Contracts;
 using UnityEngine;
 using Sohg.GameAgg.Contracts;
+using Sohg.SpeciesAgg.Contracts;
 
 namespace Sohg.SocietyAgg.Contracts
 {
     public interface ISociety
     {
         string Name { get; }
+        ISpecies Species { get; }
         ISocietyState State { get; }
         ITerritory Territory { get; }
         Color Color { get; }

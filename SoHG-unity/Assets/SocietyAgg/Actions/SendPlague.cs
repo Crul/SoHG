@@ -15,7 +15,7 @@ namespace Sohg.SocietyAgg.Actions
         
         public override void Execute(ISociety society)
         {
-            if (game.ConsumeFaith(FaithCost))
+            if (game.PlayerSpecies.ConsumeFaith(FaithCost))
             {
                 game.ExecuteAction(ExecutePlague(society));
                 game.Log("Plague sent to {0}", society.Name);

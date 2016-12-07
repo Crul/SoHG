@@ -21,8 +21,9 @@ namespace Sohg.SocietyAgg.Actions
 
         public Sprite ActionIcon { get { return actionIcon; } }
         public int FaithCost { get { return faithCost; } }
+        public bool IsActive { get; private set; }
         public ITechnology[] RequiredTechnologies { get { return requiredTechnologies; } }
-
+        
         public void Initialize(IRunningGame game)
         {
             this.game = game;

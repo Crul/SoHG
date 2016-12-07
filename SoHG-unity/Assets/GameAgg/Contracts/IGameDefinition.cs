@@ -1,5 +1,6 @@
 ﻿using Sohg.TechnologyAgg.Contracts;
 using Sohg.SocietyAgg.Contracts;
+using Sohg.SpeciesAgg.Contracts;
 
 namespace Sohg.GameAgg.Contracts
 {
@@ -9,7 +10,7 @@ namespace Sohg.GameAgg.Contracts
         ISocietyAction[] SocietyActions { get; }
         ITechnologyCategory[] TechnologyCategories { get; }
 
-        ISocietyDefinition PlayerSociety { get; }
-        ISocietyDefinition NonPlayerSociety { get; }
+        ISpecies PlayerSpecies { get; }
+        ISpecies[] NonPlayerSpecies { get; }
     }
 }
