@@ -42,6 +42,8 @@ namespace Sohg.CrossCutting.Factories
 
         [SerializeField]
         private TechnologyBox technologyBoxPrefab;
+        [SerializeField]
+        private TechnologyCategoryBox technologyCategoryBoxPrefab;
 
         public IGrid InstantiateGrid(Canvas canvas)
         {
@@ -60,7 +62,10 @@ namespace Sohg.CrossCutting.Factories
 
         public IInstructions InstantiateInstructions(Canvas canvas)
         {
-            return InstantiateIntoCanvas(instructionsPrefab, canvas, "Instructions");
+            var instructions = InstantiateIntoCanvas(instructionsPrefab, canvas, "Instructions");
+            instructions.transform.localScale = Vector3.one; // TODO why scale = 1 needed?
+
+            return instructions;
         }
 
         public ISocietyMarker InstantiateSocietyMarker(Canvas canvas, string name)
@@ -95,7 +100,18 @@ namespace Sohg.CrossCutting.Factories
 
         public ITechnologyBox InstantiateTechnologyBox(GameObject gameObject, string name)
         {
-            return InstantiateInto(technologyBoxPrefab, gameObject, name);
+            var technologyBox = InstantiateInto(technologyBoxPrefab, gameObject, name);
+            technologyBox.transform.localScale = Vector3.one; // TODO why scale = 1 needed?
+
+            return technologyBox;
+        }
+
+        public ITechnologyCategoryBox InstantiateTechnologyCategoryBox(GameObject gameObject, string name)
+        {
+            var technologyCategoryBox = InstantiateInto(technologyCategoryBoxPrefab, gameObject, name);
+            technologyCategoryBox.transform.localScale = Vector3.one; // TODO why scale = 1 needed?
+
+            return technologyCategoryBox;
         }
 
         public T InstantiatePooledIntoCanvas<T>(T prefab, Canvas canvas, string name = "")

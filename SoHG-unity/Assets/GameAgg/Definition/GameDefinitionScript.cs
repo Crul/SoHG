@@ -16,7 +16,7 @@ namespace Sohg.GameAgg.Definition
         [SerializeField]
         private GameStageScript[] stages;
         [SerializeField]
-        private Technology[] technologies;
+        private TechnologyCategory[] technologyCategories;
 
         [Header("Society")]
         [SerializeField]
@@ -28,7 +28,7 @@ namespace Sohg.GameAgg.Definition
         private SocietyAction[] societyActions;
 
         public IGameStage[] Stages { get { return stages; } }
-        public ITechnology[] Technologies { get { return technologies; } }
+        public ITechnologyCategory[] TechnologyCategories { get { return technologyCategories; } }
         public ISocietyDefinition PlayerSociety { get { return playerSociety; } }
         public ISocietyDefinition NonPlayerSociety { get { return nonPlayerSociety; } }
         public ISocietyAction[] SocietyActions { get { return societyActions; } }

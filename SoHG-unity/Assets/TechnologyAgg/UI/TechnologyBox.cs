@@ -6,13 +6,13 @@ using UnityEngine.UI;
 
 namespace Sohg.TechnologyAgg.UI
 {
-    [RequireComponent(typeof(Button))]
+    [DisallowMultipleComponent]
     public class TechnologyBox : BaseComponent, ITechnologyBox
     {
         [SerializeField]
-        private Image technologyIcon;
-
         private Button button;
+        [SerializeField]
+        private Image technologyIcon;
 
         private IRunningGame game;
         private ITechnology technology;
@@ -23,10 +23,9 @@ namespace Sohg.TechnologyAgg.UI
             hasBeenActivated = false;
             this.game = game;
             this.technology = technology;
-            technologyIcon.sprite = technology.TechnologyIcon;
 
-            button = GetComponent<Button>();
             button.onClick.AddListener(() => ActivateTechnology());
+            technologyIcon.sprite = technology.TechnologyIcon;
         }
 
         public void SetState(int faithPower)

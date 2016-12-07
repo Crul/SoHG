@@ -1,5 +1,5 @@
-﻿using Sohg.SocietyAgg.Contracts;
-using Sohg.TechnologyAgg.Contracts;
+﻿using Sohg.TechnologyAgg.Contracts;
+using Sohg.SocietyAgg.Contracts;
 
 namespace Sohg.GameAgg.Contracts
 {
@@ -7,7 +7,7 @@ namespace Sohg.GameAgg.Contracts
     {
         IGameStage[] Stages { get; }
         ISocietyAction[] SocietyActions { get; }
-        ITechnology[] Technologies { get; }
+        ITechnologyCategory[] TechnologyCategories { get; }
 
         ISocietyDefinition PlayerSociety { get; }
         ISocietyDefinition NonPlayerSociety { get; }

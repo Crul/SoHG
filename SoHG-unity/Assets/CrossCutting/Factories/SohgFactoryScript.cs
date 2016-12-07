@@ -129,9 +129,21 @@ namespace Sohg.CrossCutting.Factories
             return societyPropertyInfo;
         }
 
-        public ITechnologyBox CreateTechnologyBox(IRunningGame game, GameObject technologyPanel, ITechnology technology)
+        public ITechnologyCategoryBox CreateTechnologyCategoryBox(IRunningGame game, ITechnologyCategory technologyCategory, GameObject technologyPanel)
         {
-            var technologyBox = prefabFactory.InstantiateTechnologyBox(technologyPanel, technology.Name);
+            var technologyCategoryBox = prefabFactory.InstantiateTechnologyCategoryBox(technologyPanel, technologyCategory.Name);
+
+            technologyCategory.Technologies.ToList()
+                .ForEach(technology => CreateTechnologyBox(game, technology, technologyCategory, technologyCategoryBox));
+
+            technologyCategoryBox.Initialize(technologyCategory);
+
+            return technologyCategoryBox;
+        }
+
+        private ITechnologyBox CreateTechnologyBox(IRunningGame game, ITechnology technology, ITechnologyCategory technologyCategory, ITechnologyCategoryBox technologyCategoryBox)
+        {
+            var technologyBox = prefabFactory.InstantiateTechnologyBox(technologyCategoryBox.Content, technology.Name);
             technologyBox.Initialize(game, technology);
 
             return technologyBox;
