@@ -23,7 +23,6 @@ namespace Sohg.GameAgg.UI
         {
             resumeButton.onClick.AddListener(() => gameObject.SetActive(false));
             exitButton.onClick.AddListener(() => SceneManager.LoadScene("Menu"));
-            gameObject.SetActive(false);
         }
 
         public void Update()
