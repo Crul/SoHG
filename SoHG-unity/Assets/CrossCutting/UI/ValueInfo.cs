@@ -1,9 +1,9 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace Sohg.CrossCutting.UI
 {
+    [DisallowMultipleComponent]
     public class ValueInfo : BaseComponent
     {
         [SerializeField]

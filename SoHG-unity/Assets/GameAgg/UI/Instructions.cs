@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 namespace Sohg.GameAgg.UI
 {
+    [DisallowMultipleComponent]
     public class Instructions : BaseComponent, IInstructions
     {
         [SerializeField]

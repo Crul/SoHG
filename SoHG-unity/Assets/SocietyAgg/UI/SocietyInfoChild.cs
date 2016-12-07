@@ -1,8 +1,10 @@
 ﻿using Sohg.CrossCutting;
 using Sohg.SocietyAgg.Contracts;
+using UnityEngine;
 
 namespace Sohg.SocietyAgg.UI
 {
+    [DisallowMultipleComponent]
     public abstract class SocietyInfoChild : BaseComponent, ISocietyInfoChild
     {
         public ISocietyAction SocietyAction { get; private set; }

@@ -9,6 +9,7 @@ using Sohg.TechnologyAgg.Contracts;
 
 namespace Sohg.GameAgg.UI
 {
+    [DisallowMultipleComponent]
     public class GameInfoPanel : BaseComponent, IGameInfoPanel
     {
         [SerializeField]

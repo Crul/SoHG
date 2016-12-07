@@ -4,6 +4,7 @@ using UnityEngine;
 namespace Sohg.CrossCutting.Pooling
 {
     // http://catlikecoding.com/unity/tutorials/object-pools/
+    [DisallowMultipleComponent]
     public class PooledObject : BaseComponent
     {
         [NonSerialized]

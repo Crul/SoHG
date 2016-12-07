@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Sohg.GameAgg.UI
 {
+    [DisallowMultipleComponent]
     public class GameStatusInfo : BaseComponent, IGameStatusInfo
     {
         [SerializeField]
