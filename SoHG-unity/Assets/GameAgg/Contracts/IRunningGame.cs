@@ -14,11 +14,13 @@ namespace Sohg.GameAgg.Contracts
         ISpecies PlayerSpecies { get; }
         List<ISpecies> Species { get; }
 
+        void ActivateActions();
         void ExecuteAction(IEnumerator actionExecution);
+        List<ITechnology> GetActiveTechnologies();
         bool IsPaused();
         void Log(string log, params object[] logParams);
         void NextStage();
-        void OnTechnologyActivated(ITechnology technology);
+
         IInstructions OpenInstructions(string instructionsText);
         void OpenSocietyInfo(ISociety society);
     }

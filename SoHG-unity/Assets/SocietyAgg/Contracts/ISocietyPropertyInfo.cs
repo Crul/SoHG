@@ -4,7 +4,6 @@ namespace Sohg.SocietyAgg.Contracts
 {
     public interface ISocietyPropertyInfo
     {
-        void Initialize(SocietyProperty societyProperty);
-        void SetSociety(ISociety society);
+        void Initialize(SocietyProperty societyProperty, ISocietyInfo societyInfo);
     }
 }

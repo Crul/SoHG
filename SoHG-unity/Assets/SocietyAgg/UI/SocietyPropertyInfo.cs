@@ -14,25 +14,24 @@ namespace Sohg.SocietyAgg.UI
     [DisallowMultipleComponent]
     public class SocietyPropertyInfo : ValueInfo, ISocietyPropertyInfo
     {
+        private ISocietyInfo societyInfo;
         private SocietyProperty societyProperty;
-        private ISociety society;
-        
-        public void Initialize(SocietyProperty societyProperty)
+
+        private ISociety society { get { return societyInfo.Society; } }
+
+        public void Initialize(SocietyProperty societyProperty, ISocietyInfo societyInfo)
         {
+            this.societyInfo = societyInfo;
             this.societyProperty = societyProperty;
+
             SetTitle(GetTitle());
         }
-
-        public void SetSociety(ISociety society)
-        {
-            this.society = society;
-        }
-
+        
         public void Update()
         {
             if (gameObject.activeSelf && society != null)
             {
-                SetValue(GetValue(society));
+                SetValue(GetValue());
             }
         }
         
@@ -47,7 +46,7 @@ namespace Sohg.SocietyAgg.UI
             return string.Format("ERROR - Invalid society property: {0}", societyProperty.ToString());
         }
 
-        private string GetValue(ISociety society)
+        private string GetValue()
         {
             switch (societyProperty)
             {

@@ -12,14 +12,14 @@ namespace Sohg.CrossCutting.Pooling
 
         public ObjectPool Pool { get; set; }
 
-        public T GetPooledInstance<T>(Canvas canvas) where T : PooledObject
+        public T GetPooledInstance<T>(GameObject gameObject) where T : PooledObject
         {
             if (!poolInstanceForPrefab)
             {
                 poolInstanceForPrefab = ObjectPool.GetPool(this);
             }
 
-            return (T)poolInstanceForPrefab.GetObject(canvas);
+            return (T)poolInstanceForPrefab.GetObject(gameObject);
         }
 
         public void ReturnToPool()

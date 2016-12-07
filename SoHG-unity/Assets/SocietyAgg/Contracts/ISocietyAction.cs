@@ -1,5 +1,4 @@
 ﻿using Sohg.GameAgg.Contracts;
-using Sohg.TechnologyAgg.Contracts;
 using UnityEngine;
 
 namespace Sohg.SocietyAgg.Contracts
@@ -10,8 +9,9 @@ namespace Sohg.SocietyAgg.Contracts
         int FaithCost { get; }
         bool IsActive { get; }
 
-        void Initialize(IRunningGame game);
+        void CheckActivation(IRunningGame game);
         void Execute(ISociety society);
-        bool Requires(ITechnology technology);
+        void Initialize(IRunningGame game);
+        bool IsActionEnabled(ISociety society);
     }
 }

@@ -7,6 +7,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System;
 
 namespace Sohg.SocietyAgg.UI
 {
@@ -27,8 +28,7 @@ namespace Sohg.SocietyAgg.UI
         private GameObject propertiesPanel;
         [SerializeField]
         private SocietyProperty[] societyProperties;
-
-        private IRunningGame game;
+        
         private int colliderMargin = 10; // TODO move to SocietyInfo.colliderMargin config/inspector prop?
         private Image background;
         private RectTransform rectTransform;
@@ -37,40 +37,23 @@ namespace Sohg.SocietyAgg.UI
         private List<ISocietyEffectIcon> effectIcons;
         private List<ISocietyPropertyInfo> propertyInfos;
 
+        public IRunningGame Game { get; private set; }
         public ISociety Society { get; private set; }
 
-        public GameObject ActionsPanel { get { return actionsPanel;  } }
+        public GameObject ActionsPanel { get { return actionsPanel; } }
         public GameObject EffectsPanel { get { return effectsPanel; } }
         public GameObject PropertiesPanel { get { return propertiesPanel; } }
 
         public void Initialize(IRunningGame game)
         {
-            actionButtons = new List<ISocietyActionButton>();
-            effectIcons = new List<ISocietyEffectIcon>();
-            propertyInfos = new List<ISocietyPropertyInfo>();
+            Hide();
 
-            this.game = game;
-
+            Game = game;
             background = gameObject.GetComponent<Image>();
             rectTransform = gameObject.GetComponent<RectTransform>();
             boxCollider2D = gameObject.GetComponent<BoxCollider2D>();
 
-            societyProperties.ToList()
-                .ForEach(property => InitializeProperty(game, property));
-            
-            Hide();
-        }
-
-        public void AddAction(ISocietyAction action)
-        {
-            action.Initialize(game);
-
-            var actionButton = game.SohgFactory.CreateSocietyActionButton(action, this);
-            actionButtons.Add(actionButton);
-
-            // TODO add action effect icon on enabled (effect icons pool?)
-            var effectIcon = game.SohgFactory.CreateSocietyEffectIcon(action, this);
-            effectIcons.Add(effectIcon);
+            Reset();
         }
 
         public void Hide()
@@ -79,31 +62,30 @@ namespace Sohg.SocietyAgg.UI
             gameObject.SetActive(false);
         }
 
+        public void Reset()
+        {
+            ReturnAllChildrenToPool(propertiesPanel);
+
+            propertyInfos = new List<ISocietyPropertyInfo>();
+            societyProperties.ToList().ForEach(property => InitializeProperty(property));
+        }
+
         public void Show(ISociety society)
+        {
+            SetSociety(society);
+            SetPosition();
+
+            transform.SetAsLastSibling();
+            gameObject.SetActive(true);
+        }
+
+        private void SetSociety(ISociety society)
         {
             Society = society;
             societyName.text = Society.Name;
             background.color = society.Color;
-            gameObject.transform.position = Society.Territory.GetCenter();
-            propertyInfos.ForEach(propertyInfo => propertyInfo.SetSociety(Society));
 
-            transform.SetAsLastSibling();
-            Update();
-
-            gameObject.SetActive(true);
-
-            StartCoroutine(SetSize());
-        }
-
-        private IEnumerator SetSize()
-        {
-            yield return new WaitForFixedUpdate();
-            boxCollider2D.size = new Vector2
-            (
-                rectTransform.rect.size.x + (colliderMargin * 2),
-                rectTransform.rect.size.y + (colliderMargin * 2)
-            );
-            boxCollider2D.offset = new Vector2(0, rectTransform.rect.size.y / 2);
+            InitializeSocietyActions();
         }
 
         public void OnMouseExit()
@@ -111,29 +93,44 @@ namespace Sohg.SocietyAgg.UI
             Hide();
         }
 
-        public void Update()
+        private void InitializeAction(ISocietyAction action)
         {
-            if (gameObject.activeSelf && Society != null)
-            {
-                // TODO change this with actionButton.SetSociety like propertyInfo
-                actionButtons.ForEach(actionButton => 
-                {
-                    var isActionButtonEnabled = (game.PlayerSpecies.FaithPower > actionButton.SocietyAction.FaithCost
-                        && Society.IsActionEnabled[actionButton.SocietyAction]);
-
-                    actionButton.SetEnable(isActionButtonEnabled);
-                });
-
-                // TODO change this with effectIcon.SetSociety like propertyInfo
-                effectIcons.ForEach(effectIcon =>
-                    effectIcon.SetEnable(Society.IsEffectActive[effectIcon.SocietyAction]));
-            }
+            var actionButton = Game.SohgFactory.CreateSocietyActionButton(action, this);
+            actionButtons.Add(actionButton);
+            
+            var effectIcon = Game.SohgFactory.CreateSocietyEffectIcon(action, this);
+            effectIcons.Add(effectIcon);
         }
-        
-        private void InitializeProperty(IRunningGame game, SocietyProperty property)
+
+        private void InitializeProperty(SocietyProperty property)
         {
-            var propertyInfo = game.SohgFactory.CreateSocietyPropertyInfo(property, this);
+            var propertyInfo = Game.SohgFactory.CreateSocietyPropertyInfo(property, this);
             propertyInfos.Add(propertyInfo);
+        }
+
+        private void InitializeSocietyActions()
+        {
+            // TODO make (only disbaled) actions and effect pool objects in SocietyInfo ?
+
+            ReturnAllChildrenToPool(actionsPanel);
+            ReturnAllChildrenToPool(effectsPanel);
+
+            actionButtons = new List<ISocietyActionButton>();
+            effectIcons = new List<ISocietyEffectIcon>();
+
+            Society.Actions.ToList().ForEach(action => InitializeAction(action));
+        }
+
+        private void SetPosition()
+        {
+            gameObject.transform.position = Society.Territory.GetCenter();
+
+            boxCollider2D.size = new Vector2
+            (
+                rectTransform.rect.size.x + (colliderMargin * 2),
+                rectTransform.rect.size.y + (colliderMargin * 2)
+            );
+            boxCollider2D.offset = new Vector2(0, rectTransform.rect.size.y / 2);
         }
     }
 }

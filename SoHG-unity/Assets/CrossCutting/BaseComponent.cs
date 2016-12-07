@@ -1,7 +1,15 @@
-﻿using UnityEngine;
+﻿using Sohg.CrossCutting.Pooling;
+using System.Linq;
+using UnityEngine;
 
 namespace Sohg.CrossCutting
 {
-    public class BaseComponent : MonoBehaviour
-    { }
+    public abstract class BaseComponent : MonoBehaviour
+    {
+        protected void ReturnAllChildrenToPool(GameObject parent)
+        {
+            parent.GetComponentsInChildren<PooledObject>().ToList()
+                .ForEach(child => child.ReturnToPool());
+        }
+    }
 }

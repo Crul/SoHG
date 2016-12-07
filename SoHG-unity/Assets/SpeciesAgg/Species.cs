@@ -28,7 +28,12 @@ namespace Sohg.SpeciesAgg
         public List<ISociety> Societies { get; private set; }
         public int FaithPower { get; private set; }
         public int TotalFaith { get; private set; }
-        
+
+        public Species()
+        {
+            Reset();
+        }
+
         public void Reset()
         {
             Societies = new List<ISociety>();

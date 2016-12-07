@@ -1,21 +1,23 @@
-﻿using Sohg.CrossCutting;
+﻿using Sohg.CrossCutting.Pooling;
+using Sohg.GameAgg.Contracts;
 using Sohg.SocietyAgg.Contracts;
 using UnityEngine;
 
 namespace Sohg.SocietyAgg.UI
 {
     [DisallowMultipleComponent]
-    public abstract class SocietyInfoChild : BaseComponent, ISocietyInfoChild
+    public abstract class SocietyInfoChild : PooledObject, ISocietyInfoChild
     {
-        public ISocietyAction SocietyAction { get; private set; }
-        protected ISocietyInfo societyInfo { get; private set; }
+        private ISocietyInfo societyInfo;
+        protected ISocietyAction societyAction { get; private set; }
+
+        protected IRunningGame game { get { return societyInfo.Game; } }
+        protected ISociety society { get { return societyInfo.Society; } }
 
         public virtual void Initialize(ISocietyAction societyAction, ISocietyInfo societyInfo)
         {
-            SocietyAction = societyAction;
             this.societyInfo = societyInfo;
+            this.societyAction = societyAction;
         }
-
-        public abstract void SetEnable(bool isEnabled);
     }
 }

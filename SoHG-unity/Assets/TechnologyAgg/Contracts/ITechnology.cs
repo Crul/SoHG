@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Sohg.GameAgg.Contracts;
+using UnityEngine;
 
 namespace Sohg.TechnologyAgg.Contracts
 {
@@ -7,5 +8,9 @@ namespace Sohg.TechnologyAgg.Contracts
         string Name { get; }
         int FaithCost { get; }
         Sprite TechnologyIcon { get; }
+        bool IsActive { get; }
+
+        bool Activate(IRunningGame game);
+        void Reset();
     }
 }

@@ -16,7 +16,7 @@ namespace Sohg.SocietyAgg.Actions
         private int faithCost;
         [SerializeField]
         private Technology[] requiredTechnologies;
-        
+
         protected IRunningGame game { get; private set; }
 
         public Sprite ActionIcon { get { return actionIcon; } }
@@ -24,16 +24,40 @@ namespace Sohg.SocietyAgg.Actions
         public bool IsActive { get; private set; }
         public ITechnology[] RequiredTechnologies { get { return requiredTechnologies; } }
         
+        public abstract void Execute(ISociety society);
+
+        public void CheckActivation(IRunningGame game)
+        {
+            if (IsActive)
+            {
+                return;
+            }
+
+            var activeTechnologies = game.GetActiveTechnologies();
+            var areAllRequiredTechnologiesActive = RequiredTechnologies
+                .All(requiredTechnology => activeTechnologies.Contains(requiredTechnology));
+
+            if (areAllRequiredTechnologiesActive)
+            {
+                Activate(game);
+            }
+        }
+
         public void Initialize(IRunningGame game)
         {
             this.game = game;
+            CheckActivation(game);
         }
 
-        public abstract void Execute(ISociety society);
-
-        public bool Requires(ITechnology technology)
+        public virtual bool IsActionEnabled(ISociety society)
         {
-            return RequiredTechnologies.Contains(technology);
+            return true;
+        }
+
+        private void Activate(IRunningGame game)
+        {
+            game.Species.SelectMany(species => species.Societies).ToList()
+                .ForEach(society => society.AddAction(this));
         }
     }
 }

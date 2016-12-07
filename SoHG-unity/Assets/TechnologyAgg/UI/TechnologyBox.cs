@@ -49,15 +49,16 @@ namespace Sohg.TechnologyAgg.UI
 
         private void ActivateTechnology()
         {
-            game.OnTechnologyActivated(technology);
-
-            hasBeenActivated = true;
-            var activatedColor = new Color(0.5f, 1, 0.5f, 0.8f);
-            technologyIcon.color = activatedColor;
-            var buttonColors = button.colors;
-            buttonColors.disabledColor = activatedColor;
-            button.colors = buttonColors;
-            button.interactable = false;
+            if (technology.Activate(game))
+            {
+                hasBeenActivated = true;
+                var activatedColor = new Color(0.5f, 1, 0.5f, 0.8f);
+                technologyIcon.color = activatedColor;
+                var buttonColors = button.colors;
+                buttonColors.disabledColor = activatedColor;
+                button.colors = buttonColors;
+                button.interactable = false;
+            }
         }
     }
 }

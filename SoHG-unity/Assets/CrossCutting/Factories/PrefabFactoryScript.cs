@@ -52,7 +52,7 @@ namespace Sohg.CrossCutting.Factories
 
         public IFaithRecolectable InstantiateFaithRecolectable(Canvas canvas, string name)
         {
-            return InstantiatePooledIntoCanvas(faithRecolectablePrefab, canvas, name);
+            return InstantiatePooledInto(faithRecolectablePrefab, canvas.gameObject, name);
         }
 
         public IEndGame InstantiateEndGame(Canvas canvas)
@@ -75,7 +75,7 @@ namespace Sohg.CrossCutting.Factories
 
         public IFight InstantiateFight(Canvas canvas, string name)
         {
-            return InstantiatePooledIntoCanvas(fightPrefab, canvas, name);
+            return InstantiatePooledInto(fightPrefab, canvas.gameObject, name);
         }
 
         public ISocietyInfo InstantiateSocietyInfo(Canvas canvas, string name)
@@ -85,17 +85,17 @@ namespace Sohg.CrossCutting.Factories
 
         public ISocietyActionButton InstantiateSocietyActionButton(GameObject gameObject, string name)
         {
-            return InstantiateInto(societyActionButtonPrefab, gameObject, name);
+            return InstantiatePooledInto(societyActionButtonPrefab, gameObject, name);
         }
 
         public ISocietyEffectIcon InstantiateSocietyEffectIcon(GameObject gameObject, string name)
         {
-            return InstantiateInto(societyEffectIconPrefab, gameObject, name);
+            return InstantiatePooledInto(societyEffectIconPrefab, gameObject, name);
         }
 
         public ISocietyPropertyInfo InstantiateSocietyPropertyInfo(GameObject gameObject, string name)
         {
-            return InstantiateInto(societyPropertyInfoPrefab, gameObject, name);
+            return InstantiatePooledInto(societyPropertyInfoPrefab, gameObject, name);
         }
 
         public ITechnologyBox InstantiateTechnologyBox(GameObject gameObject, string name)
@@ -114,10 +114,10 @@ namespace Sohg.CrossCutting.Factories
             return technologyCategoryBox;
         }
 
-        public T InstantiatePooledIntoCanvas<T>(T prefab, Canvas canvas, string name = "")
+        public T InstantiatePooledInto<T>(T prefab, GameObject gameObject, string name = "")
             where T : PooledObject
         {
-            var pooledObject = prefab.GetPooledInstance<T>(canvas);
+            var pooledObject = prefab.GetPooledInstance<T>(gameObject);
             pooledObject.name = name;
 
             return pooledObject;

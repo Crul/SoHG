@@ -9,7 +9,7 @@ namespace Sohg.GameAgg.Stages
     {
         public override void Start()
         {
-            game.Reset();
+            game.ResetGame();
 
             game.OpenInstructions
             (

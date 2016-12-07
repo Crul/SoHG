@@ -60,9 +60,17 @@ namespace Sohg.GameAgg
             Species.Add(PlayerSpecies);
         }
 
-        public void Reset()
+        public void ResetGame()
         {
             Species.ForEach(species => species.Reset());
+
+            gameDefinition.TechnologyCategories
+                .SelectMany(technologyCategory => technologyCategory.Technologies)
+                .ToList()
+                .ForEach(technology => technology.Reset());
+
+            gameDefinition.SocietyActions.ToList()
+                .ForEach(action => action.Initialize(this));
         }
     }
 }

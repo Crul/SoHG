@@ -1,4 +1,5 @@
-﻿using Sohg.SocietyAgg.Contracts;
+﻿using Sohg.GameAgg.Contracts;
+using Sohg.SocietyAgg.Contracts;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,9 +17,10 @@ namespace Sohg.SocietyAgg.UI
             iconImage.sprite = societyAction.ActionIcon;
         }
 
-        public override void SetEnable(bool isEnabled)
+        public void Update()
         {
-            gameObject.SetActive(isEnabled);
+            var isEffectActive = (society.IsEffectActive[societyAction]);
+            gameObject.SetActive(isEffectActive);
         }
     }
 }

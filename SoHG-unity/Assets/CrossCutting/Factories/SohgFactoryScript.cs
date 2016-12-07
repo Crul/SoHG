@@ -126,7 +126,7 @@ namespace Sohg.CrossCutting.Factories
             var societyPropertyInfo = prefabFactory
                 .InstantiateSocietyPropertyInfo(societyInfo.PropertiesPanel, "SocietyProperty" + property.ToString());
 
-            societyPropertyInfo.Initialize(property);
+            societyPropertyInfo.Initialize(property, societyInfo);
 
             return societyPropertyInfo;
         }

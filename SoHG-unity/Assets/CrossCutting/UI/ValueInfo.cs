@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿using Sohg.CrossCutting.Pooling;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Sohg.CrossCutting.UI
 {
     [DisallowMultipleComponent]
-    public class ValueInfo : BaseComponent
+    public class ValueInfo : PooledObject
     {
         [SerializeField]
         private Text titleText;

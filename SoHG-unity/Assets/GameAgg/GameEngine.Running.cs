@@ -3,14 +3,30 @@ using Sohg.GameAgg.Contracts;
 using Sohg.SocietyAgg.Contracts;
 using System.Linq;
 using Sohg.TechnologyAgg.Contracts;
+using System.Collections.Generic;
 
 namespace Sohg.GameAgg
 {
     public partial class GameEngine : IRunningGame
     {
+        public void ActivateActions()
+        {
+            gameDefinition.SocietyActions.ToList()
+                .ForEach(action => action.CheckActivation(this));
+        }
+        
         public void ExecuteAction(IEnumerator actionExecution)
         {
             StartCoroutine(actionExecution);
+        }
+
+        public List<ITechnology> GetActiveTechnologies()
+        {
+            return gameDefinition.TechnologyCategories.SelectMany
+                (
+                    technologyCategory => technologyCategory.Technologies
+                        .Where(technology => technology.IsActive)
+                ).ToList();
         }
 
         public bool IsPaused()
@@ -37,18 +53,6 @@ namespace Sohg.GameAgg
             currentStage = gameDefinition.Stages[currentStageIndex];
             currentStage.SetGame(this);
             currentStage.Start();
-        }
-
-        public void OnTechnologyActivated(ITechnology technology)
-        {
-            PlayerSpecies.ConsumeFaith(technology.FaithCost);
-
-            // TODO make society action technology requirement properly
-            var activatedSocietyActions = gameDefinition.SocietyActions
-                .Where(action => action.Requires(technology));
-
-            activatedSocietyActions.ToList()
-                .ForEach(action => societyInfo.AddAction(action));
         }
 
         public IInstructions OpenInstructions(string instructionsText)
