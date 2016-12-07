@@ -7,7 +7,7 @@ using UnityEngine.UI;
 namespace Sohg.TechnologyAgg.UI
 {
     [RequireComponent(typeof(Button))]
-    public class TechnologyButton : BaseComponent, ITechnologyButton
+    public class TechnologyBox : BaseComponent, ITechnologyBox
     {
         [SerializeField]
         private Image technologyIcon;

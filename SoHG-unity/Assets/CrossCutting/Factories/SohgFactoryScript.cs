@@ -129,12 +129,12 @@ namespace Sohg.CrossCutting.Factories
             return societyPropertyInfo;
         }
 
-        public ITechnologyButton CreateTechnologyButton(IRunningGame game, GameObject technologyPanel, ITechnology technology)
+        public ITechnologyBox CreateTechnologyBox(IRunningGame game, GameObject technologyPanel, ITechnology technology)
         {
-            var technologyButton = prefabFactory.InstantiateTechnologyButton(technologyPanel, technology.Name);
-            technologyButton.Initialize(game, technology);
+            var technologyBox = prefabFactory.InstantiateTechnologyBox(technologyPanel, technology.Name);
+            technologyBox.Initialize(game, technology);
 
-            return technologyButton;
+            return technologyBox;
         }
 
         public ITerritory CreateTerritory(params ICell[] cells)

@@ -2,7 +2,7 @@
 
 namespace Sohg.TechnologyAgg.Contracts
 {
-    public interface ITechnologyButton
+    public interface ITechnologyBox
     {
         void Initialize(IRunningGame game, ITechnology technology);
         void SetState(int faithPower);

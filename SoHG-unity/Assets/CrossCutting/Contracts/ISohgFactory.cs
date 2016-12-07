@@ -23,7 +23,7 @@ namespace Sohg.CrossCutting.Contracts
         ISocietyActionButton CreateSocietyActionButton(ISocietyAction action, ISocietyInfo societyInfo);
         ISocietyEffectIcon CreateSocietyEffectIcon(ISocietyAction action, ISocietyInfo societyInfo);
         ISocietyInfo CreateSocietyInfo(IRunningGame game);
-        ITechnologyButton CreateTechnologyButton(IRunningGame game, GameObject technologyPanel, ITechnology technology);
+        ITechnologyBox CreateTechnologyBox(IRunningGame game, GameObject technologyPanel, ITechnology technology);
         ISocietyPropertyInfo CreateSocietyPropertyInfo(SocietyProperty property, ISocietyInfo societyInfo);
         ITerritory CreateTerritory(params ICell[] cells);
         IGrid GetGrid();

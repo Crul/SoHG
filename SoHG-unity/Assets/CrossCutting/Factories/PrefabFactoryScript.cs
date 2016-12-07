@@ -41,7 +41,7 @@ namespace Sohg.CrossCutting.Factories
         private SocietyPropertyInfo societyPropertyInfoPrefab;
 
         [SerializeField]
-        private TechnologyButton technologyButtonPrefab;
+        private TechnologyBox technologyBoxPrefab;
 
         public IGrid InstantiateGrid(Canvas canvas)
         {
@@ -93,9 +93,9 @@ namespace Sohg.CrossCutting.Factories
             return InstantiateInto(societyPropertyInfoPrefab, gameObject, name);
         }
 
-        public ITechnologyButton InstantiateTechnologyButton(GameObject gameObject, string name)
+        public ITechnologyBox InstantiateTechnologyBox(GameObject gameObject, string name)
         {
-            return InstantiateInto(technologyButtonPrefab, gameObject, name);
+            return InstantiateInto(technologyBoxPrefab, gameObject, name);
         }
 
         public T InstantiatePooledIntoCanvas<T>(T prefab, Canvas canvas, string name = "")

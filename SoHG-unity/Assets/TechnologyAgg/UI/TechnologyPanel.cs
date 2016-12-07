@@ -14,12 +14,12 @@ namespace Sohg.TechnologyAgg.UI
         [SerializeField]
         private Button backButton;
 
-        private List<ITechnologyButton> buttons;
+        private List<ITechnologyBox> buttons;
         private IRunningGame game;
 
         public TechnologyPanel()
         {
-            buttons = new List<ITechnologyButton>();
+            buttons = new List<ITechnologyBox>();
         }
 
         public void Awake()
@@ -49,7 +49,7 @@ namespace Sohg.TechnologyAgg.UI
 
         private void AddTechnology(ISohgFactory factory, ITechnology technology)
         {
-            buttons.Add(factory.CreateTechnologyButton(game, gameObject, technology));
+            buttons.Add(factory.CreateTechnologyBox(game, gameObject, technology));
         }
     }
 }
