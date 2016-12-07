@@ -54,10 +54,10 @@ namespace Sohg.SocietyAgg.UI
 
         private void RecolectFaith()
         {
-            if (game != null && faithAmount > 0)
+            if (state == FaithRecolectableState.Initialized)
             {
-                game.PlayerSpecies.AddFaith(faithAmount);
                 state = FaithRecolectableState.Recolected;
+                game.PlayerSpecies.AddFaith(faithAmount);
             }
         }
 
