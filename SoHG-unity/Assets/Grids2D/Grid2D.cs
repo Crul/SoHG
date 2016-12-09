@@ -13,6 +13,7 @@ namespace Grids2D
             territories.Add((Territory)territory);
             _numTerritories++;
             cells.ToList().ForEach(cell => SetCellTerritory(cell, territory));
+            TexturizeTerritory(territory.TerritoryIndex);
         }
 
         public ICell GetRandomCell(Func<ICell, bool> cellFilter)

@@ -21,7 +21,7 @@ namespace Grids2D
                 CheckSocietiesTerritoriesExpansion(expadedCellCount, unassignedSocietyCells);
             }
 
-            RedrawTerritories();
+            RecalculateTerritories();
 
             societyTerritories.SelectMany(territory => territory.cells)
                 .ToList().ForEach(cell => cell.SetSocietyAssigned());

@@ -46,7 +46,7 @@ namespace Grids2D
             GetCellIndexRange().ForEach(cellIndex => InitializeCell(cellIndex));
 
             CreateConnectedTerritories(sohgFactory);
-            RedrawTerritories();
+            RecalculateTerritories();
         }
 
         private void CreateConnectedTerritories(ISohgFactory sohgFactory)

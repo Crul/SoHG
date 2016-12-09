@@ -10,19 +10,21 @@ namespace Grids2D
         {
             if (territoriesHaveChanged)
             {
-                RedrawTerritories();
+                RecalculateTerritories();
                 territoriesHaveChanged = false;
             }
         }
 
-        private void RedrawTerritories()
+        private void RecalculateTerritories()
         {
             Redraw();
-            GetTerritoryIndexRange().ForEach(territoryIndex =>
-            {
-                TexturizeTerritory(territoryIndex);
-                SetSocietyNeighbours(territoryIndex);
-            });
+
+            GetTerritoryIndexRange()
+                .ForEach(territoryIndex =>
+                {
+                    TexturizeTerritory(territoryIndex);
+                    SetSocietyNeighbours(territoryIndex);
+                });
             
             cells.Where(cell => cell.territoryIndex > -1).ToList()
                 .ForEach(cell => cell.CanBeInvaded = CanCellBeInvaded(cell));
@@ -67,7 +69,9 @@ namespace Grids2D
             }
             color.a = 0.1f;
 
-            TerritoryToggleRegionSurface(territoryIndex, true, color, false, null);
+            territories[territoryIndex].fillColor = color;
+
+            // TerritoryToggleRegionSurface(territoryIndex, true, color, false, null);
         }
     }
 }
