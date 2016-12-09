@@ -16,7 +16,7 @@ namespace Sohg.GameAgg
     public class GameDefinition : ScriptableBaseObject, IGameDefinition
     {
         [SerializeField]
-        private GameStageScript[] stages;
+        private GameStage[] stages;
         [SerializeField]
         private TechnologyCategory[] technologyCategories;
 

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Sohg.CrossCutting
 {
     [CreateAssetMenu(fileName = "SohgConfig", menuName = "SoHG/Config")]
-    public class SohgConfigScript : ScriptableBaseObject, ISohgConfig
+    public class SohgConfig : ScriptableBaseObject, ISohgConfig
     {
         [Header("Game")]
         [SerializeField]
@@ -28,7 +28,7 @@ namespace Sohg.CrossCutting
 
         public int NonPlayerSocietyCount { get { return nonPlayerSocietyCount; } }
         public long InitialSocietyPopulationByCell { get { return initialSocietyPopulationByCell; } }
-        
+
         public int WarActionsTimeInterval { get { return warActionsTimeInterval; } }
 
         public float AttackDamageTieRateThreshold { get { return attackDamageTieRateThreshold; } }

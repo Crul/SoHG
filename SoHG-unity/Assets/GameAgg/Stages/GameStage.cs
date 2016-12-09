@@ -5,7 +5,7 @@ using Sohg.GameAgg.Contracts;
 namespace Sohg.GameAgg.Stages
 {
     [System.Serializable]
-    public class GameStageScript : ScriptableBaseObject, IGameStage
+    public class GameStage : ScriptableBaseObject, IGameStage
     {
         private IRunningGame _game;
 
