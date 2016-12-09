@@ -96,7 +96,9 @@ namespace Sohg.SocietyAgg.Relationships
 
         public bool WillingToAttack(IWarPlayable game)
         {
-            return friendshipRange < game.SohgFactory.Config.FriendshipRangeBottomThresholdForAttack; // TODO randomize WillingToAttack
+            var friendShipThreshold = (Random.Range(0f, 1f) * game.SohgFactory.Config.FriendshipRangeBottomThresholdForAttack);
+
+            return friendshipRange < friendShipThreshold;
         }
     }
 }
