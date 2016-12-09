@@ -1,17 +1,17 @@
-﻿using UnityEngine;
-using Sohg.Grids2D.Contracts;
-using Sohg.GameAgg.Contracts;
-using Grids2D;
-using System.Linq;
+﻿using Grids2D;
 using Sohg.CrossCutting.Contracts;
+using Sohg.Grids2D.Contracts;
+using Sohg.GameAgg;
+using Sohg.GameAgg.Contracts;
 using Sohg.SocietyAgg.Contracts;
-using System;
 using Sohg.SocietyAgg.Relationships;
 using Sohg.SocietyAgg.UI;
 using Sohg.SocietyAgg;
-using Sohg.TechnologyAgg.Contracts;
 using Sohg.SpeciesAgg.Contracts;
-using Sohg.GameAgg;
+using Sohg.TechnologyAgg.Contracts;
+using System;
+using System.Linq;
+using UnityEngine;
 
 namespace Sohg.CrossCutting.Factories
 {
@@ -99,7 +99,7 @@ namespace Sohg.CrossCutting.Factories
 
         public ISocietyActionButton CreateSocietyActionButton(ISocietyAction action, ISocietyInfo societyInfo)
         {
-            var actionButton = prefabFactory.InstantiateSocietyActionButton(societyInfo.ActionsPanel, "SocietyActionButton"); // TODO SocietyActionButtonName
+            var actionButton = prefabFactory.InstantiateSocietyActionButton(societyInfo.ActionsPanel, "SocietyActionButton"); // TODO SocietyActionButton name
             actionButton.Initialize(action, societyInfo);
 
             return actionButton;
@@ -107,7 +107,7 @@ namespace Sohg.CrossCutting.Factories
 
         public ISocietyEffectIcon CreateSocietyEffectIcon(ISocietyAction action, ISocietyInfo societyInfo)
         {
-            var effectIcon = prefabFactory.InstantiateSocietyEffectIcon(societyInfo.EffectsPanel, "SocietyEffectIcon"); // TODO SocietyActionEffect
+            var effectIcon = prefabFactory.InstantiateSocietyEffectIcon(societyInfo.EffectsPanel, "SocietyEffectIcon"); // TODO SocietyActionEffect name
             effectIcon.Initialize(action, societyInfo);
 
             return effectIcon;
@@ -121,6 +121,14 @@ namespace Sohg.CrossCutting.Factories
             return societyInfo;
         }
 
+        public ISocietySkillIcon CreateSocietySkillIcon(ISkill skill, ISocietyInfo societyInfo)
+        {
+            var skillIcon = prefabFactory.InstantiateSocietySkillIcon(societyInfo.SkillsPanel, "SocietySkillIcon"); // TODO SocietySkillIcon name
+            skillIcon.Initialize(skill, societyInfo);
+
+            return skillIcon;
+        }
+
         public ISocietyPropertyInfo CreateSocietyPropertyInfo(SocietyProperty property, ISocietyInfo societyInfo)
         {
             var societyPropertyInfo = prefabFactory
@@ -131,22 +139,24 @@ namespace Sohg.CrossCutting.Factories
             return societyPropertyInfo;
         }
 
-        public ITechnologyCategoryBox CreateTechnologyCategoryBox(IRunningGame game, ITechnologyCategory technologyCategory, GameObject technologyPanel)
+        public ITechnologyCategoryBox CreateTechnologyCategoryBox(IWarPlayable game, ITechnologyCategory technologyCategory,
+            ITechnologyStatesSetter technologyStatesSetter, GameObject technologyPanel)
         {
             var technologyCategoryBox = prefabFactory.InstantiateTechnologyCategoryBox(technologyPanel, technologyCategory.Name);
 
             technologyCategory.Technologies.ToList()
-                .ForEach(technology => CreateTechnologyBox(game, technology, technologyCategory, technologyCategoryBox));
+                .ForEach(technology => CreateTechnologyBox(game, technology, technologyCategory, technologyCategoryBox, technologyStatesSetter));
 
             technologyCategoryBox.Initialize(technologyCategory);
 
             return technologyCategoryBox;
         }
 
-        private ITechnologyBox CreateTechnologyBox(IRunningGame game, ITechnology technology, ITechnologyCategory technologyCategory, ITechnologyCategoryBox technologyCategoryBox)
+        private ITechnologyBox CreateTechnologyBox(IWarPlayable game, ITechnology technology, ITechnologyCategory technologyCategory,
+            ITechnologyCategoryBox technologyCategoryBox, ITechnologyStatesSetter technologyStatesSetter)
         {
             var technologyBox = prefabFactory.InstantiateTechnologyBox(technologyCategoryBox.Content, technology.Name);
-            technologyBox.Initialize(game, technology);
+            technologyBox.Initialize(game, technology, technologyStatesSetter);
 
             return technologyBox;
         }

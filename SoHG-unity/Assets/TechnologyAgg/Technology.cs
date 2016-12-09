@@ -5,7 +5,8 @@ using UnityEngine;
 
 namespace Sohg.TechnologyAgg
 {
-    public abstract class Technology : ScriptableBaseObject, ITechnology
+    [CreateAssetMenu(fileName = "NewTechnology", menuName = "SoHG/Technologies/Technology")]
+    public class Technology : ScriptableBaseObject, ITechnology
     {
         [SerializeField]
         private string name;
@@ -24,14 +25,13 @@ namespace Sohg.TechnologyAgg
             Reset();
         }
 
-        public bool Activate(IRunningGame game)
+        public bool Activate(IWarPlayable game)
         {
             var hasFaithBeenConsumed = game.PlayerSpecies.ConsumeFaith(FaithCost);
             if (hasFaithBeenConsumed)
             {
                 IsActive = true;
-                game.ActivateActions();
-                CustomActivation(game);
+                game.OnTechnologyActivated();
             }
 
             return IsActive;
@@ -41,7 +41,5 @@ namespace Sohg.TechnologyAgg
         { 
             IsActive = false;
         }
-
-        protected virtual void CustomActivation(IRunningGame game) { }
     }
 }

@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using Sohg.Grids2D.Contracts;
-using UnityEngine;
+﻿using Sohg.Grids2D.Contracts;
 using Sohg.GameAgg.Contracts;
 using Sohg.SpeciesAgg.Contracts;
-using Sohg.SocietyAgg.Actions;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Sohg.SocietyAgg.Contracts
 {
@@ -17,9 +16,11 @@ namespace Sohg.SocietyAgg.Contracts
         
         Dictionary<ISocietyAction, bool> IsEffectActive { get; }
         IEnumerable<ISocietyAction> Actions { get; }
+        IEnumerable<ISkill> Skills { get; }
 
-        void AddAction(SocietyAction societyAction);
+        void AddAction(ISocietyAction societyAction);
         void AddRelationship(ISociety society);
+        void AddSkill(ISkill skill);
         void RemoveRelationship(ISociety deathSociety);
 
         bool IsNeighbourOf(ISociety society);

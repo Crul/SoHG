@@ -11,10 +11,12 @@ namespace Sohg.SocietyAgg.UI
         private Image iconImage;
 
         private Button button;
+        private ISocietyAction societyAction;
 
-        public override void Initialize(ISocietyAction societyAction, ISocietyInfo societyInfo)
+        public void Initialize(ISocietyAction societyAction, ISocietyInfo societyInfo)
         {
-            base.Initialize(societyAction, societyInfo); // DO NOT REMOVE
+            Initialize(societyInfo);
+            this.societyAction = societyAction;
 
             button = GetComponent<Button>();
             iconImage.sprite = societyAction.ActionIcon;

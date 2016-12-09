@@ -10,7 +10,7 @@ namespace Sohg.TechnologyAgg.Contracts
         Sprite TechnologyIcon { get; }
         bool IsActive { get; }
 
-        bool Activate(IRunningGame game);
+        bool Activate(IWarPlayable game);
         void Reset();
     }
 }

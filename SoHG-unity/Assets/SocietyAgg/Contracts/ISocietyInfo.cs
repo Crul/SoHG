@@ -8,6 +8,7 @@ namespace Sohg.SocietyAgg.Contracts
         GameObject ActionsPanel { get; }
         GameObject EffectsPanel { get; }
         GameObject PropertiesPanel { get; }
+        GameObject SkillsPanel { get; }
 
         IRunningGame Game { get; }
         ISociety Society { get; }

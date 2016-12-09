@@ -14,15 +14,18 @@ namespace Sohg.TechnologyAgg.UI
         [SerializeField]
         private Image technologyIcon;
 
-        private IRunningGame game;
+        private IWarPlayable game;
         private ITechnology technology;
+        private ITechnologyStatesSetter technologyStatesSetter;
         private bool hasBeenActivated;
 
-        public void Initialize(IRunningGame game, ITechnology technology)
+        public void Initialize(IWarPlayable game, ITechnology technology,
+            ITechnologyStatesSetter technologyStatesSetter)
         {
             hasBeenActivated = false;
             this.game = game;
             this.technology = technology;
+            this.technologyStatesSetter = technologyStatesSetter;
 
             button.onClick.AddListener(() => ActivateTechnology());
             technologyIcon.sprite = technology.TechnologyIcon;
@@ -58,6 +61,8 @@ namespace Sohg.TechnologyAgg.UI
                 buttonColors.disabledColor = activatedColor;
                 button.colors = buttonColors;
                 button.interactable = false;
+
+                technologyStatesSetter.SetTechnologiesStates();
             }
         }
     }

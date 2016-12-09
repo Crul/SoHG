@@ -5,7 +5,7 @@ namespace Sohg.TechnologyAgg.Contracts
 {
     public interface ITechnologyPanel
     {
-        void Initialize(IRunningGame game, List<ITechnologyCategory> technologyCategories);
+        void Initialize(IWarPlayable game, List<ITechnologyCategory> technologyCategories);
         bool IsVisible();
         void Open();
     }

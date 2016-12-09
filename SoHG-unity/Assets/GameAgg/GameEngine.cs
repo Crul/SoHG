@@ -56,12 +56,16 @@ namespace Sohg.GameAgg
             gameInfoPanel.TechnologyPanel.Initialize(this, gameDefinition.TechnologyCategories.ToList());
 
             PlayerSpecies = gameDefinition.PlayerSpecies;
-            Species = gameDefinition.NonPlayerSpecies.ToList();
-            Species.Add(PlayerSpecies);
         }
 
         public void ResetGame()
         {
+            hasPlayerWon = null;
+
+            var nonPlayerSpeciesCount = Math.Min(SohgFactory.Config.NonPlayerSocietyCount, gameDefinition.NonPlayerSpecies.Length);
+            Species = gameDefinition.NonPlayerSpecies.Take(nonPlayerSpeciesCount).ToList();
+            Species.Add(PlayerSpecies);
+
             Species.ForEach(species => species.Reset());
 
             gameDefinition.TechnologyCategories
@@ -71,6 +75,9 @@ namespace Sohg.GameAgg
 
             gameDefinition.SocietyActions.ToList()
                 .ForEach(action => action.Initialize(this));
+
+            gameDefinition.Skills.ToList()
+                .ForEach(skill => skill.Initialize(this));
         }
     }
 }

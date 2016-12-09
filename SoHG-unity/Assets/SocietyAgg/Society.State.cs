@@ -9,14 +9,14 @@ namespace Sohg.SocietyAgg
         public struct SocietyState : ISocietyState
         {
             private float aggressivityRate;
-            private float technologyLevelRate;
 
             public float FriendshipRange { get; private set; }
             public long PopulationAmount { get; private set; }
+            public float TechnologyLevelRate { get; private set; }
 
             public float Power
             {
-                get { return System.Math.Max(1, PopulationAmount * aggressivityRate * technologyLevelRate); }
+                get { return System.Math.Max(1, PopulationAmount * aggressivityRate * TechnologyLevelRate); }
             }
 
             public int MaximumAttacks
@@ -27,7 +27,7 @@ namespace Sohg.SocietyAgg
             public SocietyState(ISpecies species)
             {
                 aggressivityRate = species.InitialAggressivityRate;
-                technologyLevelRate = species.InitialTechnologyLevelRate;
+                TechnologyLevelRate = species.InitialTechnologyLevelRate;
                 PopulationAmount = 0;
                 FriendshipRange = 0.5f;
             }
@@ -49,6 +49,11 @@ namespace Sohg.SocietyAgg
                 var faithEmitted = (isFaithEmitted ? Random.Range(2, 10) : 0);
 
                 return faithEmitted;
+            }
+
+            public void OnSkillAdded(ISkill skill)
+            {
+                TechnologyLevelRate += skill.TechnologyRateBonus;
             }
         }
 

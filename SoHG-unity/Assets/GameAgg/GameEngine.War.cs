@@ -1,18 +1,26 @@
-﻿using System.Collections.Generic;
-using Sohg.GameAgg.Contracts;
+﻿using Sohg.GameAgg.Contracts;
 using Sohg.Grids2D.Contracts;
 using Sohg.SocietyAgg.Relationships;
-using System;
 using Sohg.SocietyAgg.Contracts;
+using System;
 using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Sohg.GameAgg
 {
     public partial class GameEngine : IWarPlayable
     {
+        private bool? hasPlayerWon;
+
         public void CreateFight(ICell from, ICell target, Action resolveAttack)
         {
             SohgFactory.CreateFight(from, target, resolveAttack);
+        }
+
+        public void EndWar(bool hasPlayerWon)
+        {
+            this.hasPlayerWon = hasPlayerWon;
         }
 
         public void EvolveWar(int time)
@@ -24,8 +32,11 @@ namespace Sohg.GameAgg
             }
 
             grid.RedrawIfChanged();
+        }
 
-            CheckWinOrLoose();
+        public void ExecuteAction(IEnumerator actionExecution)
+        {
+            StartCoroutine(actionExecution);
         }
 
         public Dictionary<ICell, ICell> GetAttackableCells(Relationship relationship)
@@ -43,24 +54,7 @@ namespace Sohg.GameAgg
                 KillSociety(invadedTerritory.Society);
             }
         }
-
-        private void CheckWinOrLoose()
-        {
-            var hasPlayerLosen = (PlayerSpecies.Societies.Sum(society => society.Territory.CellCount) == 0);
-            if (hasPlayerLosen)
-            {
-                endGame.Show(false);
-            }
-            else
-            {
-                var hasPlayerWon = (Species.Count == 1);
-                if (hasPlayerWon)
-                {
-                    endGame.Show(true);
-                }
-            }
-        }
-
+        
         private void KillSociety(ISociety deathSociety)
         {
             Species.SelectMany(species => species.Societies)

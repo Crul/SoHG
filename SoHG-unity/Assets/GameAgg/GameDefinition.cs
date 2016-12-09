@@ -8,6 +8,7 @@ using Sohg.TechnologyAgg;
 using Sohg.TechnologyAgg.Contracts;
 using Sohg.SpeciesAgg;
 using Sohg.SpeciesAgg.Contracts;
+using Sohg.SocietyAgg.Skills;
 
 namespace Sohg.GameAgg
 {
@@ -26,12 +27,15 @@ namespace Sohg.GameAgg
         private Species[] nonPlayerSpecies;
         [Space]
         [SerializeField]
+        private Skill[] skills;
+        [SerializeField]
         private SocietyAction[] societyActions;
 
         public IGameStage[] Stages { get { return stages; } }
         public ITechnologyCategory[] TechnologyCategories { get { return technologyCategories; } }
         public ISpecies PlayerSpecies { get { return playerSpecies; } }
         public ISpecies[] NonPlayerSpecies { get { return nonPlayerSpecies; } }
+        public ISkill[] Skills { get { return skills; } }
         public ISocietyAction[] SocietyActions { get { return societyActions; } }
     }
 }

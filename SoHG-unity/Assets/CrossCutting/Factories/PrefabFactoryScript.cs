@@ -39,6 +39,8 @@ namespace Sohg.CrossCutting.Factories
         private SocietyEffectIcon societyEffectIconPrefab;
         [SerializeField]
         private SocietyPropertyInfo societyPropertyInfoPrefab;
+        [SerializeField]
+        private SocietySkillIcon societySkillIconPrefab;
 
         [SerializeField]
         private TechnologyBox technologyBoxPrefab;
@@ -96,6 +98,11 @@ namespace Sohg.CrossCutting.Factories
         public ISocietyPropertyInfo InstantiateSocietyPropertyInfo(GameObject gameObject, string name)
         {
             return InstantiatePooledInto(societyPropertyInfoPrefab, gameObject, name);
+        }
+
+        public ISocietySkillIcon InstantiateSocietySkillIcon(GameObject gameObject, string name)
+        {
+            return InstantiatePooledInto(societySkillIconPrefab, gameObject, name);
         }
 
         public ITechnologyBox InstantiateTechnologyBox(GameObject gameObject, string name)

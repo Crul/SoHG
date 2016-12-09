@@ -1,5 +1,4 @@
-﻿using Sohg.GameAgg.Contracts;
-using Sohg.SocietyAgg.Contracts;
+﻿using Sohg.SocietyAgg.Contracts;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,9 +9,12 @@ namespace Sohg.SocietyAgg.UI
         [SerializeField]
         private Image iconImage;
 
-        public override void Initialize(ISocietyAction societyAction, ISocietyInfo societyInfo)
+        protected ISocietyAction societyAction { get; private set; }
+
+        public void Initialize(ISocietyAction societyAction, ISocietyInfo societyInfo)
         {
-            base.Initialize(societyAction, societyInfo); // DO NOT REMOVE
+            Initialize(societyInfo);
+            this.societyAction = societyAction;
 
             iconImage.sprite = societyAction.ActionIcon;
         }

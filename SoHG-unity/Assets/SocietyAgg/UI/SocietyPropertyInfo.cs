@@ -8,7 +8,8 @@ namespace Sohg.SocietyAgg.UI
     {
         None,
         Population,
-        Power
+        Power,
+        Technology
     };
 
     [DisallowMultipleComponent]
@@ -41,6 +42,7 @@ namespace Sohg.SocietyAgg.UI
             {
                 case SocietyProperty.Population: return "Population";
                 case SocietyProperty.Power: return "Power";
+                case SocietyProperty.Technology: return "Technology";
             }
 
             return string.Format("ERROR - Invalid society property: {0}", societyProperty.ToString());
@@ -54,7 +56,10 @@ namespace Sohg.SocietyAgg.UI
                     return society.State.PopulationAmount.ToString("### ### ### ### ### ##0"); // TODO number format
 
                 case SocietyProperty.Power:
-                    return society.State.Power.ToString();
+                    return society.State.Power.ToString("### ### ###");
+
+                case SocietyProperty.Technology:
+                    return society.State.TechnologyLevelRate.ToString("##.# %");
             }
 
             return string.Format("ERROR - Invalid society property: {0}", societyProperty.ToString());

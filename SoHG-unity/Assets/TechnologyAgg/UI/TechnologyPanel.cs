@@ -9,7 +9,7 @@ using UnityEngine.UI;
 namespace Sohg.TechnologyAgg.UI
 {
     [DisallowMultipleComponent]
-    public class TechnologyPanel : BaseComponent, ITechnologyPanel
+    public class TechnologyPanel : BaseComponent, ITechnologyPanel, ITechnologyStatesSetter
     {
         [SerializeField]
         private Button backButton;
@@ -17,7 +17,7 @@ namespace Sohg.TechnologyAgg.UI
         private GameObject technologyCategoriesPanel;
 
         private List<ITechnologyCategoryBox> technologyCategoryBoxes;
-        private IRunningGame game;
+        private IWarPlayable game;
 
         public TechnologyPanel()
         {
@@ -29,11 +29,12 @@ namespace Sohg.TechnologyAgg.UI
             backButton.onClick.AddListener(() => gameObject.SetActive(false));
         }
 
-        public void Initialize(IRunningGame game, List<ITechnologyCategory> technologyCategories)
+        public void Initialize(IWarPlayable game, List<ITechnologyCategory> technologyCategories)
         {
             this.game = game;
 
-            technologyCategories.ForEach(technologyCategory => AddTechnologyCategory(game.SohgFactory, technologyCategory));
+            technologyCategories.ForEach(technologyCategory => 
+                AddTechnologyCategory(game.SohgFactory, technologyCategory));
         }
 
         public bool IsVisible()
@@ -43,15 +44,20 @@ namespace Sohg.TechnologyAgg.UI
 
         public void Open()
         {
-            technologyCategoryBoxes.ForEach(technologyCategory => technologyCategory.SetState(game));
+            SetTechnologiesStates();
             gameObject.transform.SetAsLastSibling();
             gameObject.SetActive(true);
+        }
+
+        public void SetTechnologiesStates()
+        {
+            technologyCategoryBoxes.ForEach(technologyCategory => technologyCategory.SetState(game));
         }
 
         private void AddTechnologyCategory(ISohgFactory factory, ITechnologyCategory technologyCategory)
         {
             technologyCategoryBoxes
-                .Add(factory.CreateTechnologyCategoryBox(game, technologyCategory, technologyCategoriesPanel));
+                .Add(factory.CreateTechnologyCategoryBox(game, technologyCategory, this, technologyCategoriesPanel));
         }
     }
 }

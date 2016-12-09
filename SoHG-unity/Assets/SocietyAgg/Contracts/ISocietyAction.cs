@@ -1,17 +1,14 @@
-﻿using Sohg.GameAgg.Contracts;
+﻿using Sohg.TechnologyAgg.Contracts;
 using UnityEngine;
 
 namespace Sohg.SocietyAgg.Contracts
 {
-    public interface ISocietyAction
+    public interface ISocietyAction : ITechnologyDependent
     {
         Sprite ActionIcon { get; }
         int FaithCost { get; }
-        bool IsActive { get; }
-
-        void CheckActivation(IRunningGame game);
+        
         void Execute(ISociety society);
-        void Initialize(IRunningGame game);
         bool IsActionEnabled(ISociety society);
     }
 }

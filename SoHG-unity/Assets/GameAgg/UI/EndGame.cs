@@ -19,6 +19,7 @@ namespace Sohg.GameAgg.UI
         public void Awake()
         {
             exitButton.onClick.AddListener(() => SceneManager.LoadScene("Menu"));
+            transform.SetAsLastSibling();
             gameObject.SetActive(false);
         }
 

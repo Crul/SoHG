@@ -1,34 +1,10 @@
-﻿using System.Collections;
-using Sohg.GameAgg.Contracts;
+﻿using Sohg.GameAgg.Contracts;
 using Sohg.SocietyAgg.Contracts;
-using System.Linq;
-using Sohg.TechnologyAgg.Contracts;
-using System.Collections.Generic;
 
 namespace Sohg.GameAgg
 {
     public partial class GameEngine : IRunningGame
     {
-        public void ActivateActions()
-        {
-            gameDefinition.SocietyActions.ToList()
-                .ForEach(action => action.CheckActivation(this));
-        }
-        
-        public void ExecuteAction(IEnumerator actionExecution)
-        {
-            StartCoroutine(actionExecution);
-        }
-
-        public List<ITechnology> GetActiveTechnologies()
-        {
-            return gameDefinition.TechnologyCategories.SelectMany
-                (
-                    technologyCategory => technologyCategory.Technologies
-                        .Where(technology => technology.IsActive)
-                ).ToList();
-        }
-
         public bool IsPaused()
         {
             // TODO fix pause, now is not working with Fight animation (and execution)
