@@ -9,16 +9,20 @@ namespace Sohg.SocietyAgg.UI
         [SerializeField]
         private Image iconImage;
 
-        public override void Initialize(ISocietyAction societyAction, ISocietyInfo societyInfo)
+        protected ISocietyAction societyAction { get; private set; }
+
+        public void Initialize(ISocietyAction societyAction, ISocietyInfo societyInfo)
         {
-            base.Initialize(societyAction, societyInfo); // DO NOT REMOVE
+            Initialize(societyInfo);
+            this.societyAction = societyAction;
 
             iconImage.sprite = societyAction.ActionIcon;
         }
 
-        public override void SetEnable(bool isEnabled)
+        public void Update()
         {
-            gameObject.SetActive(isEnabled);
+            var isEffectActive = (society.IsEffectActive[societyAction]);
+            gameObject.SetActive(isEffectActive);
         }
     }
 }

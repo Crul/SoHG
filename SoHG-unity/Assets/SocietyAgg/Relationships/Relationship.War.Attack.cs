@@ -47,7 +47,7 @@ namespace Sohg.SocietyAgg.Relationships
 
             if (damageRate > 1)
                 return AttackResult.Win;
-
+            
             return AttackResult.Loose;
         }
 

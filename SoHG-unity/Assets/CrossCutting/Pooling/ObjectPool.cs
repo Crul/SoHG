@@ -33,7 +33,7 @@ namespace Sohg.CrossCutting.Pooling
             return pool;
         }
 
-        public PooledObject GetObject(Canvas canvas)
+        public PooledObject GetObject(GameObject gameObject)
         {
             PooledObject obj;
             int lastAvailableIndex = availableObjects.Count - 1;
@@ -46,7 +46,7 @@ namespace Sohg.CrossCutting.Pooling
             else
             {
                 obj = Instantiate(prefab);
-                obj.transform.SetParent(canvas.transform, false);
+                obj.transform.SetParent(gameObject.transform, false);
                 obj.Pool = this;
             }
 

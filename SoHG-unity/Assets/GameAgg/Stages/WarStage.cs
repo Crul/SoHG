@@ -1,4 +1,5 @@
 ﻿using Sohg.GameAgg.Contracts;
+using System.Linq;
 using UnityEngine;
 
 namespace Sohg.GameAgg.Stages
@@ -24,7 +25,31 @@ namespace Sohg.GameAgg.Stages
             if (!game.IsPaused())
             {
                 game.EvolveWar(++time);
+                CheckWinOrLoose();
             }
+        }
+
+        private void CheckWinOrLoose()
+        {
+            var hasPlayerLosen = (game.PlayerSpecies.Societies.Count == 0);
+            if (hasPlayerLosen)
+            {
+               EndWar(false);
+            }
+            else
+            {
+                var hasPlayerWon = (game.Species.Count == 1);
+                if (hasPlayerWon)
+                {
+                    EndWar(true);
+                }
+            }
+        }
+
+        private void EndWar(bool hasPlayerWon)
+        {
+            game.EndWar(hasPlayerWon);
+            game.NextStage();
         }
     }
 }

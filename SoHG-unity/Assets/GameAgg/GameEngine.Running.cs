@@ -1,18 +1,10 @@
-﻿using System.Collections;
-using Sohg.GameAgg.Contracts;
-using Sohg.GameAgg.UI;
+﻿using Sohg.GameAgg.Contracts;
 using Sohg.SocietyAgg.Contracts;
-using System.Linq;
 
 namespace Sohg.GameAgg
 {
     public partial class GameEngine : IRunningGame
     {
-        public void ExecuteAction(IEnumerator actionExecution)
-        {
-            StartCoroutine(actionExecution);
-        }
-
         public bool IsPaused()
         {
             // TODO fix pause, now is not working with Fight animation (and execution)
@@ -29,26 +21,14 @@ namespace Sohg.GameAgg
         public void NextStage()
         {
             currentStageIndex++;
-            if (currentStageIndex >= GameDefinition.Stages.Length)
+            if (currentStageIndex >= gameDefinition.Stages.Length)
             {
                 throw new System.Exception("GameEngine.NextStage() - Not enough stages");
             }
 
-            currentStage = GameDefinition.Stages[currentStageIndex];
+            currentStage = gameDefinition.Stages[currentStageIndex];
             currentStage.SetGame(this);
             currentStage.Start();
-        }
-
-        public void OnTechnologyActivated(ITechnology technology)
-        {
-            ConsumeFaith(technology.FaithCost);
-
-            // TODO make society action technology requirement properly
-            var activatedSocietyActions = GameDefinition.SocietyActions
-                .Where(action => action.Requires(technology));
-
-            activatedSocietyActions.ToList()
-                .ForEach(action => societyInfo.AddAction(action));
         }
 
         public IInstructions OpenInstructions(string instructionsText)

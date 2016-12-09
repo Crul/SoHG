@@ -1,10 +1,12 @@
 ﻿using Sohg.CrossCutting;
 using Sohg.CrossCutting.UI;
 using Sohg.GameAgg.Contracts;
+using System.Linq;
 using UnityEngine;
 
 namespace Sohg.GameAgg.UI
 {
+    [DisallowMultipleComponent]
     public class GameStatusInfo : BaseComponent, IGameStatusInfo
     {
         [SerializeField]
@@ -23,15 +25,15 @@ namespace Sohg.GameAgg.UI
 
         public void SetValues(IRunningGame game)
         {
-            var populationAmount = game.PlayerSociety.State.PopulationAmount;
+            var populationAmount = game.PlayerSpecies.Societies.Sum(society => society.State.PopulationAmount);
             populationInfo
                 .SetValue(populationAmount.ToString("### ### ### ### ### ##0")); // TODO number format
 
             faithPowerInfo
-                .SetValue(game.FaithPower.ToString("### ### ### ### ### ##0")); // TODO number format
+                .SetValue(game.PlayerSpecies.FaithPower.ToString("### ### ### ### ### ##0")); // TODO number format
 
             totalFaithInfo
-                .SetValue(game.TotalFaith.ToString("### ### ### ### ### ##0")); // TODO number format
+                .SetValue(game.PlayerSpecies.TotalFaith.ToString("### ### ### ### ### ##0")); // TODO number format
         }
     }
 }

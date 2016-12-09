@@ -1,4 +1,5 @@
-﻿using Sohg.SocietyAgg.Contracts;
+﻿using System.Collections.Generic;
+using Sohg.SocietyAgg.Contracts;
 using UnityEngine;
 
 namespace Sohg.Grids2D.Contracts

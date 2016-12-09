@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 namespace Sohg.GameAgg.UI
 {
+    [DisallowMultipleComponent]
     public class EndGame : BaseComponent, IEndGame
     {
         [SerializeField]
@@ -18,6 +19,7 @@ namespace Sohg.GameAgg.UI
         public void Awake()
         {
             exitButton.onClick.AddListener(() => SceneManager.LoadScene("Menu"));
+            transform.SetAsLastSibling();
             gameObject.SetActive(false);
         }
 

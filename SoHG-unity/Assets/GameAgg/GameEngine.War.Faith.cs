@@ -1,38 +1,22 @@
-﻿using Sohg.SocietyAgg.Contracts;
+﻿using Sohg.SpeciesAgg.Contracts;
 
 namespace Sohg.GameAgg
 {
     public partial class GameEngine
     {
-        public void AddFaith(int faithAmount)
+        public void EmitFaith(ISpecies species)
         {
-            FaithPower += faithAmount;
-            TotalFaith += faithAmount;
-        }
-
-        public bool ConsumeFaith(int faithAmount)
-        {
-            var isEnoughFaith = (faithAmount <= FaithPower);
-            if (isEnoughFaith)
+            species.Societies.ForEach(society =>
             {
-                FaithPower -= faithAmount;
-            }
+                var faithAmount = society.State.GetFaithEmitted();
+                if (faithAmount > 0)
+                {
+                    var faithCell = grid
+                        .GetRandomCell(cell => cell.TerritoryIndex == society.Territory.TerritoryIndex);
 
-            return isEnoughFaith;
-        }
-
-        public void EmitFaith(ISociety society)
-        {
-            var faithAmount = society.State.GetFaithEmitted();
-            if (faithAmount == 0)
-            {
-                return;
-            }
-
-            var faithCell = grid
-                .GetRandomCell(cell => cell.TerritoryIndex == society.Territory.TerritoryIndex);
-
-            SohgFactory.CreateFaith(this, faithCell, faithAmount);
+                    SohgFactory.CreateFaith(this, faithCell, faithAmount);
+                }
+            });
         }
     }
 }

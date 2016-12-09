@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 namespace Sohg.MenuAgg
 {
+    [DisallowMultipleComponent]
     public class Menu : BaseComponent
     {
         [SerializeField]

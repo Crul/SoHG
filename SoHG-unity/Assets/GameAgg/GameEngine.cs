@@ -8,6 +8,8 @@ using Sohg.SocietyAgg.Contracts;
 using UnityEngine;
 using Sohg.CrossCutting.Contracts;
 using System.Collections.Generic;
+using Sohg.SpeciesAgg.Contracts;
+using System.Linq;
 
 namespace Sohg.GameAgg
 {
@@ -25,17 +27,14 @@ namespace Sohg.GameAgg
         [SerializeField]
         private SohgFactoryScript sohgFactory;
 
+        private IGameDefinition gameDefinition;
         private IEndGame endGame;
         private IGrid grid;
         private IInstructions instructions;
         private ISocietyInfo societyInfo;
 
-        public IGameDefinition GameDefinition { get; private set; }
-        public List<ISociety> Societies { get; private set; }
-
-        public ISociety PlayerSociety { get; private set; }
-        public int FaithPower { get; private set; }
-        public int TotalFaith { get; private set; }
+        public ISpecies PlayerSpecies { get; private set; }
+        public List<ISpecies> Species { get; private set; }
 
         public IGameInfoPanel GameInfoPanel { get { return gameInfoPanel; } }
         public ISohgFactory SohgFactory { get { return sohgFactory; } }
@@ -44,16 +43,41 @@ namespace Sohg.GameAgg
         {
             SohgFactory.SetCanvas(boardCanvas, boardOverCanvas, fixedOverCanvas);
             
-            GameDefinition = SohgFactory.GameDefinition;
+            gameDefinition = SohgFactory.GameDefinition;
+
             // TODO remove single-instance-using unity prefabs from prefabFactory
             endGame = SohgFactory.CreateEndGame();
             instructions = SohgFactory.CreateInstructions();
             societyInfo = SohgFactory.CreateSocietyInfo(this);
-
             grid = SohgFactory.CreateGrid();
+
             grid.AddOnCellClick(cell => OnGridCellClick(cell)); // TODO fix non-blocking grid click
 
-            gameInfoPanel.TechnologyPanel.Initialize(this);
+            gameInfoPanel.TechnologyPanel.Initialize(this, gameDefinition.TechnologyCategories.ToList());
+
+            PlayerSpecies = gameDefinition.PlayerSpecies;
+        }
+
+        public void ResetGame()
+        {
+            hasPlayerWon = null;
+
+            var nonPlayerSpeciesCount = Math.Min(SohgFactory.Config.NonPlayerSocietyCount, gameDefinition.NonPlayerSpecies.Length);
+            Species = gameDefinition.NonPlayerSpecies.Take(nonPlayerSpeciesCount).ToList();
+            Species.Add(PlayerSpecies);
+
+            Species.ForEach(species => species.Reset());
+
+            gameDefinition.TechnologyCategories
+                .SelectMany(technologyCategory => technologyCategory.Technologies)
+                .ToList()
+                .ForEach(technology => technology.Reset());
+
+            gameDefinition.SocietyActions.ToList()
+                .ForEach(action => action.Initialize(this));
+
+            gameDefinition.Skills.ToList()
+                .ForEach(skill => skill.Initialize(this));
         }
     }
 }

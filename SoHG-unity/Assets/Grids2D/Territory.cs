@@ -1,5 +1,4 @@
-﻿using System;
-using Sohg.Grids2D.Contracts;
+﻿using Sohg.Grids2D.Contracts;
 using Sohg.SocietyAgg.Contracts;
 using UnityEngine;
 using System.Linq;

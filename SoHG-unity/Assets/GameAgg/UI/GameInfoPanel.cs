@@ -4,9 +4,12 @@ using Sohg.GameAgg.Contracts;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using Sohg.TechnologyAgg.UI;
+using Sohg.TechnologyAgg.Contracts;
 
 namespace Sohg.GameAgg.UI
 {
+    [DisallowMultipleComponent]
     public class GameInfoPanel : BaseComponent, IGameInfoPanel
     {
         [SerializeField]

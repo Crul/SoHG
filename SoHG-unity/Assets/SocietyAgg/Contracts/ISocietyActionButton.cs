@@ -1,5 +1,7 @@
 ﻿namespace Sohg.SocietyAgg.Contracts
 {
-    public interface ISocietyActionButton : ISocietyInfoChild
-    { }
+    public interface ISocietyActionButton : ISocietyInfoActionElement
+    {
+        void Initialize(ISocietyAction action, ISocietyInfo societyInfo);
+    }
 }

@@ -4,6 +4,8 @@ using Sohg.Grids2D.Contracts;
 using Sohg.SocietyAgg.Contracts;
 using Sohg.SocietyAgg.UI;
 using UnityEngine;
+using Sohg.TechnologyAgg.Contracts;
+using Sohg.SpeciesAgg.Contracts;
 
 namespace Sohg.CrossCutting.Contracts
 {
@@ -18,13 +20,16 @@ namespace Sohg.CrossCutting.Contracts
         IGrid CreateGrid();
         IInstructions CreateInstructions();
         IRelationship CreateRelationship(ISociety we, ISociety them);
-        ISociety CreateSociety(IRunningGame game, ISocietyDefinition societyDefinition, ICell[] cells);
+        void CreateSociety(IRunningGame game, ISpecies species, ICell[] cells);
         ISocietyActionButton CreateSocietyActionButton(ISocietyAction action, ISocietyInfo societyInfo);
         ISocietyEffectIcon CreateSocietyEffectIcon(ISocietyAction action, ISocietyInfo societyInfo);
         ISocietyInfo CreateSocietyInfo(IRunningGame game);
-        ITechnologyButton CreateTechnologyButton(IRunningGame game, GameObject technologyPanel, ITechnology technology);
+        ISocietySkillIcon CreateSocietySkillIcon(ISkill skill, ISocietyInfo societyInfo);
+        ITechnologyCategoryBox CreateTechnologyCategoryBox(IWarPlayable game, ITechnologyCategory technologyCategory, 
+            ITechnologyStatesSetter technologyStatesSetter, GameObject technologyPanel);
         ISocietyPropertyInfo CreateSocietyPropertyInfo(SocietyProperty property, ISocietyInfo societyInfo);
         ITerritory CreateTerritory(params ICell[] cells);
+
         IGrid GetGrid();
         void SetCanvas(Canvas boardCanvas, Canvas boardOverCanvas, Canvas fixedOverCanvas);
     }
