@@ -23,17 +23,6 @@ namespace Sohg.GameAgg
             this.hasPlayerWon = hasPlayerWon;
         }
 
-        public void EvolveWar(int time)
-        {
-            if (time % SohgFactory.Config.WarActionsTimeInterval == 0)
-            {
-                Species.ForEach(species => species.Evolve(this));
-                EmitFaith(PlayerSpecies);
-            }
-
-            grid.RedrawIfChanged();
-        }
-
         public void ExecuteAction(IEnumerator actionExecution)
         {
             StartCoroutine(actionExecution);
@@ -54,7 +43,12 @@ namespace Sohg.GameAgg
                 KillSociety(invadedTerritory.Society);
             }
         }
-        
+
+        public void RedrawIfChanged()
+        {
+            grid.RedrawIfChanged();
+        }
+
         private void KillSociety(ISociety deathSociety)
         {
             Species.SelectMany(species => species.Societies)

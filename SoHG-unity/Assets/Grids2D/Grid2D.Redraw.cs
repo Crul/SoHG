@@ -10,8 +10,8 @@ namespace Grids2D
         {
             if (territoriesHaveChanged)
             {
-                RecalculateTerritories();
                 territoriesHaveChanged = false;
+                RecalculateTerritories();
             }
         }
 
