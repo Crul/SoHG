@@ -2,7 +2,7 @@
 
 namespace Sohg.GameAgg.Stages
 {
-    public abstract class GameStage<TRunningbleGame> : GameStageScript
+    public abstract class GameStage<TRunningbleGame> : GameStage
         where TRunningbleGame : IRunningGame
     {
         protected TRunningbleGame game

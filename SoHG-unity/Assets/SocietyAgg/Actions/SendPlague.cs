@@ -29,11 +29,8 @@ namespace Sohg.SocietyAgg.Actions
 
         public override void Execute(ISociety society)
         {
-            if (game.PlayerSpecies.ConsumeFaith(FaithCost))
-            {
-                game.ExecuteAction(ExecutePlague(society));
-                game.Log("Plague sent to {0}", society.Name);
-            }
+            game.ExecuteAction(ExecutePlague(society));
+            game.Log("Plague sent to {0}", society.Name);
         }
 
         private IEnumerator ExecutePlague(ISociety society)

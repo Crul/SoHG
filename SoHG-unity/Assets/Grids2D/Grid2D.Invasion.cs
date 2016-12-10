@@ -1,7 +1,6 @@
 ﻿using Sohg.Grids2D.Contracts;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace Grids2D
 {
@@ -31,21 +30,11 @@ namespace Grids2D
         };
         #endregion
 
-        public Dictionary<ICell, ICell> GetInvadableCells(ITerritory territory1, ITerritory territory2)
+        public ICell GetInvadableCell(ICell from, ITerritory territory)
         {
-            // TODO invade less connected cells first?
-            return ((Territory)territory1).cells
-                .Where(cell => !cell.IsInvolvedInAttack)
-                .Select(cell => new
-                {
-                    Cell = cell,
-                    Neighbour = CellGetNeighbours(cell)
-                        .Where(neighbour => IsCellOfTerritoryInvadable(neighbour, territory2))
-                        .OrderBy(pair => Random.Range(0f, 1f))
-                        .FirstOrDefault()
-                })
-                .Where(pair => pair.Neighbour != null)
-                .ToDictionary(pair => (ICell)pair.Cell, pair => (ICell)pair.Neighbour);
+            return CellGetNeighbours(from.CellIndex)
+                .Where(neighbour => neighbour.CanBeInvaded && neighbour.TerritoryIndex == territory.TerritoryIndex)
+                .FirstOrDefault();
         }
 
         public void InvadeTerritory(ICell from, ICell target)
@@ -60,6 +49,24 @@ namespace Grids2D
 
             var territoryInvader = territories[from.TerritoryIndex];
             SetCellTerritory(target, territoryInvader);
+
+            var affectedCells = CellGetNeighbours((Cell)from)
+                .Concat(CellGetNeighbours((Cell)target))
+                .Where(cell => cell.TerritoryIndex > 0)
+                .Distinct();
+
+            var affectedTerritories = affectedCells
+                .Select(cell => territories[cell.TerritoryIndex])
+                .ToList();
+
+            var affectedCellIndices = affectedCells.Select(cell => cell.CellIndex).ToList();
+
+            affectedTerritories.ForEach(territory => 
+                territory.UpdateFrontiers(affectedTerritories, affectedCellIndices, this));
+            
+            affectedCells.ToList().ForEach(cell => cell.CanBeInvaded = CanCellBeInvaded(cell));
+
+            FixNonInvadableTerritories();
 
             territoriesHaveChanged = true;
         }
@@ -129,5 +136,6 @@ namespace Grids2D
 
             cellList[index] = neighbour;
         }
+
     }
 }

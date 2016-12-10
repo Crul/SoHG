@@ -1,16 +1,15 @@
-﻿using System.Collections.Generic;
-using Sohg.SocietyAgg.Contracts;
-using Sohg.GameAgg.Contracts;
+﻿using Sohg.GameAgg.Contracts;
+using Sohg.Grids2D.Contracts;
 
 namespace Sohg.SocietyAgg.Contracts
 {
     public interface IRelationship
     {
-        bool IsNeighbour { get; }
         ISociety We { get; }
         ISociety Them { get; }
 
+        bool AreWeNeighbours();
         void Evolve(IWarPlayable game);
-        void SetNeighbour(List<ISociety> neighbourSocieties);
+        void ResolveAttack(IWarPlayable game, ICell from, ICell target);
     }
 }

@@ -21,12 +21,20 @@ namespace Grids2D
                 CheckSocietiesTerritoriesExpansion(expadedCellCount, unassignedSocietyCells);
             }
 
-            RedrawTerritories();
+            territories.ForEach(territory => territory.InitializeFrontier(this));
 
+            Redraw();
+
+            territories.ForEach(territory =>
+                TerritoryToggleRegionSurface(territory.TerritoryIndex, true, Color.white, false, canvasTexture));
+
+            cells.Where(cell => cell.territoryIndex > -1).ToList()
+                .ForEach(cell => cell.CanBeInvaded = CanCellBeInvaded(cell));
+
+            FixNonInvadableTerritories();
+            
             societyTerritories.SelectMany(territory => territory.cells)
                 .ToList().ForEach(cell => cell.SetSocietyAssigned());
-
-            // highlightMode = HIGHLIGHT_MODE.Territories; // TODO ?
         }
 
         private void CheckSocietiesTerritoriesExpansion(int expadedCellCount, List<Cell> unassignedSocietyCells)
@@ -68,6 +76,17 @@ namespace Grids2D
             });
 
             return cellsToBeExpanded.Count;
+        }
+
+        private void FixNonInvadableTerritories()
+        {
+            // TODO: resolve ring corner cases (still problem with multiple rings)
+            territories
+                .Where(territory => (territory.cells.Count > 0
+                    && territory.cells.Count(cell => cell.CanBeInvaded) == 0))
+                .SelectMany(territory => territory.cells)
+                .ToList()
+                .ForEach(cell => cell.CanBeInvaded = true);
         }
     }
 }

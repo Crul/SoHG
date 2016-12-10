@@ -68,13 +68,7 @@ namespace Sohg.SocietyAgg
 
         public bool IsNeighbourOf(ISociety society)
         {
-            return relationships.Single(relationship => relationship.Them == society).IsNeighbour;
-        }
-
-        public void SetNeighbours(List<ISociety> neighbourSocieties)
-        {
-            relationships
-                .ForEach(relationship => relationship.SetNeighbour(neighbourSocieties));
+            return relationships.Single(relationship => relationship.Them == society).AreWeNeighbours();
         }
     }
 }

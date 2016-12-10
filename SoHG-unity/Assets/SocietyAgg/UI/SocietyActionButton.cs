@@ -1,4 +1,5 @@
-﻿using Sohg.SocietyAgg.Contracts;
+﻿using System;
+using Sohg.SocietyAgg.Contracts;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,16 +14,18 @@ namespace Sohg.SocietyAgg.UI
         private Button button;
         private ISocietyAction societyAction;
 
+        public void Awake()
+        {
+            button = GetComponent<Button>();
+            gameObject.GetComponent<Button>().onClick.AddListener(() => ExecuteAction());
+        }
+
         public void Initialize(ISocietyAction societyAction, ISocietyInfo societyInfo)
         {
             Initialize(societyInfo);
             this.societyAction = societyAction;
 
-            button = GetComponent<Button>();
             iconImage.sprite = societyAction.ActionIcon;
-
-            gameObject.GetComponent<Button>().onClick
-                .AddListener(() => societyAction.Execute(society));
         }
 
         public void Update()
@@ -34,9 +37,17 @@ namespace Sohg.SocietyAgg.UI
             button.interactable = isButtonEnabled;
         }
 
+        private void ExecuteAction()
+        {
+            if (game.PlayerSpecies.ConsumeFaith(societyAction.FaithCost))
+            {
+                societyAction.Execute(society);
+            }
+        }
+
         private bool HasPlayerEnoughFaithPower()
         {
-            return game.PlayerSpecies.FaithPower > societyAction.FaithCost;
+            return game.PlayerSpecies.FaithPower >= societyAction.FaithCost;
         }
 
         private bool IsEffectActive()

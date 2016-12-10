@@ -8,10 +8,12 @@ namespace Sohg.GameAgg.Stages
     public class WarStage : GameStage<IWarPlayable>
     {
         private int time;
+        private int currentSocietyIndex;
 
         public override void Start()
         {
             time = 0;
+            currentSocietyIndex = 0;
             game.OpenInstructions(
                 "The Stories begin" + System.Environment.NewLine +
                 "The human species has born and they are not alone." + System.Environment.NewLine +
@@ -22,9 +24,28 @@ namespace Sohg.GameAgg.Stages
 
         public override void FixedUpdate()
         {
-            if (!game.IsPaused())
+            time++;
+            game.RedrawIfChanged();
+
+            if (!game.IsPaused() && (time % game.SohgFactory.Config.WarActionsTimeInterval == 0))
             {
-                game.EvolveWar(++time);
+                var societies = game.Species.SelectMany(species => species.Societies).ToList();
+                if (currentSocietyIndex >= societies.Count)
+                {
+                    currentSocietyIndex = 0;
+                }
+
+                var society = societies[currentSocietyIndex];
+                society.Species.Evolve(game);
+                society.Evolve(game);
+
+                if (society.Species == game.PlayerSpecies)
+                {
+                    game.EmitFaith(society);
+                }
+
+                currentSocietyIndex++;
+
                 CheckWinOrLoose();
             }
         }
@@ -38,7 +59,8 @@ namespace Sohg.GameAgg.Stages
             }
             else
             {
-                var hasPlayerWon = (game.Species.Count == 1);
+                // TODO: this should be enough (is not): var hasPlayerWon = (game.Species.Count == 1);
+                var hasPlayerWon = (game.Species.Count(species =>  species.Societies.Sum(society => society.Territory.CellCount) > 0) == 1);
                 if (hasPlayerWon)
                 {
                     EndWar(true);

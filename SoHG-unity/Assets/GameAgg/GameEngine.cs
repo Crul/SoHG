@@ -25,7 +25,7 @@ namespace Sohg.GameAgg
         [SerializeField]
         private GameInfoPanel gameInfoPanel;
         [SerializeField]
-        private SohgFactoryScript sohgFactory;
+        private SohgFactory sohgFactory;
 
         private IGameDefinition gameDefinition;
         private IEndGame endGame;

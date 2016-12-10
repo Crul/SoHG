@@ -16,12 +16,12 @@ using UnityEngine;
 namespace Sohg.CrossCutting.Factories
 {
     [CreateAssetMenu(fileName = "SohgFactory", menuName = "SoHG/Sohg Factory")]
-    public class SohgFactoryScript : ScriptableBaseObject, ISohgFactory
+    public class SohgFactory : ScriptableBaseObject, ISohgFactory
     {
         [SerializeField]
-        private PrefabFactoryScript prefabFactory;
+        private PrefabFactory prefabFactory;
         [SerializeField]
-        private SohgConfigScript sohgConfig;
+        private SohgConfig sohgConfig;
         [SerializeField]
         private GameDefinition gameDefinition;
 

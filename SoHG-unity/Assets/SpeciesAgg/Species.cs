@@ -43,7 +43,6 @@ namespace Sohg.SpeciesAgg
 
         public void Evolve(IWarPlayable game)
         {
-            Societies.ForEach(society => society.Evolve(game));
         }
 
         public void AddFaith(int faithAmount)

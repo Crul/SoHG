@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using Sohg.SocietyAgg.Contracts;
+﻿using Sohg.SocietyAgg.Contracts;
 
 namespace Sohg.SocietyAgg.Relationships
 {
     public partial class Relationship : IRelationship
     {
-        public bool IsNeighbour { get; private set; }
         public ISociety We { get; private set; }
         public ISociety Them { get; private set; }
 
@@ -18,9 +16,11 @@ namespace Sohg.SocietyAgg.Relationships
             friendshipRange = 0.5f; // TODO update Relationship.firendshipRange
         }
 
-        public void SetNeighbour(List<ISociety> neighbourSocieties)
+        public bool AreWeNeighbours()
         {
-            IsNeighbour = neighbourSocieties.Contains(Them);
+            var frontierCells = We.Territory.FrontierCellsByTerritoryIndex[Them.Territory.TerritoryIndex];
+
+            return frontierCells != null && frontierCells.Count > 0;
         }
     }
 }

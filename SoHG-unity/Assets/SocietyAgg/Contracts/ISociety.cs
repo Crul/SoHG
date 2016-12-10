@@ -22,11 +22,9 @@ namespace Sohg.SocietyAgg.Contracts
         void AddRelationship(ISociety society);
         void AddSkill(ISkill skill);
         void RemoveRelationship(ISociety deathSociety);
-
-        bool IsNeighbourOf(ISociety society);
-        void SetNeighbours(List<ISociety> neighbourSocieties);
-
+        
         void Initialize();
+        bool IsNeighbourOf(ISociety society);
         void Evolve(IWarPlayable game);
         bool ShouldWeAttack(ISociety them);
     }
