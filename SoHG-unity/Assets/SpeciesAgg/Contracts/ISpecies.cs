@@ -18,7 +18,7 @@ namespace Sohg.SpeciesAgg.Contracts
         int TotalFaith { get; }
 
         void Reset();
-        void Evolve(IWarPlayable game);
+        void Evolve(IEvolvableGame game);
 
         void AddFaith(int faithAmount);
         bool ConsumeFaith(int faithAmount);

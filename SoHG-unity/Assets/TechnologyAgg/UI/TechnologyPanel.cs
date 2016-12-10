@@ -17,7 +17,7 @@ namespace Sohg.TechnologyAgg.UI
         private GameObject technologyCategoriesPanel;
 
         private List<ITechnologyCategoryBox> technologyCategoryBoxes;
-        private IWarPlayable game;
+        private IEvolvableGame game;
 
         public TechnologyPanel()
         {
@@ -29,7 +29,7 @@ namespace Sohg.TechnologyAgg.UI
             backButton.onClick.AddListener(() => gameObject.SetActive(false));
         }
 
-        public void Initialize(IWarPlayable game, List<ITechnologyCategory> technologyCategories)
+        public void Initialize(IEvolvableGame game, List<ITechnologyCategory> technologyCategories)
         {
             this.game = game;
 

@@ -12,9 +12,9 @@ namespace Sohg.CrossCutting
         [SerializeField]
         private long initialSocietyPopulationByCell;
 
-        [Header("War")]
+        [Header("Evolution")]
         [SerializeField]
-        private int warActionsTimeInterval;
+        private int evolutionActionsTimeInterval;
 
         [Header("Attack")]
         [SerializeField]
@@ -29,7 +29,7 @@ namespace Sohg.CrossCutting
         public int NonPlayerSocietyCount { get { return nonPlayerSocietyCount; } }
         public long InitialSocietyPopulationByCell { get { return initialSocietyPopulationByCell; } }
 
-        public int WarActionsTimeInterval { get { return warActionsTimeInterval; } }
+        public int EvolutionActionsTimeInterval { get { return evolutionActionsTimeInterval; } }
 
         public float AttackDamageTieRateThreshold { get { return attackDamageTieRateThreshold; } }
         public int FightDuration { get { return fightDuration; } }

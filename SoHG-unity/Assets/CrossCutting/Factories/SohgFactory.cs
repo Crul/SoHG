@@ -37,7 +37,7 @@ namespace Sohg.CrossCutting.Factories
             return prefabFactory.InstantiateEndGame(boardCanvas);
         }
 
-        public IFaithRecolectable CreateFaith(IWarPlayable game, ICell faithCell, int faithAmount)
+        public IFaithRecolectable CreateFaith(IEvolvableGame game, ICell faithCell, int faithAmount)
         {
             var faithRecolectable = prefabFactory.InstantiateFaithRecolectable(boardOverCanvas, "FaithRecolectable");
             faithRecolectable.Initialize(game, faithCell, faithAmount);
@@ -139,7 +139,7 @@ namespace Sohg.CrossCutting.Factories
             return societyPropertyInfo;
         }
 
-        public ITechnologyCategoryBox CreateTechnologyCategoryBox(IWarPlayable game, ITechnologyCategory technologyCategory,
+        public ITechnologyCategoryBox CreateTechnologyCategoryBox(IEvolvableGame game, ITechnologyCategory technologyCategory,
             ITechnologyStatesSetter technologyStatesSetter, GameObject technologyPanel)
         {
             var technologyCategoryBox = prefabFactory.InstantiateTechnologyCategoryBox(technologyPanel, technologyCategory.Name);
@@ -152,7 +152,7 @@ namespace Sohg.CrossCutting.Factories
             return technologyCategoryBox;
         }
 
-        private ITechnologyBox CreateTechnologyBox(IWarPlayable game, ITechnology technology, ITechnologyCategory technologyCategory,
+        private ITechnologyBox CreateTechnologyBox(IEvolvableGame game, ITechnology technology, ITechnologyCategory technologyCategory,
             ITechnologyCategoryBox technologyCategoryBox, ITechnologyStatesSetter technologyStatesSetter)
         {
             var technologyBox = prefabFactory.InstantiateTechnologyBox(technologyCategoryBox.Content, technology.Name);

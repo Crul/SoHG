@@ -14,12 +14,12 @@ namespace Sohg.TechnologyAgg.UI
         [SerializeField]
         private Image technologyIcon;
 
-        private IWarPlayable game;
+        private IEvolvableGame game;
         private ITechnology technology;
         private ITechnologyStatesSetter technologyStatesSetter;
         private bool hasBeenActivated;
 
-        public void Initialize(IWarPlayable game, ITechnology technology,
+        public void Initialize(IEvolvableGame game, ITechnology technology,
             ITechnologyStatesSetter technologyStatesSetter)
         {
             hasBeenActivated = false;

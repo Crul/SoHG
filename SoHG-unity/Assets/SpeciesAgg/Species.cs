@@ -41,7 +41,7 @@ namespace Sohg.SpeciesAgg
             TotalFaith = 0;
         }
 
-        public void Evolve(IWarPlayable game)
+        public void Evolve(IEvolvableGame game)
         {
         }
 

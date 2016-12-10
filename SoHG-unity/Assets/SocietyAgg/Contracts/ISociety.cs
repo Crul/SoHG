@@ -25,7 +25,7 @@ namespace Sohg.SocietyAgg.Contracts
         
         void Initialize();
         bool IsNeighbourOf(ISociety society);
-        void Evolve(IWarPlayable game);
+        void Evolve(IEvolvableGame game);
         bool ShouldWeAttack(ISociety them);
     }
 }

@@ -6,7 +6,7 @@ using System.Collections;
 
 namespace Sohg.GameAgg
 {
-    public partial class GameEngine : IWarPlayable
+    public partial class GameEngine : IEvolvableGame
     {
         private bool? hasPlayerWon;
 
@@ -27,7 +27,7 @@ namespace Sohg.GameAgg
             return true;
         }
 
-        public void EndWar(bool hasPlayerWon)
+        public void FinishEvolution(bool hasPlayerWon)
         {
             this.hasPlayerWon = hasPlayerWon;
         }

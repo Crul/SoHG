@@ -5,7 +5,7 @@ namespace Sohg.SocietyAgg
 {
     public partial class Society : ISociety
     {
-        public void Evolve(IWarPlayable game)
+        public void Evolve(IEvolvableGame game)
         {
             relationships.ForEach(relationship => relationship.Evolve(game));
         }

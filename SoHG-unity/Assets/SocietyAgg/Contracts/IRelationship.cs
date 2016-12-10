@@ -9,7 +9,7 @@ namespace Sohg.SocietyAgg.Contracts
         ISociety Them { get; }
 
         bool AreWeNeighbours();
-        void Evolve(IWarPlayable game);
-        void ResolveAttack(IWarPlayable game, ICell from, ICell target);
+        void Evolve(IEvolvableGame game);
+        void ResolveAttack(IEvolvableGame game, ICell from, ICell target);
     }
 }

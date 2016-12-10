@@ -25,7 +25,7 @@ namespace Sohg.TechnologyAgg
             Reset();
         }
 
-        public bool Activate(IWarPlayable game)
+        public bool Activate(IEvolvableGame game)
         {
             var hasFaithBeenConsumed = game.PlayerSpecies.ConsumeFaith(FaithCost);
             if (hasFaithBeenConsumed)

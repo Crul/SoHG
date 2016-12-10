@@ -4,7 +4,7 @@ namespace Sohg.SocietyAgg.Relationships
 {
     public partial class Relationship
     {
-        public void Evolve(IWarPlayable game)
+        public void Evolve(IEvolvableGame game)
         {
             if (!AreWeNeighbours())
             {

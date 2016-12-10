@@ -11,7 +11,7 @@ namespace Sohg.TechnologyAgg
         private Technology[] requiredTechnologies;
 
         protected bool isActive { get; private set; }
-        protected IWarPlayable game { get; private set; }
+        protected IEvolvableGame game { get; private set; }
 
         public ITechnology[] RequiredTechnologies { get { return requiredTechnologies; } }
 
@@ -30,7 +30,7 @@ namespace Sohg.TechnologyAgg
             }
         }
 
-        public void Initialize(IWarPlayable game)
+        public void Initialize(IEvolvableGame game)
         {
             isActive = false;
             this.game = game;

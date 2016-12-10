@@ -5,13 +5,13 @@ using System.Collections;
 
 namespace Sohg.GameAgg.Contracts
 {
-    public interface IWarPlayable : IRunningGame
+    public interface IEvolvableGame : IRunningGame
     {
         bool CheckDependentTechnologies(ITechnologyDependent technologyDependent);
         bool CreateFight(IRelationship relationship, int fromCellIndex);
         void EmitFaith(ISociety society);
-        void EndWar(bool hasPlayerWon);
         void ExecuteAction(IEnumerator actionExecution);
+        void FinishEvolution(bool hasPlayerWon);
         void Invade(ICell from, ICell target);
         void OnTechnologyActivated();
         void RedrawIfChanged();

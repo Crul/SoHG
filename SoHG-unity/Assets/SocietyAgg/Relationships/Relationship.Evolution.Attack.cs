@@ -17,7 +17,7 @@ namespace Sohg.SocietyAgg.Relationships
 
         private int currentAttacks = 0;
 
-        public void ResolveAttack(IWarPlayable game, ICell from, ICell target)
+        public void ResolveAttack(IEvolvableGame game, ICell from, ICell target)
         {
             var damageRate = (We.State.Power / Them.State.Power); // TODO randomize
             var result = GetResult(damageRate, game.SohgFactory.Config.AttackDamageTieRateThreshold); // TODO randomize
@@ -60,7 +60,7 @@ namespace Sohg.SocietyAgg.Relationships
             target.IsInvolvedInAttack = false;
         }
 
-        public bool WillingToAttack(IWarPlayable game)
+        public bool WillingToAttack(IEvolvableGame game)
         {
             var friendShipThreshold = (Random.Range(0f, 1f) 
                 * game.SohgFactory.Config.FriendshipRangeBottomThresholdForAttack);
@@ -68,7 +68,7 @@ namespace Sohg.SocietyAgg.Relationships
             return friendshipRange < friendShipThreshold;
         }
 
-        private void Attack(IWarPlayable game)
+        private void Attack(IEvolvableGame game)
         {
             var frontierCellIndices = We.Territory
                 .FrontierCellsByTerritoryIndex[Them.Territory.TerritoryIndex]

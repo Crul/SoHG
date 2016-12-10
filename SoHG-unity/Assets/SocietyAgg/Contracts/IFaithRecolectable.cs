@@ -5,6 +5,6 @@ namespace Sohg.SocietyAgg.Contracts
 {
     public interface IFaithRecolectable
     {
-        void Initialize(IWarPlayable game, ICell faithCell, int faithAmount);
+        void Initialize(IEvolvableGame game, ICell faithCell, int faithAmount);
     }
 }

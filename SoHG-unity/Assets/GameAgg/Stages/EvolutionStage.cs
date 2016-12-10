@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace Sohg.GameAgg.Stages
 {
-    [CreateAssetMenu(fileName = "WarStage", menuName = "SoHG/Stages/War")]
-    public class WarStage : GameStage<IWarPlayable>
+    [CreateAssetMenu(fileName = "EvolutionStage", menuName = "SoHG/Stages/Evolution")]
+    public class EvolutionStage : GameStage<IEvolvableGame>
     {
         private int time;
         private int currentSocietyIndex;
@@ -19,7 +19,7 @@ namespace Sohg.GameAgg.Stages
                 "The human species has born and they are not alone." + System.Environment.NewLine +
                 System.Environment.NewLine +
                 "Good luck!");
-            game.Log("Hominid war has started!");
+            game.Log("Hominid evolution has started!");
         }
 
         public override void FixedUpdate()
@@ -27,7 +27,7 @@ namespace Sohg.GameAgg.Stages
             time++;
             game.RedrawIfChanged();
 
-            if (!game.IsPaused() && (time % game.SohgFactory.Config.WarActionsTimeInterval == 0))
+            if (!game.IsPaused() && (time % game.SohgFactory.Config.EvolutionActionsTimeInterval == 0))
             {
                 var societies = game.Species.SelectMany(species => species.Societies).ToList();
                 if (currentSocietyIndex >= societies.Count)
@@ -55,7 +55,7 @@ namespace Sohg.GameAgg.Stages
             var hasPlayerLosen = (game.PlayerSpecies.Societies.Count == 0);
             if (hasPlayerLosen)
             {
-               EndWar(false);
+                Finish(false);
             }
             else
             {
@@ -63,14 +63,14 @@ namespace Sohg.GameAgg.Stages
                 var hasPlayerWon = (game.Species.Count(species =>  species.Societies.Sum(society => society.Territory.CellCount) > 0) == 1);
                 if (hasPlayerWon)
                 {
-                    EndWar(true);
+                    Finish(true);
                 }
             }
         }
 
-        private void EndWar(bool hasPlayerWon)
+        private void Finish(bool hasPlayerWon)
         {
-            game.EndWar(hasPlayerWon);
+            game.FinishEvolution(hasPlayerWon);
             game.NextStage();
         }
     }

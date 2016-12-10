@@ -7,6 +7,6 @@ namespace Sohg.TechnologyAgg.Contracts
         ITechnology[] RequiredTechnologies { get; }
 
         void CheckActivation();
-        void Initialize(IWarPlayable game);
+        void Initialize(IEvolvableGame game);
     }
 }

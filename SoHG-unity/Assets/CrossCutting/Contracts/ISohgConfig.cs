@@ -5,7 +5,7 @@
         int NonPlayerSocietyCount { get; }
         long InitialSocietyPopulationByCell { get; }
 
-        int WarActionsTimeInterval { get; }
+        int EvolutionActionsTimeInterval { get; }
 
         float AttackDamageTieRateThreshold { get; }
         int FightDuration { get; }

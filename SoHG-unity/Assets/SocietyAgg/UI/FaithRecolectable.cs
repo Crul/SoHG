@@ -31,7 +31,7 @@ namespace Sohg.SocietyAgg.UI
         private FaithRecolectableState state;
 
         private int faithAmount;
-        private IWarPlayable game;
+        private IEvolvableGame game;
 
         public void Awake()
         {
@@ -42,7 +42,7 @@ namespace Sohg.SocietyAgg.UI
             GetComponent<Button>().onClick.AddListener(() => RecolectFaith());
         }
 
-        public void Initialize(IWarPlayable game, ICell faithCell, int faithAmount)
+        public void Initialize(IEvolvableGame game, ICell faithCell, int faithAmount)
         {
             this.game = game;
             this.faithAmount = faithAmount;
