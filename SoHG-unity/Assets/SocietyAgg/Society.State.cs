@@ -21,7 +21,7 @@ namespace Sohg.SocietyAgg
 
             public int MaximumAttacks
             {
-                get { return System.Math.Max(1, System.Convert.ToInt32(Power / 10000)); } // TODO calculate MaximumAttacks
+                get { return System.Math.Max(1, System.Convert.ToInt32(Power / 200)); } // TODO calculate MaximumAttacks
             }
 
             public SocietyState(ISpecies species)
