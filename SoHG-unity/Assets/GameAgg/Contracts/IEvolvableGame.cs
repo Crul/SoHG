@@ -14,6 +14,5 @@ namespace Sohg.GameAgg.Contracts
         void FinishEvolution(bool hasPlayerWon);
         void Invade(ICell from, ICell target);
         void OnTechnologyActivated();
-        void RedrawIfChanged();
     }
 }

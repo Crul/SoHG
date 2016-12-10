@@ -48,11 +48,6 @@ namespace Sohg.GameAgg
             }
         }
 
-        public void RedrawIfChanged()
-        {
-            grid.RedrawIfChanged();
-        }
-
         private void KillSociety(ISociety deathSociety)
         {
             Species.SelectMany(species => species.Societies)

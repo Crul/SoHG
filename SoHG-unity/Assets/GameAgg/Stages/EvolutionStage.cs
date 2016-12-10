@@ -25,7 +25,6 @@ namespace Sohg.GameAgg.Stages
         public override void FixedUpdate()
         {
             time++;
-            game.RedrawIfChanged();
 
             if (!game.IsPaused() && (time % game.SohgFactory.Config.EvolutionActionsTimeInterval == 0))
             {

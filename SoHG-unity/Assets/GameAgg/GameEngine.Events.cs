@@ -20,6 +20,7 @@ namespace Sohg.GameAgg
             if (currentStage != null)
             {
                 currentStage.FixedUpdate();
+                grid.RedrawIfChanged();
             }
         }
 
