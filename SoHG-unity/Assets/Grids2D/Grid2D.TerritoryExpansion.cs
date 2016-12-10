@@ -21,12 +21,12 @@ namespace Grids2D
                 CheckSocietiesTerritoriesExpansion(expadedCellCount, unassignedSocietyCells);
             }
 
+            territories.ForEach(territory => territory.InitializeFrontier(this));
+
             RecalculateTerritories();
 
             societyTerritories.SelectMany(territory => territory.cells)
                 .ToList().ForEach(cell => cell.SetSocietyAssigned());
-
-            // highlightMode = HIGHLIGHT_MODE.Territories; // TODO ?
         }
 
         private void CheckSocietiesTerritoriesExpansion(int expadedCellCount, List<Cell> unassignedSocietyCells)

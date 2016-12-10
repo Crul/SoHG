@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
-using Sohg.SocietyAgg.Contracts;
+﻿using Sohg.SocietyAgg.Contracts;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Sohg.Grids2D.Contracts
 {
     public interface ITerritory
     {
-        int TerritoryIndex { get; }
-        ISociety Society { get; }
         int CellCount { get; }
+        IDictionary<int, List<int>> FrontierCellsByTerritoryIndex { get; }
+        ISociety Society { get; }
+        int TerritoryIndex { get; }
 
         Vector2 GetCenter();
         void SetSociety(ISociety society);

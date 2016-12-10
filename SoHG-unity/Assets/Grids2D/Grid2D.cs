@@ -16,6 +16,11 @@ namespace Grids2D
             TexturizeTerritory(territory.TerritoryIndex);
         }
 
+        public ICell GetCell(int cellIndex)
+        {
+            return cells[cellIndex];
+        }
+
         public ICell GetRandomCell(Func<ICell, bool> cellFilter)
         {
             var filteredCells = cells.Where(cell => cellFilter(cell));

@@ -1,11 +1,8 @@
 ﻿using Sohg.GameAgg.Contracts;
 using Sohg.Grids2D.Contracts;
-using Sohg.SocietyAgg.Relationships;
 using Sohg.SocietyAgg.Contracts;
-using System;
 using System.Linq;
 using System.Collections;
-using System.Collections.Generic;
 
 namespace Sohg.GameAgg
 {
@@ -13,9 +10,21 @@ namespace Sohg.GameAgg
     {
         private bool? hasPlayerWon;
 
-        public void CreateFight(ICell from, ICell target, Action resolveAttack)
+        public bool CreateFight(IRelationship relationship, int fromCellIndex)
         {
-            SohgFactory.CreateFight(from, target, resolveAttack);
+            var from = grid.GetCell(fromCellIndex);
+            var target = grid.GetInvadableCell(from, relationship.Them.Territory);
+            if (target == null)
+            {
+                return false;
+            }
+            
+            from.IsInvolvedInAttack = true;
+            target.IsInvolvedInAttack = true;
+
+            SohgFactory.CreateFight(from, target, () => relationship.ResolveAttack(this, from, target));
+
+            return true;
         }
 
         public void EndWar(bool hasPlayerWon)
@@ -26,11 +35,6 @@ namespace Sohg.GameAgg
         public void ExecuteAction(IEnumerator actionExecution)
         {
             StartCoroutine(actionExecution);
-        }
-
-        public Dictionary<ICell, ICell> GetAttackableCells(Relationship relationship)
-        {
-            return grid.GetInvadableCells(relationship.We.Territory, relationship.Them.Territory);
         }
 
         public void Invade(ICell from, ICell target)
