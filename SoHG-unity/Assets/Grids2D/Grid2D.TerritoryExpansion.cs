@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Sohg.CrossCutting.Contracts;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -6,20 +7,26 @@ namespace Grids2D
 {
     public partial class Grid2D
     {
-        public void ExpandSocietiesTerritories()
+        public void ExpandSocietiesTerritories(int initialTerritorySizeLimit)
         {
             var unassignedSocietyCells = cells.Where(cell => cell.IsSocietyUnassigned).ToList();
 
             var societyTerritories = cells.Where(cell => cell.IsSocietyAssigned)
                 .Select(cell => GetTerritory(cell)).Distinct().ToList();
 
-            while (unassignedSocietyCells.Count > 0)
+            int expadedCellCount;
+            do
             {
-                var expadedCellCount = societyTerritories
+                expadedCellCount = societyTerritories
+                    .Where(territory => territory.CellCount < initialTerritorySizeLimit)
                     .Sum(territory => ExpandTerritory(territory, unassignedSocietyCells));
-
-                CheckSocietiesTerritoriesExpansion(expadedCellCount, unassignedSocietyCells);
             }
+            while (expadedCellCount > 0);
+            
+            societyTerritories.SelectMany(territory => territory.cells)
+                .ToList().ForEach(cell => cell.SetSocietyAssigned());
+            
+            FixDisconnectedNonSocietyTerritories();
 
             territories.ForEach(territory => territory.InitializeFrontier(this));
 
@@ -32,19 +39,6 @@ namespace Grids2D
                 .ForEach(cell => cell.CanBeInvaded = CanCellBeInvaded(cell));
 
             FixNonInvadableTerritories();
-            
-            societyTerritories.SelectMany(territory => territory.cells)
-                .ToList().ForEach(cell => cell.SetSocietyAssigned());
-        }
-
-        private void CheckSocietiesTerritoriesExpansion(int expadedCellCount, List<Cell> unassignedSocietyCells)
-        {
-            var noCellsExpandedAndUnassignedCellsPending = (expadedCellCount == 0 && unassignedSocietyCells.Count > 0);
-            if (noCellsExpandedAndUnassignedCellsPending)
-            {
-                Debug.LogWarning("ExpandSocietyTerritories not ended!"); // TODO ExpandSocietyTerritories not ended!
-                unassignedSocietyCells.Clear();
-            }
         }
 
         private void ExpandFullTerritory(Territory territory, List<Cell> unassignedCells)
@@ -76,6 +70,36 @@ namespace Grids2D
             });
 
             return cellsToBeExpanded.Count;
+        }
+
+        private void FixDisconnectedNonSocietyTerritories()
+        {
+            var unassignedSocietyCells = cells.Where(cell => cell.IsSocietyUnassigned).ToList();
+            while (unassignedSocietyCells.Count > 0)
+            {
+                var currentTerritoryCells = unassignedSocietyCells.Take(1).ToList();
+                unassignedSocietyCells.Remove(currentTerritoryCells.Single());
+
+                var lastAddedCellsCount = 0;
+                do
+                {
+                    var cellsToAdd = currentTerritoryCells.SelectMany(cell => CellGetNeighbours(cell))
+                        .Where(neighbour => unassignedSocietyCells.Contains(neighbour))
+                        .Distinct()
+                        .ToList();
+
+                    cellsToAdd.ForEach(cell => unassignedSocietyCells.Remove(cell));
+                    currentTerritoryCells.AddRange(cellsToAdd);
+
+                    lastAddedCellsCount = cellsToAdd.Count;
+                }
+                while (lastAddedCellsCount > 0);
+                
+                if (unassignedSocietyCells.Count > 0)
+                {
+                    sohgFactory.CreateTerritory(currentTerritoryCells.ToArray());
+                }
+            }
         }
 
         private void FixNonInvadableTerritories()

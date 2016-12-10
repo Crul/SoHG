@@ -2,6 +2,7 @@
 using Sohg.Grids2D.Contracts;
 using Sohg.SocietyAgg.Contracts;
 using Sohg.SpeciesAgg.Contracts;
+using System;
 using System.Linq;
 
 namespace Sohg.GameAgg
@@ -19,7 +20,10 @@ namespace Sohg.GameAgg
                 CreateSociety(species);
             }
 
-            grid.ExpandSocietiesTerritories();
+            var initialTerritorySize = Convert.ToInt16(SohgFactory.Config.InitialSocietyPopulationLimit 
+                / SohgFactory.Config.InitialSocietyPopulationByCell);
+
+            grid.ExpandSocietiesTerritories(initialTerritorySize);
 
             Species.SelectMany(species => species.Societies).ToList()
                 .ForEach(society => society.Initialize());

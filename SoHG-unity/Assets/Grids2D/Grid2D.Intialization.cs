@@ -8,6 +8,8 @@ namespace Grids2D
 {
     public partial class Grid2D : IGrid
     {
+        private ISohgFactory sohgFactory;
+
         public int TerritoryCount
         {
             get { return territories.Count; }
@@ -25,6 +27,8 @@ namespace Grids2D
 
         public void InitializeBoard(ISohgFactory sohgFactory)
         {
+            this.sohgFactory = sohgFactory;
+
             gridTopology = GRID_TOPOLOGY.Hexagonal;
             highlightMode = HIGHLIGHT_MODE.None;
 
