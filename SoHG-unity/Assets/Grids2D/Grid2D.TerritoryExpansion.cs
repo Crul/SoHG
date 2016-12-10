@@ -23,8 +23,16 @@ namespace Grids2D
 
             territories.ForEach(territory => territory.InitializeFrontier(this));
 
-            RecalculateTerritories();
+            Redraw();
 
+            territories.ForEach(territory =>
+                TerritoryToggleRegionSurface(territory.TerritoryIndex, true, Color.white, false, canvasTexture));
+
+            cells.Where(cell => cell.territoryIndex > -1).ToList()
+                .ForEach(cell => cell.CanBeInvaded = CanCellBeInvaded(cell));
+
+            FixNonInvadableTerritories();
+            
             societyTerritories.SelectMany(territory => territory.cells)
                 .ToList().ForEach(cell => cell.SetSocietyAssigned());
         }
@@ -68,6 +76,17 @@ namespace Grids2D
             });
 
             return cellsToBeExpanded.Count;
+        }
+
+        private void FixNonInvadableTerritories()
+        {
+            // TODO: resolve ring corner cases (still problem with multiple rings)
+            territories
+                .Where(territory => (territory.cells.Count > 0
+                    && territory.cells.Count(cell => cell.CanBeInvaded) == 0))
+                .SelectMany(territory => territory.cells)
+                .ToList()
+                .ForEach(cell => cell.CanBeInvaded = true);
         }
     }
 }

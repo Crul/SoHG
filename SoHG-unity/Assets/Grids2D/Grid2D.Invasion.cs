@@ -64,6 +64,10 @@ namespace Grids2D
             affectedTerritories.ForEach(territory => 
                 territory.UpdateFrontiers(affectedTerritories, affectedCellIndices, this));
             
+            affectedCells.ToList().ForEach(cell => cell.CanBeInvaded = CanCellBeInvaded(cell));
+
+            FixNonInvadableTerritories();
+
             territoriesHaveChanged = true;
         }
 

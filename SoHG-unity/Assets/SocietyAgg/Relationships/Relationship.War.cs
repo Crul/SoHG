@@ -6,7 +6,7 @@ namespace Sohg.SocietyAgg.Relationships
     {
         public void Evolve(IWarPlayable game)
         {
-            if (!IsNeighbour)
+            if (!AreWeNeighbours())
             {
                 return;
             }

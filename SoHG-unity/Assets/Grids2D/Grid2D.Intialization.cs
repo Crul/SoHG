@@ -46,7 +46,14 @@ namespace Grids2D
             GetCellIndexRange().ForEach(cellIndex => InitializeCell(cellIndex));
 
             CreateConnectedTerritories(sohgFactory);
-            RecalculateTerritories();
+
+            Redraw();
+
+            GetTerritoryIndexRange().ForEach(territoryIndex =>
+            {
+                TerritoryToggleRegionSurface(territoryIndex, true, Color.white, false, canvasTexture);
+                TexturizeTerritory(territoryIndex);
+            });
         }
 
         private void CreateConnectedTerritories(ISohgFactory sohgFactory)
@@ -64,7 +71,7 @@ namespace Grids2D
         {
             var cellWorldPosition = CellGetPosition(cellIndex);
             cells[cellIndex].Initialize(cellIndex, cellWorldPosition);
-            CellToggleRegionSurface(cellIndex, true, canvasTexture);
+            // CellToggleRegionSurface(cellIndex, true, canvasTexture);
         }
     }
 }
