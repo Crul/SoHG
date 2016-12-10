@@ -70,20 +70,29 @@ namespace Sohg.SocietyAgg.Relationships
 
         private void Attack(IWarPlayable game)
         {
-            var frontierCellIndices = We.Territory.FrontierCellsByTerritoryIndex[Them.Territory.TerritoryIndex];
+            var frontierCellIndices = We.Territory
+                .FrontierCellsByTerritoryIndex[Them.Territory.TerritoryIndex]
+                .OrderBy(cell => Random.Range(0f, 1f))
+                .ToList();
+
             var availableAttacks = (We.State.MaximumAttacks - currentAttacks);
-            
-            if (frontierCellIndices.Count > availableAttacks)
+            var currentFrontierCellIndex = 0;
+
+            while(true)
             {
-                frontierCellIndices = frontierCellIndices.OrderBy(cell => Random.Range(0f, 1f))
-                    .Take(availableAttacks).ToList();
+                var frontierCellIndex = frontierCellIndices[currentFrontierCellIndex];
+                if (game.CreateFight(this, frontierCellIndex))
+                {
+                    currentAttacks++;
+                    break;
+                }
+
+                currentFrontierCellIndex++;
+                if (currentFrontierCellIndex >= frontierCellIndices.Count)
+                {
+                    break;
+                }
             }
-
-            var executedAttacks = frontierCellIndices
-                .Select(frontierCellIndex => game.CreateFight(this, frontierCellIndex))
-                .Count(executed => executed);
-
-            currentAttacks += executedAttacks;
         }
 
         private AttackResult GetResult(float damageRate, float attackDamageTieRateTheshold)
