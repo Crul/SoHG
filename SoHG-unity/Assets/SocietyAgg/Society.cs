@@ -38,7 +38,7 @@ namespace Sohg.SocietyAgg
             Color = species.Color;
             this.sohgFactory = sohgFactory;
             Species = species;
-            State = new SocietyState(species);
+            State = new SocietyState(this);
             Territory = territory;
         }
 
