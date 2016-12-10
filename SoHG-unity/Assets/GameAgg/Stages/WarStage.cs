@@ -59,7 +59,8 @@ namespace Sohg.GameAgg.Stages
             }
             else
             {
-                var hasPlayerWon = (game.Species.Count == 1);
+                // TODO: this should be enough (is not): var hasPlayerWon = (game.Species.Count == 1);
+                var hasPlayerWon = (game.Species.Count(species =>  species.Societies.Sum(society => society.Territory.CellCount) > 0) == 1);
                 if (hasPlayerWon)
                 {
                     EndWar(true);
