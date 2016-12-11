@@ -23,13 +23,15 @@ namespace Sohg.SocietyAgg.UI
         {
             this.society = society;
             canvasGroup = gameObject.GetComponent<CanvasGroup>();
-            gameObject.GetComponent<Image>().color = society.Color;
+            var societyColor = society.Color;
+            gameObject.GetComponent<Image>().color = societyColor;
             SocietyName.text = society.Name;
             SocietyName.color = new Color
             (
-                society.Color.r / 3,
-                society.Color.g / 3,
-                society.Color.b / 3
+                societyColor.r / 3,
+                societyColor.g / 3,
+                societyColor.b / 3,
+                1
             );
 
             DisableHighlight();

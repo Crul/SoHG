@@ -28,12 +28,13 @@ namespace Grids2D
             
             FixDisconnectedNonSocietyTerritories();
 
-            territories.ForEach(territory => territory.InitializeFrontier(this));
+            societyTerritories.ForEach(territory =>
+            {
+                TexturizeTerritory(territory.TerritoryIndex);
+                territory.InitializeFrontier(this);
+            });
 
             Redraw();
-
-            territories.ForEach(territory =>
-                TerritoryToggleRegionSurface(territory.TerritoryIndex, true, Color.white, false, canvasTexture));
 
             cells.Where(cell => cell.territoryIndex > -1).ToList()
                 .ForEach(cell => cell.CanBeInvaded = CanCellBeInvaded(cell));

@@ -35,7 +35,10 @@ namespace Grids2D
 
         private void SetTexture(string texturePath)
         {
-            canvasTexture = Resources.Load<Texture2D>(texturePath);
+            var textureResource = Resources.Load<Texture2D>(texturePath);
+            var material = GetComponent<Renderer>().materials[0];
+            material.mainTexture = textureResource;
+            material.color = new Color(1, 1, 1);
         }
     }
 }

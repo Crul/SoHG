@@ -44,8 +44,8 @@ namespace Grids2D
             territoryFrontiersColor = new Color(0, 0, 0, 0.3f);
 
             territories.Clear();
-            SetMask("Textures/worldMask");
             SetTexture("Textures/worldMap");
+            SetMask("Textures/worldMask");
 
             GetCellIndexRange().ForEach(cellIndex => InitializeCell(cellIndex));
 
@@ -53,11 +53,7 @@ namespace Grids2D
 
             Redraw();
 
-            GetTerritoryIndexRange().ForEach(territoryIndex =>
-            {
-                TerritoryToggleRegionSurface(territoryIndex, true, Color.white, false, canvasTexture);
-                TexturizeTerritory(territoryIndex);
-            });
+            GetTerritoryIndexRange().ForEach(territoryIndex => TexturizeTerritory(territoryIndex));
         }
 
         private void CreateConnectedTerritories(ISohgFactory sohgFactory)

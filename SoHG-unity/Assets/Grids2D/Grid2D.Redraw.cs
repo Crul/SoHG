@@ -11,23 +11,22 @@ namespace Grids2D
             {
                 territoriesHaveChanged = false;
                 Redraw();
-                GetTerritoryIndexRange().ForEach(territoryIndex =>
-                {
-                    TerritoryToggleRegionSurface(territoryIndex, true, Color.white, false, canvasTexture);
-                    TexturizeTerritory(territoryIndex);
-                });
+                GetTerritoryIndexRange().ForEach(territoryIndex => TexturizeTerritory(territoryIndex));
             }
         }
 
         private void TexturizeTerritory(int territoryIndex)
         {
-            var color = new Color(1, 1, 1);
             var society = territories[territoryIndex].Society;
-            if (society != null)
+            Color color;
+            if (society == null)
+            {
+                color = new Color(1, 1, 1, 0f);
+            }else
             {
                 color = society.Color;
+                color.a = 0.2f;
             }
-            color.a = 0.1f;
 
             territories[territoryIndex].fillColor = color;
         }
