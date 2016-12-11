@@ -8,7 +8,7 @@ using Sohg.TechnologyAgg;
 using Sohg.TechnologyAgg.Contracts;
 using Sohg.SpeciesAgg;
 using Sohg.SpeciesAgg.Contracts;
-using Sohg.SocietyAgg.Skills;
+using Sohg.SocietyAgg;
 
 namespace Sohg.GameAgg
 {

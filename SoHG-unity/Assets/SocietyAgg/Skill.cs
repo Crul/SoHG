@@ -13,7 +13,7 @@ namespace Sohg.SocietyAgg.Skills
         private Sprite skillIcon;
         [SerializeField]
         private float technologyRateBonus;
-        
+
         public Sprite SkillIcon { get { return skillIcon; } }
         public float TechnologyRateBonus { get { return technologyRateBonus; } }
 

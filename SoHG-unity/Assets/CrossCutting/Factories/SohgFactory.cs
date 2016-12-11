@@ -4,7 +4,6 @@ using Sohg.Grids2D.Contracts;
 using Sohg.GameAgg;
 using Sohg.GameAgg.Contracts;
 using Sohg.SocietyAgg.Contracts;
-using Sohg.SocietyAgg.Relationships;
 using Sohg.SocietyAgg.UI;
 using Sohg.SocietyAgg;
 using Sohg.SpeciesAgg.Contracts;
