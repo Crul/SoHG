@@ -7,7 +7,8 @@ namespace Sohg.Grids2D.Contracts
     public interface ITerritory
     {
         int CellCount { get; }
-        IDictionary<int, List<int>> FrontierCellsByTerritoryIndex { get; }
+        List<int> FrontierCellIndices { get; }
+        IDictionary<int, List<int>> FrontierCellIndicesByTerritoryIndex { get; }
         ISociety Society { get; }
         int TerritoryIndex { get; }
 

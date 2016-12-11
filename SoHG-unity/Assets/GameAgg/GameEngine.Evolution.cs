@@ -2,7 +2,6 @@
 using Sohg.Grids2D.Contracts;
 using Sohg.SocietyAgg.Contracts;
 using System.Linq;
-using System.Collections;
 
 namespace Sohg.GameAgg
 {
@@ -10,56 +9,43 @@ namespace Sohg.GameAgg
     {
         private bool? hasPlayerWon;
 
-        public bool CreateFight(IRelationship relationship, int fromCellIndex)
-        {
-            var from = grid.GetCell(fromCellIndex);
-            var target = grid.GetInvadableCell(from, relationship.Them.Territory);
-            if (target == null)
-            {
-                return false;
-            }
-            
-            from.IsInvolvedInAttack = true;
-            target.IsInvolvedInAttack = true;
-
-            SohgFactory.CreateFight(from, target, () => relationship.ResolveAttack(this, from, target));
-
-            return true;
-        }
-
         public void FinishEvolution(bool hasPlayerWon)
         {
+            Log("evolution finish");
             this.hasPlayerWon = hasPlayerWon;
-        }
-
-        public void ExecuteAction(IEnumerator actionExecution)
-        {
-            StartCoroutine(actionExecution);
         }
 
         public void Invade(ICell from, ICell target)
         {
-            var invadedTerritory = grid.GetTerritory(target);
-            grid.InvadeTerritory(from, target);
-
-            if (invadedTerritory.CellCount == 0)
+            var invadedTerritory = Grid.GetTerritory(target);
+            var hasBeenInvaded = Grid.InvadeTerritory(from, target);
+            if (hasBeenInvaded)
             {
-                KillSociety(invadedTerritory.Society);
+                var invasor = Grid.GetTerritory(target);
+                Log("{0} has invaded {1}", invasor.Society.Name, invadedTerritory.Society.Name);
+
+                if (invadedTerritory.CellCount == 0)
+                {
+                    KillSociety(invadedTerritory.Society);
+                }
             }
         }
 
         private void KillSociety(ISociety deathSociety)
         {
+            Societies.Remove(deathSociety);
             Species.SelectMany(species => species.Societies)
                 // remove relationships first to prevent pointing to removed societies
                 .Where(society => society != deathSociety).ToList()
                 .ForEach(society => society.RemoveRelationship(deathSociety));
 
             deathSociety.Species.Societies.Remove(deathSociety);
+            Log("{0} has dissapear", deathSociety.Name);
 
             if (deathSociety.Species.Societies.Count == 0)
             {
                 Species.Remove(deathSociety.Species);
+                Log("{0} is now extinct", deathSociety.Species.Name);
             }
         }
     }

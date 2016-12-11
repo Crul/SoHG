@@ -3,34 +3,65 @@ using Sohg.Grids2D.Contracts;
 using System.Linq;
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 namespace Grids2D
 {
     public partial class Grid2D : IGrid
     {
-        private ISohgFactory sohgFactory;
-
-        public int TerritoryCount
-        {
-            get { return territories.Count; }
-        }
-
         public void AddOnCellClick(Action<ICell> onCellClick)
         {
             OnCellClick += cellIndex => onCellClick(cells[cellIndex]);
-        }
-
-        public ITerritory GetTerritory(ICell cell)
-        {
-            return territories[cell.TerritoryIndex];
         }
 
         public void InitializeBoard(ISohgFactory sohgFactory)
         {
             this.sohgFactory = sohgFactory;
 
+            territories.Clear();
+
+            SetGridProperties();
+            SetTexture("Textures/worldMap");
+            SetMask("Textures/worldMask");
+
+            Enumerable.Range(0, cells.Count).ToList()
+                .ForEach(cellIndex => InitializeCell(cellIndex));
+
+            seaTerritories = CreateTerritoriesByCellType(cell => cell.IsSea);
+            nonSocietyTerritories = CreateTerritoriesByCellType(cell => cell.IsNonSocietyTerritory);
+            
+            Redraw();
+        }
+
+        private List<ITerritory> CreateTerritoriesByCellType(Func<ICell, bool> cellFilter)
+        {
+            var filteredCells = cells.Where(cell => cellFilter(cell)).ToList();
+            var allCellsTerritory = sohgFactory.CreateTerritory(filteredCells.ToArray());
+
+            return FixDisconnectedTerritory(allCellsTerritory);
+        }
+
+        private void FixNonInvadableTerritories()
+        {
+            // TODO: resolve ring corner cases (still problem with multiple rings)
+            territories
+                .Where(territory => (territory.cells.Count > 0
+                    && territory.cells.Count(cell => cell.CanBeInvaded) == 0))
+                .SelectMany(territory => territory.cells)
+                .ToList()
+                .ForEach(cell => cell.CanBeInvaded = true);
+        }
+
+        private void InitializeCell(int cellIndex)
+        {
+            var cellWorldPosition = CellGetPosition(cellIndex);
+            cells[cellIndex].Initialize(cellIndex, cellWorldPosition);
+        }
+
+        private void SetGridProperties()
+        {
             gridTopology = GRID_TOPOLOGY.Hexagonal;
-            highlightMode = HIGHLIGHT_MODE.None;
+            SetGridSelectionToNone();
 
             // TODO configure in MapSettings:
             numTerritories = 1;
@@ -42,36 +73,6 @@ namespace Grids2D
             territoryHighlightColor = new Color(1, 1, 1, 0.3f);
             cellBorderColor = new Color(0, 0, 0, 0.1f);
             territoryFrontiersColor = new Color(0, 0, 0, 0.3f);
-
-            territories.Clear();
-            SetTexture("Textures/worldMap");
-            SetMask("Textures/worldMask");
-
-            GetCellIndexRange().ForEach(cellIndex => InitializeCell(cellIndex));
-
-            CreateConnectedTerritories(sohgFactory);
-
-            Redraw();
-
-            GetTerritoryIndexRange().ForEach(territoryIndex => TexturizeTerritory(territoryIndex));
-        }
-
-        private void CreateConnectedTerritories(ISohgFactory sohgFactory)
-        {
-            var unassignedTerritoryCells = cells.Where(c => c.IsTerritoryUnassigned).ToList();
-            while (unassignedTerritoryCells.Count > 0)
-            {
-                var territory = (Territory)sohgFactory.CreateTerritory();
-                ExpandFullTerritory(territory, unassignedTerritoryCells);
-                territory.cells.ToList().ForEach(cell => cell.SetTerritoryAssigned());
-            }
-        }
-
-        private void InitializeCell(int cellIndex)
-        {
-            var cellWorldPosition = CellGetPosition(cellIndex);
-            cells[cellIndex].Initialize(cellIndex, cellWorldPosition);
-            // CellToggleRegionSurface(cellIndex, true, canvasTexture);
         }
     }
 }

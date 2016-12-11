@@ -1,4 +1,6 @@
-﻿using Sohg.GameAgg.Contracts;
+﻿using Sohg.GameAgg.Features;
+using Sohg.GameAgg.Contracts;
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -9,6 +11,11 @@ namespace Sohg.GameAgg.Stages
     {
         private int time;
         private int currentSocietyIndex;
+
+        [SerializeField]
+        private GameFeature[] features;
+
+        private IGameFeature[] Features {get { return features; } }
 
         public override void Start()
         {
@@ -26,26 +33,23 @@ namespace Sohg.GameAgg.Stages
         {
             time++;
 
+            // TODO fix time for full cycle
             if (!game.IsPaused() && (time % game.SohgFactory.Config.EvolutionActionsTimeInterval == 0))
             {
-                var societies = game.Species.SelectMany(species => species.Societies).ToList();
-                if (currentSocietyIndex >= societies.Count)
+                currentSocietyIndex++;
+                if (currentSocietyIndex >= game.Societies.Count)
                 {
                     currentSocietyIndex = 0;
                 }
 
-                var society = societies[currentSocietyIndex];
-                society.Species.Evolve(game);
-                society.Evolve(game);
-
-                if (society.Species == game.PlayerSpecies)
-                {
-                    game.EmitFaith(society);
-                }
-
-                currentSocietyIndex++;
-
+                var society = game.Societies[currentSocietyIndex];
+                Debug.Log(society.Name + " playing");
+                Features.ToList().ForEach(feature => feature.Run(game, society));
                 CheckWinOrLoose();
+            }
+            else
+            {
+                GC.Collect();
             }
         }
 
@@ -58,7 +62,7 @@ namespace Sohg.GameAgg.Stages
             }
             else
             {
-                // TODO: this should be enough (is not): var hasPlayerWon = (game.Species.Count == 1);
+                // TODO: this should be enough (but is not): var hasPlayerWon = (game.Species.Count == 1);
                 var hasPlayerWon = (game.Species.Count(species =>  species.Societies.Sum(society => society.Territory.CellCount) > 0) == 1);
                 if (hasPlayerWon)
                 {

@@ -20,7 +20,7 @@ namespace Sohg.CrossCutting.Contracts
         IGrid CreateGrid();
         IInstructions CreateInstructions();
         IRelationship CreateRelationship(ISociety we, ISociety them);
-        void CreateSociety(IRunningGame game, ISpecies species, ICell[] cells);
+        void CreateSociety(IRunningGame game, ISpecies species, params ICell[] cells);
         ISocietyActionButton CreateSocietyActionButton(ISocietyAction action, ISocietyInfo societyInfo);
         ISocietyEffectIcon CreateSocietyEffectIcon(ISocietyAction action, ISocietyInfo societyInfo);
         ISocietyInfo CreateSocietyInfo(IRunningGame game);

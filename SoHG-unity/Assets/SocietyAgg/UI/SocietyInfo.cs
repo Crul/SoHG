@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 namespace Sohg.SocietyAgg.UI
 {
-    // TODO hide when society is dead
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Image))]
     [RequireComponent(typeof(BoxCollider2D))]

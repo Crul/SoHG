@@ -32,7 +32,7 @@ namespace Sohg.GameAgg.Stages
 
         private void SetStartPoints(ISelectStartPlayable game, ICell cell)
         {
-            if (cell.IsSocietyUnassigned)
+            if (cell.IsNonSocietyTerritory)
             {
                 game.CreateSocieties(cell);
                 game.SetGridSelectionToNone();

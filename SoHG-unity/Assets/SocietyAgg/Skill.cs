@@ -2,9 +2,8 @@
 using Sohg.TechnologyAgg;
 using System.Linq;
 using UnityEngine;
-using System;
 
-namespace Sohg.SocietyAgg.Skills
+namespace Sohg.SocietyAgg
 {
     [CreateAssetMenu(fileName = "NewSkill", menuName = "SoHG/Skill")]
     public class Skill : TechnologyDependent, ISkill

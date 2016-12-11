@@ -5,20 +5,25 @@ namespace Grids2D
 {
     public partial class Territory
     {
-        public IDictionary<int, List<int>> FrontierCellsByTerritoryIndex { get; private set; }
+        public List<int> FrontierCellIndices { get; private set; }
+        public IDictionary<int, List<int>> FrontierCellIndicesByTerritoryIndex { get; private set; }
 
         public void InitializeFrontier(Grid2D grid)
         {
-            FrontierCellsByTerritoryIndex = grid.territories
-                .Where(neighbour => neighbour.TerritoryIndex != TerritoryIndex)
+            FrontierCellIndices = cells
+                .Select(cell => cell.CellIndex)
+                .Where(cellIndex => grid.CellGetNeighbours(cellIndex)
+                    .Any(neighbourCell => neighbourCell.TerritoryIndex != TerritoryIndex))
+                .ToList();
+
+            FrontierCellIndicesByTerritoryIndex = grid.territories
+                .Where(neighbourTerritory => neighbourTerritory != this)
                 .ToDictionary
                 (
-                    neighbour => neighbour.TerritoryIndex,
-                    neighbour => neighbour.cells
-                        .SelectMany(cell => grid.CellGetNeighbours(cell))
-                        .Where(cell => cell.TerritoryIndex == TerritoryIndex)
-                        .Distinct()
-                        .Select(cell => cell.CellIndex)
+                    neighbourTerritory => neighbourTerritory.TerritoryIndex,
+                    neighbourTerritory => FrontierCellIndices
+                        .Where(cell => grid.CellGetNeighbours(cell)
+                            .Any(neighbourCell => neighbourCell.TerritoryIndex == neighbourTerritory.TerritoryIndex))
                         .ToList()
                 );
         }
@@ -26,15 +31,32 @@ namespace Grids2D
         public void UpdateFrontiers(List<Territory> affectedTerritories, List<int> affectedCellIndices, Grid2D grid)
         {
             affectedTerritories
+                .Where(affectedTerritory => FrontierCellIndicesByTerritoryIndex.ContainsKey(affectedTerritory.TerritoryIndex))
+                .ToList()
                 .ForEach(affectedTerritory => RemoveFrontierCells(affectedTerritory, affectedCellIndices));
 
-            affectedCellIndices
-                .Where(cellIndex => grid.GetCell(cellIndex).TerritoryIndex == TerritoryIndex)
+            var myAffectedCellIndices = affectedCellIndices
+                .Where(cellIndex => grid.GetCell(cellIndex).TerritoryIndex == TerritoryIndex);
+
+            myAffectedCellIndices.ToList()
+                .ForEach(cellIndex => AddFrontierCell(cellIndex, grid));
+
+            var myAffectedCellFrontierIndices = myAffectedCellIndices
+                .Where(cellIndex => grid.CellGetNeighbours(cellIndex)
+                    .Any(neighbour => neighbour.TerritoryIndex != TerritoryIndex))
+                .ToList();
+
+            myAffectedCellIndices
+                .Where(cellIndex => !myAffectedCellFrontierIndices.Contains(cellIndex))
                 .ToList()
-                .ForEach(territoryAffectedCellIndex => AddFrontierCell(territoryAffectedCellIndex, grid));
+                .ForEach(cellIndex => FrontierCellIndices.Remove(cellIndex));
+
+            myAffectedCellFrontierIndices
+                .Where(cellIndex => !FrontierCellIndices.Contains(cellIndex))
+                .ToList()
+                .ForEach(cellIndex => FrontierCellIndices.Add(cellIndex));
         }
-
-
+        
         private void AddFrontierCell(int territoryAffectedCellIndex, Grid2D grid)
         {
             grid.CellGetNeighbours(territoryAffectedCellIndex)
@@ -44,23 +66,23 @@ namespace Grids2D
                 .ToList()
                 .ForEach(territoryIndex =>
                 {
-                    if (!FrontierCellsByTerritoryIndex.ContainsKey(territoryIndex))
+                    if (!FrontierCellIndicesByTerritoryIndex.ContainsKey(territoryIndex))
                     {
-                        FrontierCellsByTerritoryIndex.Add(territoryIndex, new List<int>());
+                        FrontierCellIndicesByTerritoryIndex.Add(territoryIndex, new List<int>());
                     }
-                    FrontierCellsByTerritoryIndex[territoryIndex].Add(territoryAffectedCellIndex);
+                    FrontierCellIndicesByTerritoryIndex[territoryIndex].Add(territoryAffectedCellIndex);
                 });
         }
 
         private void RemoveFrontierCells(Territory affectedTerritory, List<int> affectedCellIndices)
         {
-            var affectedTerritoryIndex = affectedTerritory.TerritoryIndex;
-            if (FrontierCellsByTerritoryIndex.ContainsKey(affectedTerritoryIndex))
-            {
-                FrontierCellsByTerritoryIndex[affectedTerritoryIndex] = FrontierCellsByTerritoryIndex[affectedTerritoryIndex]
-                    .Where(cellIndex => !affectedCellIndices.Contains(cellIndex))
-                    .ToList();
-            }
+            var territoryIndex = affectedTerritory.TerritoryIndex;
+            var territoryFrontierCellIndices = FrontierCellIndicesByTerritoryIndex[territoryIndex];
+
+            territoryFrontierCellIndices
+                .Where(cellIndex => affectedCellIndices.Contains(cellIndex))
+                .ToList()
+                .ForEach(cellIndex => territoryFrontierCellIndices.Remove(cellIndex));
         }
     }
 }

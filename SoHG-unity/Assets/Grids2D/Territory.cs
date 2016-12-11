@@ -2,10 +2,11 @@
 using Sohg.SocietyAgg.Contracts;
 using UnityEngine;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Grids2D
 {
-    public partial class Territory: ITerritory
+    public partial class Territory : ITerritory
     {
         public int TerritoryIndex { get; private set; }
         public ISociety Society { get; private set; }
@@ -16,6 +17,8 @@ namespace Grids2D
             : this(territoryIndex.ToString())
         {
             TerritoryIndex = territoryIndex;
+            FrontierCellIndicesByTerritoryIndex = new Dictionary<int, List<int>>();
+            fillColor = new Color(1, 1, 1, 0f);
         }
 
         public Vector2 GetCenter()
@@ -30,6 +33,12 @@ namespace Grids2D
         public void SetSociety(ISociety society)
         {
             Society = society;
+
+            var societyColor = society.Color;
+            societyColor.a = 0.2f; // TODO configure territory.fillColor alpha
+            fillColor = societyColor;
+
+            cells.ForEach(cell => cell.SetSocietyAssigned());
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using Sohg.Grids2D.Contracts;
+﻿using Sohg.Grids2D.Contracts;
 using UnityEngine;
 
 namespace Grids2D
@@ -8,43 +7,41 @@ namespace Grids2D
     {
         Undefined,
         Sea,
-        TerritoryUnassigned,
-        SocietyUnassigned,
-        SocietyAssigned
+        NonSocietyTerritory,
+        SocietyTerritory
     }
 
     public partial class Cell : ICell
     {
+        private CellType cellType;
+
         public int CellIndex { get; private set; }
         public Vector3 WorldPosition { get; private set; }
         public bool CanBeInvaded { get; set; }
         public bool IsInvolvedInAttack { get; set; }
 
-        public bool IsSocietyAssigned
+        public bool IsNonSocietyTerritory
         {
-            get { return cellType == CellType.SocietyAssigned; }
+            get { return cellType == CellType.NonSocietyTerritory; }
         }
 
-        public bool IsSocietyUnassigned
+        public bool IsSea
         {
-            get { return cellType == CellType.SocietyUnassigned; }
+            get { return cellType == CellType.Sea; }
         }
 
-        public bool IsTerritoryUnassigned
+        public bool IsSocietyTerritory
         {
-            get { return cellType == CellType.TerritoryUnassigned; }
+            get { return cellType == CellType.SocietyTerritory; }
         }
 
         public int TerritoryIndex { get { return territoryIndex; } }
-
-        private CellType cellType;
 
         public void Initialize(int cellIndex, Vector3 worldPosition)
         {
             CellIndex = cellIndex;
             WorldPosition = worldPosition;
-            cellType = (visible ? CellType.TerritoryUnassigned : CellType.Sea);
-            visible = true;
+            cellType = (visible ? CellType.NonSocietyTerritory : CellType.Sea);
         }
 
         public bool IsSameTerritory(Cell cell)
@@ -54,12 +51,7 @@ namespace Grids2D
 
         public void SetSocietyAssigned()
         {
-            cellType = CellType.SocietyAssigned;
-        }
-
-        public void SetTerritoryAssigned()
-        {
-            cellType = CellType.SocietyUnassigned;
+            cellType = CellType.SocietyTerritory;
         }
     }
 }

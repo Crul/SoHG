@@ -73,7 +73,7 @@ namespace Sohg.CrossCutting.Factories
             {
                 cells = new ICell[]
                 {
-                    GetGrid().GetRandomCell(cell => cell.IsSocietyUnassigned)
+                    GetGrid().GetRandomCell(cell => cell.IsNonSocietyTerritory)
                 };
             }
 
@@ -84,16 +84,14 @@ namespace Sohg.CrossCutting.Factories
             var societyMarker = prefabFactory.InstantiateSocietyMarker(boardOverCanvas, society.Name + "Marker");
             societyMarker.Initialize(game, society);
 
-            cells.ToList().ForEach(cell => cell.SetSocietyAssigned());
-
-            game.Species.SelectMany(otherSpecies => otherSpecies.Societies).ToList()
-                .ForEach(otherSociety =>
-                {
-                    otherSociety.AddRelationship(society);
-                    society.AddRelationship(otherSociety);
-                });
+            game.Societies.ForEach(otherSociety =>
+            {
+                otherSociety.AddRelationship(society);
+                society.AddRelationship(otherSociety);
+            });
 
             species.Societies.Add(society);
+            game.Societies.Add(society);
         }
 
         public ISocietyActionButton CreateSocietyActionButton(ISocietyAction action, ISocietyInfo societyInfo)

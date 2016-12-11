@@ -1,10 +1,16 @@
 ﻿using Sohg.GameAgg.Contracts;
 using Sohg.SocietyAgg.Contracts;
+using System.Collections;
 
 namespace Sohg.GameAgg
 {
     public partial class GameEngine : IRunningGame
     {
+        public void ExecuteRoutine(IEnumerator actionExecution)
+        {
+            StartCoroutine(actionExecution);
+        }
+
         public bool IsPaused()
         {
             // TODO fix pause, now is not working with Fight animation (and execution)

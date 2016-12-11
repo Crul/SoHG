@@ -1,12 +1,24 @@
-﻿using Sohg.SocietyAgg.Contracts;
+﻿using System.Collections.Generic;
+using Sohg.CrossCutting.Contracts;
+using Sohg.SocietyAgg.Contracts;
+using UnityEngine;
 
-namespace Sohg.SocietyAgg.Relationships
+namespace Sohg.SocietyAgg
 {
     public partial class Relationship : IRelationship
     {
         public ISociety We { get; private set; }
         public ISociety Them { get; private set; }
 
+        public List<int> MyFrontierCellIndices
+        {
+            get
+            {
+                return We.Territory
+                    .FrontierCellIndicesByTerritoryIndex[Them.Territory.TerritoryIndex];
+            }
+        }
+        
         private float friendshipRange;
 
         public Relationship(ISociety we, ISociety them)
@@ -18,9 +30,23 @@ namespace Sohg.SocietyAgg.Relationships
 
         public bool AreWeNeighbours()
         {
-            var frontierCells = We.Territory.FrontierCellsByTerritoryIndex[Them.Territory.TerritoryIndex];
+            var theirTerritoryIndex = Them.Territory.TerritoryIndex;
 
-            return frontierCells != null && frontierCells.Count > 0;
+            return We.Territory.FrontierCellIndicesByTerritoryIndex.ContainsKey(theirTerritoryIndex)
+                && We.Territory.FrontierCellIndicesByTerritoryIndex[theirTerritoryIndex].Count > 0;
+        }
+
+        public bool WillingToAttack(ISohgConfig config)
+        {
+            var friendShipThreshold = (Random.Range(0f, 1f) // TODO configure willing to attack
+                * config.FriendshipRangeBottomThresholdForAttack);
+
+            return (friendshipRange < friendShipThreshold) && ShouldWeAttack(config);
+        }
+
+        private bool ShouldWeAttack(ISohgConfig config)
+        {
+            return (We.State.Power / Them.State.Power) > config.PowerBalanceThresholdForAttack;
         }
     }
 }

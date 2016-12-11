@@ -11,6 +11,11 @@ namespace Sohg.SocietyAgg
         public float FriendshipRange { get; private set; }
         public long PopulationAmount { get; private set; }
         public float TechnologyLevelRate { get; private set; }
+        
+        public float PopulationDensity
+        {
+            get { return PopulationAmount / System.Math.Max(1, society.Territory.CellCount); }
+        }
 
         public float Power
         {
@@ -20,6 +25,11 @@ namespace Sohg.SocietyAgg
         public int MaximumAttacks
         {
             get { return System.Math.Max(1, System.Convert.ToInt32(Power / 200)); } // TODO calculate MaximumAttacks
+        }
+
+        public int ExpansionCapacity
+        {
+            get { return 5; } // TODO calculate ExpansionCapacity
         }
 
         public SocietyState(ISociety society)
