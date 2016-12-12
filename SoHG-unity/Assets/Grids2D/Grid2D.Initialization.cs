@@ -18,7 +18,10 @@ namespace Grids2D
         {
             this.sohgFactory = sohgFactory;
 
-            territories.Clear();
+            if (territories != null)
+            {
+                territories.Clear();
+            }
 
             SetGridProperties();
             SetTexture("Textures/worldMap");
