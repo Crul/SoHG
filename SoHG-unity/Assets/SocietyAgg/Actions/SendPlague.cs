@@ -40,9 +40,11 @@ namespace Sohg.SocietyAgg.Actions
             {
                 society.IsEffectActive[this] = true;
 
-                for (var i = 0; i < 10; i++)
+                var plagueWaveCount = 10;
+                for (var i = 0; i < plagueWaveCount; i++)
                 {
-                    society.State.Kill(plagueKillRate);
+                    var plagueDeathRate = (5 * plagueKillRate) / (1 - plagueKillRate);
+                    society.State.Kill(plagueDeathRate * society.Territory.CellCount / plagueWaveCount);
                     yield return new WaitForFixedUpdate();
                 }
 

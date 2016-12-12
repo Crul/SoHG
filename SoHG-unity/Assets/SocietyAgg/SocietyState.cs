@@ -22,7 +22,12 @@ namespace Sohg.SocietyAgg
 
         private long production
         {
-            get { return Convert.ToInt64(100 * Math.Pow(50000, 1.065 * TechnologyLevelRate) * territoryExtension); }
+            get { return productionPerCell * territoryExtension; }
+        }
+
+        private long productionPerCell
+        {
+            get { return Convert.ToInt64(100 * Math.Pow(50000, 1.065 * TechnologyLevelRate)); }
         }
 
         private int territoryExtension { get { return society.Territory.CellCount; } }
@@ -34,7 +39,7 @@ namespace Sohg.SocietyAgg
 
         public float Power
         {
-            get { return System.Math.Max(1, PopulationAmount * aggressivityRate * TechnologyLevelRate); }
+            get { return System.Math.Max(1, 100 * PopulationDensity * aggressivityRate * TechnologyLevelRate); }
         }
 
         public int MaximumAttacks
@@ -44,7 +49,12 @@ namespace Sohg.SocietyAgg
 
         public int ExpansionCapacity
         {
-            get { return Convert.ToInt32(Math.Log(1 + (0.1 * resources / PopulationDensity))); } // TODO calculate ExpansionCapacity
+            get
+            {
+                var expansionCapacity = Convert.ToInt32(Math.Floor(PopulationDensity / productionPerCell));
+
+                return Math.Max(0, expansionCapacity);
+            }
         }
 
         public SocietyState(ISohgConfig config, ISociety society)
@@ -59,7 +69,8 @@ namespace Sohg.SocietyAgg
 
         public void Evolve()
         {
-            resources += (production - consume);
+            var resourcesGrowth = (production - consume);
+            resources += resourcesGrowth;
 
             long populationGrowth;
             if (resources < 0)
@@ -69,7 +80,7 @@ namespace Sohg.SocietyAgg
             }
             else
             {
-                populationGrowth = Convert.ToInt64(0.05 * resources);
+                populationGrowth = Convert.ToInt64(0.01 * resources);
             }
 
             PopulationAmount = PopulationAmount + populationGrowth;
@@ -77,7 +88,8 @@ namespace Sohg.SocietyAgg
 
         public void Kill(float deathRate)
         {
-            PopulationAmount = System.Convert.ToInt64(PopulationAmount * (1 - deathRate));
+            var deads = System.Convert.ToInt64(PopulationDensity * deathRate / (5 + deathRate));
+            PopulationAmount -= deads;
         }
 
         public int GetFaithEmitted()

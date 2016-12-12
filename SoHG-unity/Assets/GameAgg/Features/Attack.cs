@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using Sohg.Grids2D.Contracts;
 using System.Collections.Generic;
+using Sohg.CrossCutting.Contracts;
 
 namespace Sohg.GameAgg.Features
 {
@@ -32,7 +33,7 @@ namespace Sohg.GameAgg.Features
             }
 
             society.Relationships
-                .Where(relationship => relationship.AreWeNeighbours() 
+                .Where(relationship => relationship.AreWeNeighbours()
                                     && relationship.WillingToAttack(game.SohgFactory.Config))
                 .SelectMany(relationship => relationship.MyFrontierCellIndices
                     .Select(cellIndex => new
@@ -91,23 +92,11 @@ namespace Sohg.GameAgg.Features
             var them = relationship.Them;
 
             var damageRate = (we.State.Power / them.State.Power); // TODO randomize
-            var result = GetResult(damageRate, game.SohgFactory.Config.AttackDamageTieRateThreshold); // TODO randomize
+            var result = GetResult(damageRate, game.SohgFactory.Config); // TODO randomize
 
-            var ourDeathRate = 0f;
-            var theirDeathRate = 0f;
-
-            // TODO Kill configuration to SohgConfig
-            if (damageRate > 1)
-            { // we win
-                ourDeathRate = 0;
-                theirDeathRate = (damageRate / (damageRate + 100));
-            }
-            else
-            { // we loose
-                ourDeathRate = damageRate;
-                theirDeathRate = (damageRate / (damageRate + 100));
-            }
-
+            var ourDeathRate = 1 / damageRate;
+            var theirDeathRate = damageRate;
+            
             we.State.Kill(ourDeathRate);
             them.State.Kill(theirDeathRate);
 
@@ -133,12 +122,14 @@ namespace Sohg.GameAgg.Features
             target.IsInvolvedInAttack = false;
         }
 
-        private AttackResult GetResult(float damageRate, float attackDamageTieRateTheshold)
+        private AttackResult GetResult(float damageRate, ISohgConfig config)
         {
-            if (System.Math.Abs(1 - damageRate) < attackDamageTieRateTheshold)
+            var result = damageRate * Random.Range(0.8f, 1.2f);
+
+            if (System.Math.Abs(result - 1) < config.AttackDamageTieRateThreshold)
                 return AttackResult.Tie;
 
-            if (damageRate > 1)
+            if (result > 1)
                 return AttackResult.Win;
 
             return AttackResult.Loose;
