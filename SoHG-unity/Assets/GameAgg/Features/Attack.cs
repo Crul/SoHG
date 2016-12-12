@@ -90,9 +90,9 @@ namespace Sohg.GameAgg.Features
         {
             var we = relationship.We;
             var them = relationship.Them;
-
-            var damageRate = (we.State.Power / them.State.Power); // TODO randomize
-            var result = GetResult(damageRate, game.SohgFactory.Config); // TODO randomize
+            
+            var damageRate = (float)System.Math.Pow(we.State.Power / them.State.Power, 10);
+            var result = GetResult(damageRate, game.SohgFactory.Config);
 
             var ourDeathRate = 1 / damageRate;
             var theirDeathRate = damageRate;

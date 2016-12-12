@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Linq;
 using Sohg.TechnologyAgg;
+using System.Collections;
 
 namespace Sohg.SocietyAgg.Actions
 {
@@ -15,7 +16,10 @@ namespace Sohg.SocietyAgg.Actions
         public Sprite ActionIcon { get { return actionIcon; } }
         public int FaithCost { get { return faithCost; } }
 
-        public abstract void Execute(ISociety society);
+        public void Execute(ISociety society)
+        {
+            game.ExecuteRoutine(ExecuteRoutine(society));
+        }
         
         public virtual bool IsActionEnabled(ISociety society)
         {
@@ -26,6 +30,21 @@ namespace Sohg.SocietyAgg.Actions
         {
             game.Species.SelectMany(species => species.Societies).ToList()
                 .ForEach(society => society.AddAction(this));
+        }
+
+        protected abstract IEnumerator ExecuteAction(ISociety society);
+
+        private IEnumerator ExecuteRoutine(ISociety society)
+        {
+            var effectAlreadyEnabled = (society.IsEffectActive[this]);
+            if (!effectAlreadyEnabled)
+            {
+                society.IsEffectActive[this] = true;
+
+                yield return game.ExecuteRoutine(ExecuteAction(society));
+
+                society.IsEffectActive[this] = false;
+            }
         }
     }
 }

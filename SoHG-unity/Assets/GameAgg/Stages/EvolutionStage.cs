@@ -39,8 +39,7 @@ namespace Sohg.GameAgg.Stages
                     "The Stories begin" + System.Environment.NewLine +
                     "The human species has born and they are not alone." + System.Environment.NewLine +
                     System.Environment.NewLine +
-                    "Good luck!")
-                .OnClose(() => game.Grid.SetGridSelectionToTerritory());
+                    "Good luck!");
 
             game.Log("Hominid evolution has started!");
         }
@@ -59,7 +58,6 @@ namespace Sohg.GameAgg.Stages
                 }
 
                 var society = game.Societies[currentSocietyIndex];
-                Debug.Log(society.Name + " playing");
                 Features.ToList().ForEach(feature => feature.Run(game, society));
                 CheckWinOrLoose();
             }

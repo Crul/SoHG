@@ -4,6 +4,7 @@ using Sohg.SocietyAgg.Contracts;
 using Sohg.SpeciesAgg.Contracts;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Sohg.GameAgg.Contracts
 {
@@ -16,7 +17,7 @@ namespace Sohg.GameAgg.Contracts
         List<ISociety> Societies { get; }
         List<ISpecies> Species { get; }
 
-        void ExecuteRoutine(IEnumerator actionExecution);
+        Coroutine ExecuteRoutine(IEnumerator actionExecution);
         bool IsPaused();
         void Log(string log, params object[] logParams);
         void NextStage();

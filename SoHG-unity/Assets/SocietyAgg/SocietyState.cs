@@ -1,6 +1,7 @@
 ﻿using Sohg.CrossCutting.Contracts;
 using Sohg.SocietyAgg.Contracts;
 using System;
+using System.Linq;
 
 namespace Sohg.SocietyAgg
 {
@@ -32,6 +33,21 @@ namespace Sohg.SocietyAgg
 
         private int territoryExtension { get { return society.Territory.CellCount; } }
 
+        public int MaximumAttacks
+        {
+            get { return System.Math.Max(1, System.Convert.ToInt32(Power / 500)); } // TODO calculate MaximumAttacks
+        }
+
+        public int ExpansionCapacity
+        {
+            get
+            {
+                var expansionCapacity = Convert.ToInt32(Math.Floor(1.1f * PopulationDensity / productionPerCell));
+
+                return Math.Max(0, expansionCapacity);
+            }
+        }
+
         public float PopulationDensity
         {
             get { return PopulationAmount / System.Math.Max(1, society.Territory.CellCount); }
@@ -39,23 +55,16 @@ namespace Sohg.SocietyAgg
 
         public float Power
         {
-            get { return System.Math.Max(1, 100 * PopulationDensity * aggressivityRate * TechnologyLevelRate); }
-        }
-
-        public int MaximumAttacks
-        {
-            get { return System.Math.Max(1, System.Convert.ToInt32(Power / 200)); } // TODO calculate MaximumAttacks
-        }
-
-        public int ExpansionCapacity
-        {
             get
             {
-                var expansionCapacity = Convert.ToInt32(Math.Floor(PopulationDensity / productionPerCell));
+                var powerBonus = society.Actions
+                    .Where(action => typeof(IPowerBonus).IsAssignableFrom(action.GetType()))
+                    .Sum(action => ((IPowerBonus)action).GetPowerBonus(society));
 
-                return Math.Max(0, expansionCapacity);
+                return powerBonus + System.Math.Max(1, 100 * PopulationDensity * aggressivityRate * TechnologyLevelRate);
             }
         }
+
 
         public SocietyState(ISohgConfig config, ISociety society)
         {
@@ -80,10 +89,11 @@ namespace Sohg.SocietyAgg
             }
             else
             {
-                populationGrowth = Convert.ToInt64(0.01 * resources);
+                populationGrowth = Convert.ToInt64(0.002 * resources);
             }
 
-            PopulationAmount = PopulationAmount + populationGrowth;
+            PopulationAmount += populationGrowth;
+            TechnologyLevelRate *= 1.001f;
         }
 
         public void Kill(float deathRate)

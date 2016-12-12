@@ -11,18 +11,19 @@ namespace Sohg.GameAgg.Features
     {
         public override void Run(IEvolvableGame game, ISociety society)
         {
-            Enumerable.Range(0, society.State.ExpansionCapacity)
+            var expansion = Random.Range(0, society.State.ExpansionCapacity + 1);
+            Enumerable.Range(0, expansion)
                 .ToList()
-                .ForEach(i => ExpandSociety(game.Grid, society));
+                .ForEach(i => ExpandSociety(game, society));
         }
 
-        public void ExpandSociety(IGrid grid, ISociety society)
+        public void ExpandSociety(IEvolvableGame game, ISociety society)
         {
-            var hasBeenExpanded = grid.ExpandSingleCell(society.Territory);
+            var hasBeenExpanded = game.Grid.ExpandSingleCell(society.Territory);
             if (hasBeenExpanded)
             {
                 society.State.Expanded();
-                Debug.Log(society.Name + " has expanded");
+                game.Log(society.Name + " has expanded");
             }
         }
     }

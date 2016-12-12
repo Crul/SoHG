@@ -1,14 +1,15 @@
 ﻿using Sohg.GameAgg.Contracts;
 using Sohg.SocietyAgg.Contracts;
 using System.Collections;
+using UnityEngine;
 
 namespace Sohg.GameAgg
 {
     public partial class GameEngine : IRunningGame
     {
-        public void ExecuteRoutine(IEnumerator actionExecution)
+        public Coroutine ExecuteRoutine(IEnumerator actionExecution)
         {
-            StartCoroutine(actionExecution);
+            return StartCoroutine(actionExecution);
         }
 
         public bool IsPaused()

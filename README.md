@@ -15,6 +15,7 @@ Work in progress...
 - [Menu background](https://commons.wikimedia.org/wiki/File:Bronze_age_conception_of_the_world_with_sun_gods,_animals_and_dancing_humans_at_Tangaly,_Kazakhstan.jpg)
 - [Pray icon](https://pixabay.com/en/boy-divine-god-male-man-prayer-1299588/)
 - [Fire icon](https://pixabay.com/en/fire-icon-make-fire-campfire-1345869/)
+- [War icon](https://pixabay.com/en/swords-crossed-black-silhouette-311733/)
 
 ## Dependencies
 

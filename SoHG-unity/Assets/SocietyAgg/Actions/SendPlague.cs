@@ -11,6 +11,7 @@ namespace Sohg.SocietyAgg.Actions
         [SerializeField]
         private float plagueKillRate;
 
+        private int plagueWaveCount = 10;// TODO move SendPlague.plagueWaveCount to config?
         private int secondsForRespawn = 3; // TODO move SendPlague.secondsForRespawn to config?
 
         public override bool IsActionEnabled(ISociety society)
@@ -27,31 +28,18 @@ namespace Sohg.SocietyAgg.Actions
             return isNeighbourOfPlayer;
         }
 
-        public override void Execute(ISociety society)
+        protected override IEnumerator ExecuteAction(ISociety society)
         {
-            game.ExecuteRoutine(ExecutePlague(society));
             game.Log("Plague sent to {0}", society.Name);
-        }
 
-        private IEnumerator ExecutePlague(ISociety society)
-        {
-            var effectAlreadyEnabled = (society.IsEffectActive[this]);
-            if (!effectAlreadyEnabled)
+            for (var i = 0; i < plagueWaveCount; i++)
             {
-                society.IsEffectActive[this] = true;
-
-                var plagueWaveCount = 10;
-                for (var i = 0; i < plagueWaveCount; i++)
-                {
-                    var plagueDeathRate = (5 * plagueKillRate) / (1 - plagueKillRate);
-                    society.State.Kill(plagueDeathRate * society.Territory.CellCount / plagueWaveCount);
-                    yield return new WaitForFixedUpdate();
-                }
-
-                yield return new WaitForSeconds(secondsForRespawn);
-
-                society.IsEffectActive[this] = false;
+                var plagueDeathRate = (5 * plagueKillRate) / (1 - plagueKillRate);
+                society.State.Kill(plagueDeathRate * society.Territory.CellCount / plagueWaveCount);
+                yield return new WaitForFixedUpdate();
             }
+
+            yield return new WaitForSeconds(secondsForRespawn);
         }
     }
 }
