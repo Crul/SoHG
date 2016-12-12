@@ -1,6 +1,7 @@
 ﻿using Sohg.CrossCutting;
 using Sohg.GameAgg.Contracts;
 using Sohg.SocietyAgg.Contracts;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,6 +31,8 @@ namespace Sohg.SocietyAgg.UI
         private Image background;
         private RectTransform rectTransform;
         private BoxCollider2D boxCollider2D;
+        private List<ISocietyActionButton> actionButtons;
+        private List<ISocietyEffectIcon> effectIcons;
 
         public IRunningGame Game { get; private set; }
         public ISociety Society { get; private set; }
@@ -55,6 +58,12 @@ namespace Sohg.SocietyAgg.UI
         {
             Society = null;
             gameObject.SetActive(false);
+        }
+
+        public void Refresh()
+        {
+            actionButtons.ForEach(actionButton => actionButton.Update());
+            effectIcons.ForEach(effectIcon => effectIcon.Update());
         }
 
         public void Reset()
@@ -84,8 +93,8 @@ namespace Sohg.SocietyAgg.UI
         public void Update()
         {
             var worldMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            var hit = Physics2D.Raycast(worldMousePosition, -Vector2.up);
-            if (hit.collider == null || hit.collider.gameObject != gameObject)
+            var collider = Physics2D.Raycast(worldMousePosition, -Vector2.up).collider;
+            if (collider == null || (collider.gameObject != gameObject && collider.name != "SocietyActionButton"))
             {
                 Hide();
             }
@@ -93,8 +102,11 @@ namespace Sohg.SocietyAgg.UI
 
         private void InitializeAction(ISocietyAction action)
         {
-            Game.SohgFactory.CreateSocietyActionButton(action, this);            
-            Game.SohgFactory.CreateSocietyEffectIcon(action, this);
+            var actionButton = Game.SohgFactory.CreateSocietyActionButton(action, this);
+            actionButtons.Add(actionButton);
+
+            var effectIcon = Game.SohgFactory.CreateSocietyEffectIcon(action, this);
+            effectIcons.Add(effectIcon);
         }
 
         private void InitializeProperty(SocietyProperty property)
@@ -115,6 +127,8 @@ namespace Sohg.SocietyAgg.UI
             ReturnAllChildrenToPool(effectsPanel);
             ReturnAllChildrenToPool(skillsPanel);
 
+            actionButtons = new List<ISocietyActionButton>();
+            effectIcons = new List<ISocietyEffectIcon>();
             Society.Actions.ToList().ForEach(action => InitializeAction(action));
             Society.Skills.ToList().ForEach(skill => InitializeSkill(skill));
         }

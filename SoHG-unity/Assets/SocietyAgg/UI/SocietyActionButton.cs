@@ -1,11 +1,11 @@
-﻿using System;
-using Sohg.SocietyAgg.Contracts;
+﻿using Sohg.SocietyAgg.Contracts;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Sohg.SocietyAgg.UI
 {
     [RequireComponent(typeof(Button))]
+    [RequireComponent(typeof(BoxCollider2D))]
     public class SocietyActionButton : SocietyInfoChild, ISocietyActionButton
     {
         [SerializeField]
@@ -35,6 +35,16 @@ namespace Sohg.SocietyAgg.UI
                 && IsActionEnabled();
 
             button.interactable = isButtonEnabled;
+
+            if (isButtonEnabled && Input.GetMouseButtonDown(0))
+            {
+                var worldMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                var hit = Physics2D.Raycast(worldMousePosition, -Vector2.up);
+                if (hit.collider != null && hit.collider.gameObject == gameObject)
+                {
+                    ExecuteAction();
+                }
+            }
         }
 
         private void ExecuteAction()
@@ -42,6 +52,7 @@ namespace Sohg.SocietyAgg.UI
             if (game.PlayerSpecies.ConsumeFaith(societyAction.FaithCost))
             {
                 societyAction.Execute(society);
+                societyInfo.Refresh();
             }
         }
 

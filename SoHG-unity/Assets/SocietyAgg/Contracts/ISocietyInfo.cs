@@ -15,6 +15,7 @@ namespace Sohg.SocietyAgg.Contracts
 
         void Initialize(IRunningGame game);
         void Hide();
+        void Refresh();
         void Reset();
         void Show(ISociety society);
     }
