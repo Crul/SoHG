@@ -106,6 +106,7 @@ namespace Sohg.SocietyAgg.UI
         private void SetScale(float newScale)
         {
             transform.localScale = new Vector3(newScale, newScale, 1);
+            canvasGroup.alpha = newScale;
         }
     }
 }
