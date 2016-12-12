@@ -10,6 +10,7 @@ namespace Sohg.GameAgg.Features
         public override void Run(IEvolvableGame game, ISociety society)
         {
             society.Species.Evolve(game);
+            society.State.Evolve();
         }
     }
 }

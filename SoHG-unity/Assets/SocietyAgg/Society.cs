@@ -40,7 +40,7 @@ namespace Sohg.SocietyAgg
             Color = species.Color;
             this.sohgFactory = sohgFactory;
             Species = species;
-            State = new SocietyState(this);
+            State = new SocietyState(sohgFactory.Config, this);
             Territory = territory;
         }
 
@@ -64,8 +64,7 @@ namespace Sohg.SocietyAgg
 
         public void Initialize()
         {
-            var initialPopulation = Territory.CellCount * config.InitialSocietyPopulationByCell;
-            State.SetInitialPopulation(initialPopulation);
+            State.SetInitialPopulation();
         }
 
         public void RemoveRelationship(ISociety society)

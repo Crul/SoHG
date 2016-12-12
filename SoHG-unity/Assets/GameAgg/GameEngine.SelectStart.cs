@@ -19,7 +19,7 @@ namespace Sohg.GameAgg
             }
 
             var initialTerritorySize = Convert.ToInt16(SohgFactory.Config.InitialSocietyPopulationLimit 
-                / SohgFactory.Config.InitialSocietyPopulationByCell);
+                / SohgFactory.Config.InitialPopulationByCell);
 
             Grid.ExpandSocietiesTerritories(initialTerritorySize);
 

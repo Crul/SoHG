@@ -10,8 +10,10 @@
         float TechnologyLevelRate { get; }
 
         int GetFaithEmitted();
+        void Evolve();
+        void Expanded();
         void Kill(float damageRate);
         void OnSkillAdded(ISkill skill);
-        void SetInitialPopulation(long initialPopulation);
+        void SetInitialPopulation();
     }
 }

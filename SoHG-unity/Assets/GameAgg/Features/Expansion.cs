@@ -21,6 +21,7 @@ namespace Sohg.GameAgg.Features
             var hasBeenExpanded = grid.ExpandSingleCell(society.Territory);
             if (hasBeenExpanded)
             {
+                society.State.Expanded();
                 Debug.Log(society.Name + " has expanded");
             }
         }

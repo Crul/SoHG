@@ -10,7 +10,7 @@ namespace Sohg.CrossCutting
         [SerializeField]
         private int nonPlayerSocietyCount;
         [SerializeField]
-        private long initialSocietyPopulationByCell;
+        private long initialPopulationByCell;
         [SerializeField]
         private int initialSocietyPopulationLimit;
 
@@ -29,7 +29,7 @@ namespace Sohg.CrossCutting
         private float powerBalanceThresholdForAttack;
 
         public int NonPlayerSocietyCount { get { return nonPlayerSocietyCount; } }
-        public long InitialSocietyPopulationByCell { get { return initialSocietyPopulationByCell; } }
+        public long InitialPopulationByCell { get { return initialPopulationByCell; } }
         public int InitialSocietyPopulationLimit { get { return initialSocietyPopulationLimit; } }
 
         public int EvolutionActionsTimeInterval { get { return evolutionActionsTimeInterval; } }
