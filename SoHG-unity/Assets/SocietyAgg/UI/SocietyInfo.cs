@@ -1,7 +1,6 @@
 ﻿using Sohg.CrossCutting;
 using Sohg.GameAgg.Contracts;
 using Sohg.SocietyAgg.Contracts;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -82,9 +81,14 @@ namespace Sohg.SocietyAgg.UI
             InitializeSocietyActions();
         }
 
-        public void OnMouseExit()
+        public void Update()
         {
-            Hide();
+            var worldMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            var hit = Physics2D.Raycast(worldMousePosition, -Vector2.up);
+            if (hit.collider == null || hit.collider.gameObject != gameObject)
+            {
+                Hide();
+            }
         }
 
         private void InitializeAction(ISocietyAction action)
@@ -117,7 +121,11 @@ namespace Sohg.SocietyAgg.UI
 
         private void SetPosition()
         {
-            gameObject.transform.position = Society.Territory.GetCenter();
+            var territoryCenter = Society.Territory.GetCenter();
+            var societyInfoPosition = gameObject.transform.position;
+            societyInfoPosition.x = territoryCenter.x;
+            societyInfoPosition.y = territoryCenter.y;
+            gameObject.transform.position = societyInfoPosition;
 
             boxCollider2D.size = new Vector2
             (
