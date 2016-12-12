@@ -1,10 +1,12 @@
 ﻿using Sohg.GameAgg.Contracts;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Sohg.SocietyAgg.Contracts
 {
-    public interface ISocietyInfo
+    public interface ISocietyInfo : IPointerEnterHandler, IPointerExitHandler
     {
+        bool IsVisible { get; }
         GameObject ActionsPanel { get; }
         GameObject EffectsPanel { get; }
         GameObject PropertiesPanel { get; }

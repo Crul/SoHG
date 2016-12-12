@@ -39,5 +39,14 @@ namespace Sohg.GameAgg
                 currentStage.OnCellClick(cell);
             }
         }
+
+        private void OnGridTerritoryClick(ITerritory territory)
+        {
+            if (currentStage != null)
+            {
+                currentStage.OnTerritoryClick(territory);
+
+            }
+        }
     }
 }

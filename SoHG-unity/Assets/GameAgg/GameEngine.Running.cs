@@ -46,7 +46,19 @@ namespace Sohg.GameAgg
 
         public void OpenSocietyInfo(ISociety society)
         {
-            societyInfo.Show(society);
+            if (societyInfo.Society == society)
+            {
+                CloseSocietyInfo();
+            }
+            else
+            {
+                societyInfo.Show(society);
+            }
+        }
+
+        public void CloseSocietyInfo()
+        {
+            societyInfo.Hide();
         }
     }
 }

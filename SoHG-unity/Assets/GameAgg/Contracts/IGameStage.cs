@@ -9,5 +9,6 @@ namespace Sohg.GameAgg.Contracts
         void Start();
         void FixedUpdate();
         void OnCellClick(ICell cell);
+        void OnTerritoryClick(ITerritory territory);
     }
 }

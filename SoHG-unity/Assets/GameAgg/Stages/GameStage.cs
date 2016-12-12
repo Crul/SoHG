@@ -23,5 +23,6 @@ namespace Sohg.GameAgg.Stages
         public virtual void Start() { }
         public virtual void FixedUpdate() { }
         public virtual void OnCellClick(ICell cell) { }
+        public virtual void OnTerritoryClick(ITerritory territory) { }
     }
 }

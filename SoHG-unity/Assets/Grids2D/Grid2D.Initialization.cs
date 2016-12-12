@@ -14,6 +14,12 @@ namespace Grids2D
             OnCellClick += cellIndex => onCellClick(cells[cellIndex]);
         }
 
+        public void AddOnTerritoryClick(Action<ITerritory> onTerritoryClick)
+        {
+            OnTerritoryClick +=
+                territoryIndex => onTerritoryClick(territories[territoryIndex]);
+        }
+
         public void InitializeBoard(ISohgFactory sohgFactory)
         {
             this.sohgFactory = sohgFactory;

@@ -26,15 +26,5 @@ namespace Sohg.GameAgg
             Species.SelectMany(species => species.Societies).ToList()
                 .ForEach(society => society.Initialize());
         }
-
-        public void SetGridSelectionToCell()
-        {
-            Grid.SetGridSelectionToCell();
-        }
-
-        public void SetGridSelectionToNone()
-        {
-            Grid.SetGridSelectionToNone();
-        }
     }
 }

@@ -2,13 +2,14 @@
 using Sohg.GameAgg.Contracts;
 using Sohg.SocietyAgg.Contracts;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Sohg.SocietyAgg.UI
 {
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(BoxCollider2D))]
     [RequireComponent(typeof(Image))]
+    [RequireComponent(typeof(Button))]
     [RequireComponent(typeof(CanvasGroup))]
     public class SocietyMarker : BaseComponent, ISocietyMarker
     {
@@ -20,6 +21,12 @@ namespace Sohg.SocietyAgg.UI
 
         private CanvasGroup canvasGroup;
         private static float transparency = 0.66f; // TODO
+
+        private void Awake()
+        {
+            gameObject.GetComponent<Button>().onClick
+                .AddListener(() => OpenSocietyInfo());
+        }
 
         public void Initialize(IRunningGame game, ISociety society)
         {
@@ -42,6 +49,16 @@ namespace Sohg.SocietyAgg.UI
             DisableHighlight();
         }
 
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            Highlight();
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            DisableHighlight();
+        }
+
         public void Update()
         {
             var isActive = (gameObject.activeSelf && society != null);
@@ -55,22 +72,6 @@ namespace Sohg.SocietyAgg.UI
                 else
                 {
                     SetPosition(society.Territory.GetCenter());
-
-                    var worldMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    var hit = Physics2D.Raycast(worldMousePosition, -Vector2.up);
-                    if (hit.collider != null && hit.collider.gameObject == gameObject)
-                    {
-                        Highlight();
-
-                        if (Input.GetMouseButtonDown(0))
-                        {
-                            game.OpenSocietyInfo(society);
-                        }
-                    }
-                    else
-                    {
-                        DisableHighlight();
-                    }
                 }
             }
         }
@@ -85,6 +86,11 @@ namespace Sohg.SocietyAgg.UI
         {
             canvasGroup.alpha = 1;
             SocietyName.gameObject.SetActive(true);
+        }
+
+        private void OpenSocietyInfo()
+        {
+            game.OpenSocietyInfo(society);
         }
 
         private void SetPosition(Vector2 position)

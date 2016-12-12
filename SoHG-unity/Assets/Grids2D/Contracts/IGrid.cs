@@ -1,5 +1,4 @@
 ﻿using Sohg.CrossCutting.Contracts;
-using Sohg.GameAgg.Contracts;
 using System;
 
 namespace Sohg.Grids2D.Contracts
@@ -9,6 +8,7 @@ namespace Sohg.Grids2D.Contracts
         int TerritoryCount { get; }
 
         void AddOnCellClick(Action<ICell> onCellClick);
+        void AddOnTerritoryClick(Action<ITerritory> onTerritoryClick);
         void AddTerritory(ITerritory territory, params ICell[] cells);
 
         ICell GetCell(int cellIndex);
@@ -22,6 +22,7 @@ namespace Sohg.Grids2D.Contracts
         bool InvadeTerritory(ICell from, ICell target);
         void SetGridSelectionToNone();
         void SetGridSelectionToCell();
+        void SetGridSelectionToTerritory();
         void RedrawIfChanged();
     }
 }

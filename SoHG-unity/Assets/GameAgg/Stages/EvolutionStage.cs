@@ -3,6 +3,7 @@ using Sohg.GameAgg.Contracts;
 using System;
 using System.Linq;
 using UnityEngine;
+using Sohg.Grids2D.Contracts;
 
 namespace Sohg.GameAgg.Stages
 {
@@ -17,15 +18,30 @@ namespace Sohg.GameAgg.Stages
 
         private IGameFeature[] Features {get { return features; } }
 
+        public override void OnTerritoryClick(ITerritory territory)
+        {
+            if (territory.Society == null)
+            {
+                game.CloseSocietyInfo();
+            }
+            else
+            {
+                game.OpenSocietyInfo(territory.Society);
+            }
+        }
+
         public override void Start()
         {
             time = 0;
             currentSocietyIndex = 0;
+
             game.OpenInstructions(
-                "The Stories begin" + System.Environment.NewLine +
-                "The human species has born and they are not alone." + System.Environment.NewLine +
-                System.Environment.NewLine +
-                "Good luck!");
+                    "The Stories begin" + System.Environment.NewLine +
+                    "The human species has born and they are not alone." + System.Environment.NewLine +
+                    System.Environment.NewLine +
+                    "Good luck!")
+                .OnClose(() => game.Grid.SetGridSelectionToTerritory());
+
             game.Log("Hominid evolution has started!");
         }
 

@@ -24,5 +24,6 @@ namespace Sohg.GameAgg.Contracts
 
         IInstructions OpenInstructions(string instructionsText);
         void OpenSocietyInfo(ISociety society);
+        void CloseSocietyInfo();
     }
 }

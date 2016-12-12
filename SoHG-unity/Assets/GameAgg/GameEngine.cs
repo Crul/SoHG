@@ -52,7 +52,8 @@ namespace Sohg.GameAgg
             societyInfo = SohgFactory.CreateSocietyInfo(this);
             Grid = SohgFactory.CreateGrid();
 
-            Grid.AddOnCellClick(cell => OnGridCellClick(cell)); // TODO fix non-blocking grid click
+            Grid.AddOnCellClick(cell => OnGridCellClick(cell));
+            Grid.AddOnTerritoryClick(territory => OnGridTerritoryClick(territory));
 
             gameInfoPanel.TechnologyPanel.Initialize(this, gameDefinition.TechnologyCategories.ToList());
 

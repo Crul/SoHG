@@ -5,6 +5,7 @@ using Sohg.Grids2D.Contracts;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+
 namespace Sohg.SocietyAgg.UI
 {
     [RequireComponent(typeof(Button))]
@@ -38,8 +39,10 @@ namespace Sohg.SocietyAgg.UI
             canvasGroup = GetComponent<CanvasGroup>();
             deShrinkingRate = (float)Math.Pow(shrinkingRate, 3);
             state = FaithRecolectableState.Disabled;
-            GetComponent<Button>().onClick.RemoveAllListeners();
-            GetComponent<Button>().onClick.AddListener(() => RecolectFaith());
+
+            var button = GetComponent<Button>();
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(() => RecolectFaith());
         }
 
         public void Initialize(IEvolvableGame game, ICell faithCell, int faithAmount)

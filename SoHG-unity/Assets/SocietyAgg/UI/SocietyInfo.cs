@@ -4,13 +4,13 @@ using Sohg.SocietyAgg.Contracts;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Sohg.SocietyAgg.UI
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Image))]
-    [RequireComponent(typeof(BoxCollider2D))]
     [RequireComponent(typeof(RectTransform))]
     public class SocietyInfo : BaseComponent, ISocietyInfo
     {
@@ -28,6 +28,7 @@ namespace Sohg.SocietyAgg.UI
         private SocietyProperty[] societyProperties;
         
         private int colliderMargin = 10; // TODO move to SocietyInfo.colliderMargin config/inspector prop?
+        private bool hasMouseEntered;
         private Image background;
         private RectTransform rectTransform;
         private BoxCollider2D boxCollider2D;
@@ -36,6 +37,8 @@ namespace Sohg.SocietyAgg.UI
 
         public IRunningGame Game { get; private set; }
         public ISociety Society { get; private set; }
+
+        public bool IsVisible { get { return gameObject.activeSelf; } }
 
         public GameObject ActionsPanel { get { return actionsPanel; } }
         public GameObject EffectsPanel { get { return effectsPanel; } }
@@ -59,6 +62,19 @@ namespace Sohg.SocietyAgg.UI
             Society = null;
             gameObject.SetActive(false);
         }
+        
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            hasMouseEntered = true;
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            if (hasMouseEntered)
+            {
+                Hide();
+            }
+        }
 
         public void Refresh()
         {
@@ -77,6 +93,7 @@ namespace Sohg.SocietyAgg.UI
             SetSociety(society);
             SetPosition();
 
+            hasMouseEntered = false;
             transform.SetAsLastSibling();
             gameObject.SetActive(true);
         }
@@ -88,16 +105,6 @@ namespace Sohg.SocietyAgg.UI
             background.color = society.Color;
 
             InitializeSocietyActions();
-        }
-
-        public void Update()
-        {
-            var worldMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            var collider = Physics2D.Raycast(worldMousePosition, -Vector2.up).collider;
-            if (collider == null || (collider.gameObject != gameObject && collider.name != "SocietyActionButton"))
-            {
-                Hide();
-            }
         }
 
         private void InitializeAction(ISocietyAction action)
@@ -140,13 +147,6 @@ namespace Sohg.SocietyAgg.UI
             societyInfoPosition.x = territoryCenter.x;
             societyInfoPosition.y = territoryCenter.y;
             gameObject.transform.position = societyInfoPosition;
-
-            boxCollider2D.size = new Vector2
-            (
-                rectTransform.rect.size.x + (colliderMargin * 2),
-                rectTransform.rect.size.y + (colliderMargin * 2)
-            );
-            boxCollider2D.offset = new Vector2(0, rectTransform.rect.size.y / 2);
         }
     }
 }

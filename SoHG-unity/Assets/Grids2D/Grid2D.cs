@@ -60,6 +60,11 @@ namespace Grids2D
             highlightMode = HIGHLIGHT_MODE.Cells;
         }
 
+        public void SetGridSelectionToTerritory()
+        {
+            highlightMode = HIGHLIGHT_MODE.Territories;
+        }
+
         private void SetCellTerritory(ICell cell, ITerritory territory)
         {
             CellSetTerritory(((Cell)cell).CellIndex, ((Territory)territory).TerritoryIndex);
