@@ -22,7 +22,7 @@ namespace Grids2D
             {
                 expadedCellCount = societyTerritories
                     .Where(territory => territory.CellCount < initialTerritorySizeLimit)
-                    .Sum(territory => ExpandTerritory(territory, unassignedSocietyCells));
+                    .Sum(territory => ExpandTerritory(territory, unassignedSocietyCells, initialTerritorySizeLimit));
             }
             while (expadedCellCount > 0);
             
@@ -70,13 +70,19 @@ namespace Grids2D
             return false;
         }
         
-        private int ExpandTerritory(Territory territory, List<Cell> unassignedCells)
+        private int ExpandTerritory(Territory territory, List<Cell> unassignedCells, int territorySizeLimit)
         {
             var cellsToBeExpanded = territory.cells
                 .SelectMany(cell => CellGetNeighbours(cell.CellIndex))
                 .Distinct()
                 .Where(cell => unassignedCells.Contains(cell))
                 .ToList();
+
+            var availableCellsToExpand = (territorySizeLimit - territory.cells.Count);
+            if (cellsToBeExpanded.Count > availableCellsToExpand)
+            {
+                cellsToBeExpanded = cellsToBeExpanded.Take(availableCellsToExpand).ToList();
+            }
 
             cellsToBeExpanded.ForEach(cell =>
             {
