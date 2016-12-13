@@ -1,39 +1,42 @@
 ﻿using Sohg.TechnologyAgg.Contracts;
 using Sohg.CrossCutting;
 using Sohg.GameAgg.Contracts;
-using UnityEngine.UI;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using System.Collections.Generic;
+using UnityEngine.UI;
 
 namespace Sohg.TechnologyAgg.UI
 {
     [RequireComponent(typeof(Image))]
-    [RequireComponent(typeof(ScrollRect))]
     [DisallowMultipleComponent]
-    public class TechnologyCategoryColumns : BaseComponent, ITechnologyCategoryColumn
+    public class TechnologyCategoryColumn : BaseComponent, ITechnologyCategoryColumn
     {
-        private GameObject scrollRectContent;
+        [SerializeField]
+        private RectTransform scrollRectContent;
+        [SerializeField]
+        private Text title;
+
         private List<TechnologyBox> technologyBoxes;
 
-        public GameObject Content
-        {
-            get
-            {
-                if (scrollRectContent == null)
-                {
-                    scrollRectContent = GetComponent<ScrollRect>().content.gameObject;
-                }
-
-                return scrollRectContent;
-            }
-        }
+        public GameObject Content { get { return scrollRectContent.gameObject; } }
 
         public void Initialize(ITechnologyCategory technologyCategory)
         {
-            // TODO set name 
-            technologyBoxes = GetComponent<ScrollRect>().content.GetComponentsInChildren<TechnologyBox>().ToList();
             GetComponent<Image>().color = technologyCategory.Color;
+            title.text = technologyCategory.Name;
+
+            technologyBoxes = GetComponentsInChildren<TechnologyBox>().ToList();
+            var scrollContentSize = scrollRectContent.sizeDelta;
+
+            var boxesHeight = technologyBoxes.Sum(box => box.GetComponent<RectTransform>().sizeDelta.y);
+            if (technologyBoxes.Count > 1)
+            {
+                boxesHeight += (technologyBoxes.Count - 1) * scrollRectContent.GetComponent<VerticalLayoutGroup>().spacing;
+            }
+
+            scrollContentSize.y = System.Math.Max(boxesHeight, GetComponent<RectTransform>().sizeDelta.y);
+            scrollRectContent.sizeDelta = scrollContentSize;
         }
 
         public void SetState(IRunningGame game)

@@ -5,6 +5,7 @@ using Sohg.GameAgg.Contracts;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Sohg.CrossCutting.UI;
 
 namespace Sohg.TechnologyAgg.UI
 {
@@ -15,6 +16,8 @@ namespace Sohg.TechnologyAgg.UI
         private Button backButton;
         [SerializeField]
         private GameObject technologyCategoriesPanel;
+        [SerializeField]
+        private ValueInfo availableFaithInfo;
 
         private List<ITechnologyCategoryColumn> technologyCategoryColumns;
         private IEvolvableGame game;
@@ -51,6 +54,7 @@ namespace Sohg.TechnologyAgg.UI
 
         public void SetTechnologiesStates()
         {
+            availableFaithInfo.SetValue(game.PlayerSpecies.FaithPower.ToString("### ### ##0"));
             technologyCategoryColumns.ForEach(technologyCategory => technologyCategory.SetState(game));
         }
 
