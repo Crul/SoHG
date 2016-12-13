@@ -16,6 +16,7 @@ namespace Sohg.GameAgg.Contracts
         ISpecies PlayerSpecies { get; }
         List<ISociety> Societies { get; }
         List<ISpecies> Species { get; }
+        int Year { get; set; }
 
         Coroutine ExecuteRoutine(IEnumerator actionExecution);
         bool IsPaused();

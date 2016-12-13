@@ -26,10 +26,6 @@ namespace Sohg.GameAgg
 
         public void Update()
         {
-            if (!IsPaused() && PlayerSpecies != null)
-            {
-                GameInfoPanel.GameStatusInfo.SetValues(this);
-            }
         }
 
         private void OnGridCellClick(ICell cell)

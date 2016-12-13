@@ -10,21 +10,48 @@ namespace Sohg.GameAgg.UI
     public class GameStatusInfo : BaseComponent, IGameStatusInfo
     {
         [SerializeField]
+        private ValueInfo yearInfo;
+        [SerializeField]
         private ValueInfo populationInfo;
         [SerializeField]
         private ValueInfo faithPowerInfo;
         [SerializeField]
         private ValueInfo totalFaithInfo;
 
+        private IRunningGame game;
+        private int currentUpdatesWithNoYearIncrement;
+        private int lastUpdatesWithNoYearIncrement;
+        private int displayingYear;
+        private int realYear;
+
         public void Awake()
         {
+            yearInfo.SetValue("-");
             populationInfo.SetValue("-");
             faithPowerInfo.SetValue("-");
             totalFaithInfo.SetValue("-");
         }
 
-        public void SetValues(IRunningGame game)
+        public void SetGame(IRunningGame game)
         {
+            this.game = game;
+            displayingYear = 0;
+            realYear = -1;
+        }
+
+        public void Update()
+        {
+            if (game != null && !game.IsPaused() && game.PlayerSpecies != null)
+            {
+                Refresh();
+            }
+        }
+
+        private void Refresh()
+        {
+            displayingYear += GetYearIncrement();
+            yearInfo.SetValue(displayingYear.ToString("### ### ### ### ### ##0")); // TODO number format
+
             var populationAmount = game.PlayerSpecies.Societies.Sum(society => society.State.PopulationAmount);
             populationInfo
                 .SetValue(populationAmount.ToString("### ### ### ### ### ##0")); // TODO number format
@@ -34,6 +61,20 @@ namespace Sohg.GameAgg.UI
 
             totalFaithInfo
                 .SetValue(game.PlayerSpecies.TotalFaith.ToString("### ### ### ### ### ##0")); // TODO number format
+        }
+
+        private int GetYearIncrement()
+        {
+            if (realYear != game.Year)
+            {
+                realYear = game.Year;
+                lastUpdatesWithNoYearIncrement = (currentUpdatesWithNoYearIncrement == 0 ? 1 : currentUpdatesWithNoYearIncrement);
+                currentUpdatesWithNoYearIncrement = 0;
+            }
+            currentUpdatesWithNoYearIncrement++;
+
+            return System.Math.Max(0, (realYear - displayingYear)
+                / System.Math.Max(1, lastUpdatesWithNoYearIncrement - currentUpdatesWithNoYearIncrement));
         }
     }
 }

@@ -36,6 +36,7 @@ namespace Sohg.GameAgg
         public ISpecies PlayerSpecies { get; private set; }
         public List<ISpecies> Species { get; private set; }
         public List<ISociety> Societies { get; private set; }
+        public int Year { get; set; }
 
         public IGameInfoPanel GameInfoPanel { get { return gameInfoPanel; } }
         public ISohgFactory SohgFactory { get { return sohgFactory; } }
@@ -55,6 +56,7 @@ namespace Sohg.GameAgg
             Grid.AddOnCellClick(cell => OnGridCellClick(cell));
             Grid.AddOnTerritoryClick(territory => OnGridTerritoryClick(territory));
 
+            gameInfoPanel.GameStatusInfo.SetGame(this);
             gameInfoPanel.TechnologyPanel.Initialize(this, gameDefinition.TechnologyCategories.ToList());
 
             PlayerSpecies = gameDefinition.PlayerSpecies;
@@ -82,6 +84,8 @@ namespace Sohg.GameAgg
 
             gameDefinition.Skills.ToList()
                 .ForEach(skill => skill.Initialize(this));
+
+            Year = 0;
         }
     }
 }
