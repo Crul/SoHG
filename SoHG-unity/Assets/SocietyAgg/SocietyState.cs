@@ -1,7 +1,6 @@
 ﻿using Sohg.CrossCutting.Contracts;
 using Sohg.SocietyAgg.Contracts;
 using System;
-using System.Linq;
 
 namespace Sohg.SocietyAgg
 {
@@ -15,7 +14,9 @@ namespace Sohg.SocietyAgg
         public float FriendshipRange { get; private set; }
         public long PopulationAmount { get; private set; }
         public float TechnologyLevelRate { get; private set; }
-        
+
+        public int PowerBonus { get; set; }
+
         private long consume
         {
             get { return Convert.ToInt64(PopulationAmount); }
@@ -57,15 +58,10 @@ namespace Sohg.SocietyAgg
         {
             get
             {
-                var powerBonus = society.Actions
-                    .Where(action => typeof(IPowerBonus).IsAssignableFrom(action.GetType()))
-                    .Sum(action => ((IPowerBonus)action).GetPowerBonus(society));
-
-                return powerBonus + System.Math.Max(1, 100 * PopulationDensity * aggressivityRate * TechnologyLevelRate);
+                return PowerBonus + System.Math.Max(1, 100 * PopulationDensity * aggressivityRate * TechnologyLevelRate);
             }
         }
-
-
+        
         public SocietyState(ISohgConfig config, ISociety society)
         {
             this.config = config;
@@ -114,6 +110,7 @@ namespace Sohg.SocietyAgg
         public void OnSkillAdded(ISkill skill)
         {
             TechnologyLevelRate += skill.TechnologyRateBonus;
+            FaithShrinkingRateBonus += skill.FaithShrinkingRateBonus;
         }
 
         public void SetInitialPopulation()

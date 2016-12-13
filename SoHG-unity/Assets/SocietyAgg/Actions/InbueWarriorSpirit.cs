@@ -5,15 +5,17 @@ using UnityEngine;
 namespace Sohg.SocietyAgg.Actions
 {
     [CreateAssetMenu(fileName = "InbueWarriorSpiritAction", menuName = "SoHG/Actions/Inbue Warrior Spirit")]
-    public class InbueWarriorSpirit : SocietyAction, IPowerBonus
+    public class InbueWarriorSpirit : SocietyAction
     {
         [SerializeField]
-        private float powerBonus;
+        private int powerBonus;
 
         private int fixedUpdateCyclesDuration = 30; // TODO move InbueWarriorSpirit.duration to config?
 
         protected override IEnumerator ExecuteAction(ISociety society)
         {
+            society.State.PowerBonus += powerBonus;
+
             game.Log("Warrior Spirit inbued in {0}", society.Name);
 
             var fixedUpdateCycles = 0;
@@ -21,6 +23,8 @@ namespace Sohg.SocietyAgg.Actions
             {
                 yield return new WaitForFixedUpdate();
             }
+
+            society.State.PowerBonus -= powerBonus;
         }
 
         public float GetPowerBonus(ISociety society)

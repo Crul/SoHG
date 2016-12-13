@@ -9,6 +9,8 @@
         float Power { get; }
         float TechnologyLevelRate { get; }
 
+        int PowerBonus { get; set; }
+
         int GetFaithEmitted();
         void Evolve();
         void Expanded();
