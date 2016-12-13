@@ -16,6 +16,7 @@ Work in progress...
 - [Pray icon](https://pixabay.com/en/boy-divine-god-male-man-prayer-1299588/)
 - [Fire icon](https://pixabay.com/en/fire-icon-make-fire-campfire-1345869/)
 - [War icon](https://pixabay.com/en/swords-crossed-black-silhouette-311733/)
+- [Venus Willendorf](https://es.wikipedia.org/wiki/Archivo:Venus_of_Willendorf_frontview_retouched_2.jpg)
 
 ## Dependencies
 

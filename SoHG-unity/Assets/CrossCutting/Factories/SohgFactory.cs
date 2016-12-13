@@ -36,10 +36,10 @@ namespace Sohg.CrossCutting.Factories
             return prefabFactory.InstantiateEndGame(boardCanvas);
         }
 
-        public IFaithRecolectable CreateFaith(IEvolvableGame game, ICell faithCell, int faithAmount)
+        public IFaithRecolectable CreateFaith(ISociety society, ICell faithCell, int faithAmount)
         {
             var faithRecolectable = prefabFactory.InstantiateFaithRecolectable(boardOverCanvas, "FaithRecolectable");
-            faithRecolectable.Initialize(game, faithCell, faithAmount);
+            faithRecolectable.Initialize(society, faithCell, faithAmount);
 
             return faithRecolectable;
         }

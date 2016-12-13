@@ -22,8 +22,8 @@ namespace Sohg.GameAgg.Features
             {
                 var faithCell = game.Grid
                     .GetRandomCell(cell => cell.TerritoryIndex == society.Territory.TerritoryIndex);
-
-                game.SohgFactory.CreateFaith(game, faithCell, faithAmount);
+                
+                game.SohgFactory.CreateFaith(society, faithCell, faithAmount);
             }
         }
     }

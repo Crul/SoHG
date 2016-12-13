@@ -15,6 +15,7 @@ namespace Sohg.SocietyAgg
         public long PopulationAmount { get; private set; }
         public float TechnologyLevelRate { get; private set; }
 
+        public float FaithShrinkingRateBonus { get; set; }
         public int PowerBonus { get; set; }
 
         private long consume

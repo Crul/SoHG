@@ -15,7 +15,7 @@ namespace Sohg.CrossCutting.Contracts
         IGameDefinition GameDefinition { get; }
 
         IEndGame CreateEndGame();
-        IFaithRecolectable CreateFaith(IEvolvableGame game, ICell faithCell, int faithAmount);
+        IFaithRecolectable CreateFaith(ISociety society, ICell faithCell, int faithAmount);
         IFight CreateFight(ICell from, ICell target, Action resolveAttack);
         IGrid CreateGrid();
         IInstructions CreateInstructions();

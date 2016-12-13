@@ -6,6 +6,7 @@ namespace Sohg.SocietyAgg.Contracts
     public interface ISkill : ITechnologyDependent
     {
         Sprite SkillIcon { get; }
+        float FaithShrinkingRateBonus { get; }
         float TechnologyRateBonus { get; }
     }
 }

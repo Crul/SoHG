@@ -9,6 +9,7 @@
         float Power { get; }
         float TechnologyLevelRate { get; }
 
+        float FaithShrinkingRateBonus { get; set; }
         int PowerBonus { get; set; }
 
         int GetFaithEmitted();
