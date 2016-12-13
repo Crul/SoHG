@@ -136,23 +136,23 @@ namespace Sohg.CrossCutting.Factories
             return societyPropertyInfo;
         }
 
-        public ITechnologyCategoryBox CreateTechnologyCategoryBox(IEvolvableGame game, ITechnologyCategory technologyCategory,
+        public ITechnologyCategoryColumn CreateTechnologyCategoryColumn(IEvolvableGame game, ITechnologyCategory technologyCategory,
             ITechnologyStatesSetter technologyStatesSetter, GameObject technologyPanel)
         {
-            var technologyCategoryBox = prefabFactory.InstantiateTechnologyCategoryBox(technologyPanel, technologyCategory.Name);
+            var technologyCategoryColumn = prefabFactory.InstantiateTechnologyCategoryColumn(technologyPanel, technologyCategory.Name);
 
-            technologyCategory.Technologies.ToList()
-                .ForEach(technology => CreateTechnologyBox(game, technology, technologyCategory, technologyCategoryBox, technologyStatesSetter));
+            technologyCategory.Technologies.Reverse().ToList()
+                .ForEach(technology => CreateTechnologyBox(game, technology, technologyCategory, technologyCategoryColumn, technologyStatesSetter));
 
-            technologyCategoryBox.Initialize(technologyCategory);
+            technologyCategoryColumn.Initialize(technologyCategory);
 
-            return technologyCategoryBox;
+            return technologyCategoryColumn;
         }
 
         private ITechnologyBox CreateTechnologyBox(IEvolvableGame game, ITechnology technology, ITechnologyCategory technologyCategory,
-            ITechnologyCategoryBox technologyCategoryBox, ITechnologyStatesSetter technologyStatesSetter)
+            ITechnologyCategoryColumn technologyCategoryColumn, ITechnologyStatesSetter technologyStatesSetter)
         {
-            var technologyBox = prefabFactory.InstantiateTechnologyBox(technologyCategoryBox.Content, technology.Name);
+            var technologyBox = prefabFactory.InstantiateTechnologyBox(technologyCategoryColumn.Content, technology.Name);
             technologyBox.Initialize(game, technology, technologyStatesSetter);
 
             return technologyBox;

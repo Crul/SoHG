@@ -11,7 +11,7 @@ namespace Sohg.TechnologyAgg.UI
     [RequireComponent(typeof(Image))]
     [RequireComponent(typeof(ScrollRect))]
     [DisallowMultipleComponent]
-    public class TechnologyCategoryBox : BaseComponent, ITechnologyCategoryBox
+    public class TechnologyCategoryColumns : BaseComponent, ITechnologyCategoryColumn
     {
         private GameObject scrollRectContent;
         private List<TechnologyBox> technologyBoxes;

@@ -44,7 +44,7 @@ namespace Sohg.CrossCutting.Factories
         [SerializeField]
         private TechnologyBox technologyBoxPrefab;
         [SerializeField]
-        private TechnologyCategoryBox technologyCategoryBoxPrefab;
+        private TechnologyCategoryColumn technologyCategoryColumnPrefab;
 
         public IGrid InstantiateGrid(Canvas canvas)
         {
@@ -122,12 +122,12 @@ namespace Sohg.CrossCutting.Factories
             return technologyBox;
         }
 
-        public ITechnologyCategoryBox InstantiateTechnologyCategoryBox(GameObject gameObject, string name)
+        public ITechnologyCategoryColumn InstantiateTechnologyCategoryColumn(GameObject gameObject, string name)
         {
-            var technologyCategoryBox = InstantiateInto(technologyCategoryBoxPrefab, gameObject, name);
-            technologyCategoryBox.transform.localScale = Vector3.one; // TODO why scale = 1 needed?
+            var technologyCategoryColumn = InstantiateInto(technologyCategoryColumnPrefab, gameObject, name);
+            technologyCategoryColumn.transform.localScale = Vector3.one; // TODO why scale = 1 needed?
 
-            return technologyCategoryBox;
+            return technologyCategoryColumn;
         }
 
         public T InstantiatePooledInto<T>(T prefab, GameObject gameObject, string name = "")

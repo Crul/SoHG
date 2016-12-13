@@ -25,7 +25,7 @@ namespace Sohg.CrossCutting.Contracts
         ISocietyEffectIcon CreateSocietyEffectIcon(ISocietyAction action, ISocietyInfo societyInfo);
         ISocietyInfo CreateSocietyInfo(IRunningGame game);
         ISocietySkillIcon CreateSocietySkillIcon(ISkill skill, ISocietyInfo societyInfo);
-        ITechnologyCategoryBox CreateTechnologyCategoryBox(IEvolvableGame game, ITechnologyCategory technologyCategory, 
+        ITechnologyCategoryColumn CreateTechnologyCategoryColumn(IEvolvableGame game, ITechnologyCategory technologyCategory, 
             ITechnologyStatesSetter technologyStatesSetter, GameObject technologyPanel);
         ISocietyPropertyInfo CreateSocietyPropertyInfo(SocietyProperty property, ISocietyInfo societyInfo);
         ITerritory CreateTerritory(params ICell[] cells);

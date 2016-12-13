@@ -16,12 +16,12 @@ namespace Sohg.TechnologyAgg.UI
         [SerializeField]
         private GameObject technologyCategoriesPanel;
 
-        private List<ITechnologyCategoryBox> technologyCategoryBoxes;
+        private List<ITechnologyCategoryColumn> technologyCategoryColumns;
         private IEvolvableGame game;
 
         public TechnologyPanel()
         {
-            technologyCategoryBoxes = new List<ITechnologyCategoryBox>();
+            technologyCategoryColumns = new List<ITechnologyCategoryColumn>();
         }
 
         public void Awake()
@@ -51,13 +51,13 @@ namespace Sohg.TechnologyAgg.UI
 
         public void SetTechnologiesStates()
         {
-            technologyCategoryBoxes.ForEach(technologyCategory => technologyCategory.SetState(game));
+            technologyCategoryColumns.ForEach(technologyCategory => technologyCategory.SetState(game));
         }
 
         private void AddTechnologyCategory(ISohgFactory factory, ITechnologyCategory technologyCategory)
         {
-            technologyCategoryBoxes
-                .Add(factory.CreateTechnologyCategoryBox(game, technologyCategory, this, technologyCategoriesPanel));
+            technologyCategoryColumns
+                .Add(factory.CreateTechnologyCategoryColumn(game, technologyCategory, this, technologyCategoriesPanel));
         }
     }
 }
