@@ -3,5 +3,6 @@
     public interface ISocietyInfoActionElement
     {
         void Initialize(ISocietyAction action, ISocietyInfo societyInfo);
+        void Update();
     }
 }

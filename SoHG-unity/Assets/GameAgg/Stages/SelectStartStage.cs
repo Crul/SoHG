@@ -17,7 +17,7 @@ namespace Sohg.GameAgg.Stages
                 System.Environment.NewLine +
                 "First of all, select the start point for the humans."
             )
-            .OnClose(() => game.SetGridSelectionToCell());
+            .OnClose(() => game.Grid.SetGridSelectionToCell());
 
             game.Log("Select start point");
         }
@@ -32,10 +32,10 @@ namespace Sohg.GameAgg.Stages
 
         private void SetStartPoints(ISelectStartPlayable game, ICell cell)
         {
-            if (cell.IsSocietyUnassigned)
+            if (cell.IsNonSocietyTerritory)
             {
+                game.Grid.SetGridSelectionToNone();
                 game.CreateSocieties(cell);
-                game.SetGridSelectionToNone();
                 game.NextStage();
             }
         }

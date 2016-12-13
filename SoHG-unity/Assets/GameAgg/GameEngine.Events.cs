@@ -10,7 +10,7 @@ namespace Sohg.GameAgg
 
         public void Start()
         {
-            grid.InitializeBoard(SohgFactory);
+            Grid.InitializeBoard(SohgFactory);
             currentStageIndex = -1;
             NextStage();
         }
@@ -20,6 +20,7 @@ namespace Sohg.GameAgg
             if (currentStage != null)
             {
                 currentStage.FixedUpdate();
+                Grid.RedrawIfChanged();
             }
         }
 
@@ -36,6 +37,15 @@ namespace Sohg.GameAgg
             if (currentStage != null)
             {
                 currentStage.OnCellClick(cell);
+            }
+        }
+
+        private void OnGridTerritoryClick(ITerritory territory)
+        {
+            if (currentStage != null)
+            {
+                currentStage.OnTerritoryClick(territory);
+
             }
         }
     }

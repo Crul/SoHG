@@ -8,6 +8,7 @@ namespace Sohg.Grids2D.Contracts
         int TerritoryCount { get; }
 
         void AddOnCellClick(Action<ICell> onCellClick);
+        void AddOnTerritoryClick(Action<ITerritory> onTerritoryClick);
         void AddTerritory(ITerritory territory, params ICell[] cells);
 
         ICell GetCell(int cellIndex);
@@ -15,11 +16,13 @@ namespace Sohg.Grids2D.Contracts
         ICell GetRandomCell(Func<ICell, bool> cellFilter);
         ITerritory GetTerritory(ICell cell);
 
-        void ExpandSocietiesTerritories();
+        void ExpandSocietiesTerritories(int initialTerritorySizeLimit);
+        bool ExpandSingleCell(ITerritory territory);
         void InitializeBoard(ISohgFactory sohgFactory);
-        void InvadeTerritory(ICell from, ICell target);
+        bool InvadeTerritory(ICell from, ICell target);
         void SetGridSelectionToNone();
         void SetGridSelectionToCell();
+        void SetGridSelectionToTerritory();
         void RedrawIfChanged();
     }
 }

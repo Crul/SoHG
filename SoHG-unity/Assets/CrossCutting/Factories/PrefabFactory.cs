@@ -44,7 +44,7 @@ namespace Sohg.CrossCutting.Factories
         [SerializeField]
         private TechnologyBox technologyBoxPrefab;
         [SerializeField]
-        private TechnologyCategoryBox technologyCategoryBoxPrefab;
+        private TechnologyCategoryColumn technologyCategoryColumnPrefab;
 
         public IGrid InstantiateGrid(Canvas canvas)
         {
@@ -61,6 +61,11 @@ namespace Sohg.CrossCutting.Factories
             return InstantiateIntoCanvas(endGamePrefab, canvas, "EndGame");
         }
 
+        public IFight InstantiateFight(Canvas canvas, string name)
+        {
+            return InstantiatePooledInto(fightPrefab, canvas.gameObject, name);
+        }
+
         public IInstructions InstantiateInstructions(Canvas canvas)
         {
             var instructions = InstantiateIntoCanvas(instructionsPrefab, canvas, "Instructions");
@@ -71,17 +76,22 @@ namespace Sohg.CrossCutting.Factories
 
         public ISocietyMarker InstantiateSocietyMarker(Canvas canvas, string name)
         {
-            return InstantiateIntoCanvas(societyMarkerPrefab, canvas, name);
-        }
+            var societyMarker = InstantiateIntoCanvas(societyMarkerPrefab, canvas, name);
+            var societyMarkerPosition = societyMarker.transform.position;
+            societyMarkerPosition.z = -25; // TODO why z = -50 needed
+            societyMarker.transform.position = societyMarkerPosition;
 
-        public IFight InstantiateFight(Canvas canvas, string name)
-        {
-            return InstantiatePooledInto(fightPrefab, canvas.gameObject, name);
+            return societyMarker;
         }
 
         public ISocietyInfo InstantiateSocietyInfo(Canvas canvas, string name)
         {
-            return InstantiateIntoCanvas(societyInfoPrefab, canvas, name);
+            var societyInfo = InstantiateIntoCanvas(societyInfoPrefab, canvas, name);
+            var societyInfoPosition = societyInfo.transform.position;
+            societyInfoPosition.z = -50; // TODO why z = -50 needed
+            societyInfo.transform.position = societyInfoPosition;
+
+            return societyInfo;
         }
 
         public ISocietyActionButton InstantiateSocietyActionButton(GameObject gameObject, string name)
@@ -112,12 +122,12 @@ namespace Sohg.CrossCutting.Factories
             return technologyBox;
         }
 
-        public ITechnologyCategoryBox InstantiateTechnologyCategoryBox(GameObject gameObject, string name)
+        public ITechnologyCategoryColumn InstantiateTechnologyCategoryColumn(GameObject gameObject, string name)
         {
-            var technologyCategoryBox = InstantiateInto(technologyCategoryBoxPrefab, gameObject, name);
-            technologyCategoryBox.transform.localScale = Vector3.one; // TODO why scale = 1 needed?
+            var technologyCategoryColumn = InstantiateInto(technologyCategoryColumnPrefab, gameObject, name);
+            technologyCategoryColumn.transform.localScale = Vector3.one; // TODO why scale = 1 needed?
 
-            return technologyCategoryBox;
+            return technologyCategoryColumn;
         }
 
         public T InstantiatePooledInto<T>(T prefab, GameObject gameObject, string name = "")

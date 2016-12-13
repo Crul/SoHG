@@ -2,40 +2,61 @@
 using Sohg.GameAgg.Contracts;
 using Sohg.SocietyAgg.Contracts;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Sohg.SocietyAgg.UI
 {
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(BoxCollider2D))]
+    [RequireComponent(typeof(Image))]
+    [RequireComponent(typeof(Button))]
     [RequireComponent(typeof(CanvasGroup))]
     public class SocietyMarker : BaseComponent, ISocietyMarker
     {
         [SerializeField]
         private Text SocietyName;
-        
+
+        private IRunningGame game;
         private ISociety society;
 
         private CanvasGroup canvasGroup;
-        private static float transparency = 0.85f; // TODO
+        private static float transparency = 0.66f; // TODO
+
+        private void Awake()
+        {
+            gameObject.GetComponent<Button>().onClick
+                .AddListener(() => OpenSocietyInfo());
+        }
 
         public void Initialize(IRunningGame game, ISociety society)
         {
+            this.game = game;
             this.society = society;
             canvasGroup = gameObject.GetComponent<CanvasGroup>();
-            gameObject.GetComponent<Image>().color = society.Color;
+
+            var societyColor = society.Color;
+            gameObject.GetComponent<Image>().color = societyColor;
+
             SocietyName.text = society.Name;
             SocietyName.color = new Color
             (
-                society.Color.r / 3,
-                society.Color.g / 3,
-                society.Color.b / 3
+                societyColor.r / 3,
+                societyColor.g / 3,
+                societyColor.b / 3,
+                1
             );
 
             DisableHighlight();
+        }
 
-            gameObject.GetComponent<Button>().onClick
-                .AddListener(() => game.OpenSocietyInfo(society));
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            Highlight();
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            DisableHighlight();
         }
 
         public void Update()
@@ -55,16 +76,6 @@ namespace Sohg.SocietyAgg.UI
             }
         }
 
-        public void OnMouseOver()
-        {
-            Highlight();
-        }
-
-        public void OnMouseExit()
-        {
-            DisableHighlight();
-        }
-
         private void DisableHighlight()
         {
             canvasGroup.alpha = transparency;
@@ -77,9 +88,14 @@ namespace Sohg.SocietyAgg.UI
             SocietyName.gameObject.SetActive(true);
         }
 
+        private void OpenSocietyInfo()
+        {
+            game.OpenSocietyInfo(society);
+        }
+
         private void SetPosition(Vector2 position)
         {
-            var newPosition = new Vector3(position.x, position.y, -50); // TODO why -20 needed?
+            var newPosition = new Vector3(position.x, position.y, transform.position.z);
             transform.position = newPosition;
         }
     }

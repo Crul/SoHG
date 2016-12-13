@@ -1,10 +1,10 @@
 ﻿using Sohg.SocietyAgg.Contracts;
-using Sohg.GameAgg.Contracts;
 using Sohg.CrossCutting.Pooling;
 using Sohg.Grids2D.Contracts;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+
 namespace Sohg.SocietyAgg.UI
 {
     [RequireComponent(typeof(Button))]
@@ -18,35 +18,40 @@ namespace Sohg.SocietyAgg.UI
             Initialized,
             Recolected
         }
+
         [SerializeField]
         [Range(0, 1)]
-        private float shrinkingRate;
+        private float shrinkingBaseRate;
 
         [SerializeField]
         [Range(0, 1)]
         private float shrinkingLimit;
 
+        private float shrinkingRate;
         private float deShrinkingRate;
         private CanvasGroup canvasGroup;
         private FaithRecolectableState state;
 
         private int faithAmount;
-        private IWarPlayable game;
+        private ISociety society;
 
         public void Awake()
         {
             canvasGroup = GetComponent<CanvasGroup>();
-            deShrinkingRate = (float)Math.Pow(shrinkingRate, 3);
             state = FaithRecolectableState.Disabled;
-            GetComponent<Button>().onClick.RemoveAllListeners();
-            GetComponent<Button>().onClick.AddListener(() => RecolectFaith());
+
+            var button = GetComponent<Button>();
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(() => RecolectFaith());
         }
 
-        public void Initialize(IWarPlayable game, ICell faithCell, int faithAmount)
+        public void Initialize(ISociety society, ICell faithCell, int faithAmount)
         {
-            this.game = game;
+            this.society = society;
             this.faithAmount = faithAmount;
             transform.position = faithCell.WorldPosition;
+            shrinkingRate = shrinkingBaseRate + ((1 - shrinkingBaseRate) * society.State.FaithShrinkingRateBonus);
+            deShrinkingRate = (float)Math.Pow(shrinkingRate, 3);
             SetScale(1);
             canvasGroup.alpha = 1;
             state = FaithRecolectableState.Initialized;
@@ -57,7 +62,7 @@ namespace Sohg.SocietyAgg.UI
             if (state == FaithRecolectableState.Initialized)
             {
                 state = FaithRecolectableState.Recolected;
-                game.PlayerSpecies.AddFaith(faithAmount);
+                society.Species.AddFaith(faithAmount);
             }
         }
 
@@ -66,28 +71,11 @@ namespace Sohg.SocietyAgg.UI
             switch (state)
             {
                 case FaithRecolectableState.Initialized:
-                    var smallerScale = (transform.localScale.x * shrinkingRate);
-                    if (smallerScale > shrinkingLimit)
-                    {
-                        SetScale(smallerScale);
-                    }
-                    else
-                    {
-                        End();
-                    }
+                    UpdateShrinking();
                     break;
 
                 case FaithRecolectableState.Recolected:
-                    var biggerScale = (transform.localScale.x / deShrinkingRate);
-                    if (biggerScale < 1)
-                    {
-                        SetScale(biggerScale);
-                        canvasGroup.alpha = canvasGroup.alpha * deShrinkingRate;
-                    }
-                    else
-                    {
-                        End();
-                    }
+                    UpdateDeshrinking();
                     break;
             }
         }
@@ -95,7 +83,7 @@ namespace Sohg.SocietyAgg.UI
         private void End()
         {
             state = FaithRecolectableState.Disabled;
-            game = null;
+            society = null;
             faithAmount = 0;
             ReturnToPool();
         }
@@ -103,6 +91,34 @@ namespace Sohg.SocietyAgg.UI
         private void SetScale(float newScale)
         {
             transform.localScale = new Vector3(newScale, newScale, 1);
+            canvasGroup.alpha = newScale;
+        }
+
+        private void UpdateShrinking()
+        {
+            var smallerScale = (transform.localScale.x * shrinkingRate);
+            if (smallerScale > shrinkingLimit)
+            {
+                SetScale(smallerScale);
+            }
+            else
+            {
+                End();
+            }
+        }
+
+        private void UpdateDeshrinking()
+        {
+            var biggerScale = (transform.localScale.x / deShrinkingRate);
+            if (biggerScale < 1)
+            {
+                SetScale(biggerScale);
+                canvasGroup.alpha = canvasGroup.alpha * deShrinkingRate;
+            }
+            else
+            {
+                End();
+            }
         }
     }
 }

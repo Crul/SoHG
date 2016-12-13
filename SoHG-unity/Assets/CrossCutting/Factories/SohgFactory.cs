@@ -4,7 +4,6 @@ using Sohg.Grids2D.Contracts;
 using Sohg.GameAgg;
 using Sohg.GameAgg.Contracts;
 using Sohg.SocietyAgg.Contracts;
-using Sohg.SocietyAgg.Relationships;
 using Sohg.SocietyAgg.UI;
 using Sohg.SocietyAgg;
 using Sohg.SpeciesAgg.Contracts;
@@ -37,10 +36,10 @@ namespace Sohg.CrossCutting.Factories
             return prefabFactory.InstantiateEndGame(boardCanvas);
         }
 
-        public IFaithRecolectable CreateFaith(IWarPlayable game, ICell faithCell, int faithAmount)
+        public IFaithRecolectable CreateFaith(ISociety society, ICell faithCell, int faithAmount)
         {
             var faithRecolectable = prefabFactory.InstantiateFaithRecolectable(boardOverCanvas, "FaithRecolectable");
-            faithRecolectable.Initialize(game, faithCell, faithAmount);
+            faithRecolectable.Initialize(society, faithCell, faithAmount);
 
             return faithRecolectable;
         }
@@ -74,7 +73,7 @@ namespace Sohg.CrossCutting.Factories
             {
                 cells = new ICell[]
                 {
-                    GetGrid().GetRandomCell(cell => cell.IsSocietyUnassigned)
+                    GetGrid().GetRandomCell(cell => cell.IsNonSocietyTerritory)
                 };
             }
 
@@ -85,16 +84,14 @@ namespace Sohg.CrossCutting.Factories
             var societyMarker = prefabFactory.InstantiateSocietyMarker(boardOverCanvas, society.Name + "Marker");
             societyMarker.Initialize(game, society);
 
-            cells.ToList().ForEach(cell => cell.SetSocietyAssigned());
-
-            game.Species.SelectMany(otherSpecies => otherSpecies.Societies).ToList()
-                .ForEach(otherSociety =>
-                {
-                    otherSociety.AddRelationship(society);
-                    society.AddRelationship(otherSociety);
-                });
+            game.Societies.ForEach(otherSociety =>
+            {
+                otherSociety.AddRelationship(society);
+                society.AddRelationship(otherSociety);
+            });
 
             species.Societies.Add(society);
+            game.Societies.Add(society);
         }
 
         public ISocietyActionButton CreateSocietyActionButton(ISocietyAction action, ISocietyInfo societyInfo)
@@ -139,23 +136,23 @@ namespace Sohg.CrossCutting.Factories
             return societyPropertyInfo;
         }
 
-        public ITechnologyCategoryBox CreateTechnologyCategoryBox(IWarPlayable game, ITechnologyCategory technologyCategory,
+        public ITechnologyCategoryColumn CreateTechnologyCategoryColumn(IEvolvableGame game, ITechnologyCategory technologyCategory,
             ITechnologyStatesSetter technologyStatesSetter, GameObject technologyPanel)
         {
-            var technologyCategoryBox = prefabFactory.InstantiateTechnologyCategoryBox(technologyPanel, technologyCategory.Name);
+            var technologyCategoryColumn = prefabFactory.InstantiateTechnologyCategoryColumn(technologyPanel, technologyCategory.Name);
 
-            technologyCategory.Technologies.ToList()
-                .ForEach(technology => CreateTechnologyBox(game, technology, technologyCategory, technologyCategoryBox, technologyStatesSetter));
+            technologyCategory.Technologies.Reverse().ToList()
+                .ForEach(technology => CreateTechnologyBox(game, technology, technologyCategory, technologyCategoryColumn, technologyStatesSetter));
 
-            technologyCategoryBox.Initialize(technologyCategory);
+            technologyCategoryColumn.Initialize(technologyCategory);
 
-            return technologyCategoryBox;
+            return technologyCategoryColumn;
         }
 
-        private ITechnologyBox CreateTechnologyBox(IWarPlayable game, ITechnology technology, ITechnologyCategory technologyCategory,
-            ITechnologyCategoryBox technologyCategoryBox, ITechnologyStatesSetter technologyStatesSetter)
+        private ITechnologyBox CreateTechnologyBox(IEvolvableGame game, ITechnology technology, ITechnologyCategory technologyCategory,
+            ITechnologyCategoryColumn technologyCategoryColumn, ITechnologyStatesSetter technologyStatesSetter)
         {
-            var technologyBox = prefabFactory.InstantiateTechnologyBox(technologyCategoryBox.Content, technology.Name);
+            var technologyBox = prefabFactory.InstantiateTechnologyBox(technologyCategoryColumn.Content, technology.Name);
             technologyBox.Initialize(game, technology, technologyStatesSetter);
 
             return technologyBox;

@@ -28,10 +28,7 @@ namespace Sohg.SocietyAgg.UI
 
         public void Update()
         {
-            if (time > 0)
-            {
-                CheckTime();
-            }
+            CheckTime();
         }
 
         public void Initialize(ICell from, ICell target, int time, System.Action resolveAttack)
@@ -51,9 +48,10 @@ namespace Sohg.SocietyAgg.UI
 
         private void CheckTime()
         {
-            if (time == 0)
+            if (time == 0 && resolveAttack != null)
             {
                 resolveAttack();
+                resolveAttack = null;
                 ReturnToPool();
             }
         }

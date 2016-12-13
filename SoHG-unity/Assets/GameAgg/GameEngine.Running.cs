@@ -1,10 +1,17 @@
 ﻿using Sohg.GameAgg.Contracts;
 using Sohg.SocietyAgg.Contracts;
+using System.Collections;
+using UnityEngine;
 
 namespace Sohg.GameAgg
 {
     public partial class GameEngine : IRunningGame
     {
+        public Coroutine ExecuteRoutine(IEnumerator actionExecution)
+        {
+            return StartCoroutine(actionExecution);
+        }
+
         public bool IsPaused()
         {
             // TODO fix pause, now is not working with Fight animation (and execution)
@@ -40,7 +47,19 @@ namespace Sohg.GameAgg
 
         public void OpenSocietyInfo(ISociety society)
         {
-            societyInfo.Show(society);
+            if (societyInfo.Society == society)
+            {
+                CloseSocietyInfo();
+            }
+            else
+            {
+                societyInfo.Show(society);
+            }
+        }
+
+        public void CloseSocietyInfo()
+        {
+            societyInfo.Hide();
         }
     }
 }

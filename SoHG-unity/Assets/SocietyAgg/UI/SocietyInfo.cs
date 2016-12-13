@@ -4,14 +4,13 @@ using Sohg.SocietyAgg.Contracts;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Sohg.SocietyAgg.UI
 {
-    // TODO hide when society is dead
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Image))]
-    [RequireComponent(typeof(BoxCollider2D))]
     [RequireComponent(typeof(RectTransform))]
     public class SocietyInfo : BaseComponent, ISocietyInfo
     {
@@ -29,12 +28,17 @@ namespace Sohg.SocietyAgg.UI
         private SocietyProperty[] societyProperties;
         
         private int colliderMargin = 10; // TODO move to SocietyInfo.colliderMargin config/inspector prop?
+        private bool hasMouseEntered;
         private Image background;
         private RectTransform rectTransform;
         private BoxCollider2D boxCollider2D;
+        private List<ISocietyActionButton> actionButtons;
+        private List<ISocietyEffectIcon> effectIcons;
 
         public IRunningGame Game { get; private set; }
         public ISociety Society { get; private set; }
+
+        public bool IsVisible { get { return gameObject.activeSelf; } }
 
         public GameObject ActionsPanel { get { return actionsPanel; } }
         public GameObject EffectsPanel { get { return effectsPanel; } }
@@ -58,6 +62,25 @@ namespace Sohg.SocietyAgg.UI
             Society = null;
             gameObject.SetActive(false);
         }
+        
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            hasMouseEntered = true;
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            if (hasMouseEntered)
+            {
+                Hide();
+            }
+        }
+
+        public void Refresh()
+        {
+            actionButtons.ForEach(actionButton => actionButton.Update());
+            effectIcons.ForEach(effectIcon => effectIcon.Update());
+        }
 
         public void Reset()
         {
@@ -70,6 +93,7 @@ namespace Sohg.SocietyAgg.UI
             SetSociety(society);
             SetPosition();
 
+            hasMouseEntered = false;
             transform.SetAsLastSibling();
             gameObject.SetActive(true);
         }
@@ -83,15 +107,13 @@ namespace Sohg.SocietyAgg.UI
             InitializeSocietyActions();
         }
 
-        public void OnMouseExit()
-        {
-            Hide();
-        }
-
         private void InitializeAction(ISocietyAction action)
         {
-            Game.SohgFactory.CreateSocietyActionButton(action, this);            
-            Game.SohgFactory.CreateSocietyEffectIcon(action, this);
+            var actionButton = Game.SohgFactory.CreateSocietyActionButton(action, this);
+            actionButtons.Add(actionButton);
+
+            var effectIcon = Game.SohgFactory.CreateSocietyEffectIcon(action, this);
+            effectIcons.Add(effectIcon);
         }
 
         private void InitializeProperty(SocietyProperty property)
@@ -112,20 +134,19 @@ namespace Sohg.SocietyAgg.UI
             ReturnAllChildrenToPool(effectsPanel);
             ReturnAllChildrenToPool(skillsPanel);
 
+            actionButtons = new List<ISocietyActionButton>();
+            effectIcons = new List<ISocietyEffectIcon>();
             Society.Actions.ToList().ForEach(action => InitializeAction(action));
             Society.Skills.ToList().ForEach(skill => InitializeSkill(skill));
         }
 
         private void SetPosition()
         {
-            gameObject.transform.position = Society.Territory.GetCenter();
-
-            boxCollider2D.size = new Vector2
-            (
-                rectTransform.rect.size.x + (colliderMargin * 2),
-                rectTransform.rect.size.y + (colliderMargin * 2)
-            );
-            boxCollider2D.offset = new Vector2(0, rectTransform.rect.size.y / 2);
+            var territoryCenter = Society.Territory.GetCenter();
+            var societyInfoPosition = gameObject.transform.position;
+            societyInfoPosition.x = territoryCenter.x;
+            societyInfoPosition.y = territoryCenter.y;
+            gameObject.transform.position = societyInfoPosition;
         }
     }
 }

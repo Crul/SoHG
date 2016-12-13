@@ -5,6 +5,7 @@ using Sohg.GameAgg.Contracts;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Sohg.CrossCutting.UI;
 
 namespace Sohg.TechnologyAgg.UI
 {
@@ -15,13 +16,15 @@ namespace Sohg.TechnologyAgg.UI
         private Button backButton;
         [SerializeField]
         private GameObject technologyCategoriesPanel;
+        [SerializeField]
+        private ValueInfo availableFaithInfo;
 
-        private List<ITechnologyCategoryBox> technologyCategoryBoxes;
-        private IWarPlayable game;
+        private List<ITechnologyCategoryColumn> technologyCategoryColumns;
+        private IEvolvableGame game;
 
         public TechnologyPanel()
         {
-            technologyCategoryBoxes = new List<ITechnologyCategoryBox>();
+            technologyCategoryColumns = new List<ITechnologyCategoryColumn>();
         }
 
         public void Awake()
@@ -29,7 +32,7 @@ namespace Sohg.TechnologyAgg.UI
             backButton.onClick.AddListener(() => gameObject.SetActive(false));
         }
 
-        public void Initialize(IWarPlayable game, List<ITechnologyCategory> technologyCategories)
+        public void Initialize(IEvolvableGame game, List<ITechnologyCategory> technologyCategories)
         {
             this.game = game;
 
@@ -51,13 +54,14 @@ namespace Sohg.TechnologyAgg.UI
 
         public void SetTechnologiesStates()
         {
-            technologyCategoryBoxes.ForEach(technologyCategory => technologyCategory.SetState(game));
+            availableFaithInfo.SetValue(game.PlayerSpecies.FaithPower.ToString("### ### ##0"));
+            technologyCategoryColumns.ForEach(technologyCategory => technologyCategory.SetState(game));
         }
 
         private void AddTechnologyCategory(ISohgFactory factory, ITechnologyCategory technologyCategory)
         {
-            technologyCategoryBoxes
-                .Add(factory.CreateTechnologyCategoryBox(game, technologyCategory, this, technologyCategoriesPanel));
+            technologyCategoryColumns
+                .Add(factory.CreateTechnologyCategoryColumn(game, technologyCategory, this, technologyCategoriesPanel));
         }
     }
 }

@@ -37,11 +37,11 @@ namespace Grids2D
                 .FirstOrDefault();
         }
 
-        public void InvadeTerritory(ICell from, ICell target)
+        public bool InvadeTerritory(ICell from, ICell target)
         {
-            if (!CanCellBeInvaded(target))
+            if (target.IsSocietyTerritory && !CanCellBeInvaded(target))
             {
-                return;
+                return false;
             }
 
             var territoryToBeInvaded = territories[target.TerritoryIndex];
@@ -50,29 +50,32 @@ namespace Grids2D
             var territoryInvader = territories[from.TerritoryIndex];
             SetCellTerritory(target, territoryInvader);
 
-            var affectedCells = CellGetNeighbours((Cell)from)
-                .Concat(CellGetNeighbours((Cell)target))
-                .Where(cell => cell.TerritoryIndex > 0)
-                .Distinct();
-
-            var affectedTerritories = affectedCells
-                .Select(cell => territories[cell.TerritoryIndex])
-                .ToList();
-
-            var affectedCellIndices = affectedCells.Select(cell => cell.CellIndex).ToList();
-
-            affectedTerritories.ForEach(territory => 
-                territory.UpdateFrontiers(affectedTerritories, affectedCellIndices, this));
-            
-            affectedCells.ToList().ForEach(cell => cell.CanBeInvaded = CanCellBeInvaded(cell));
+            UpdateFrontiersAfterTerritoryChange(from, target);
 
             FixNonInvadableTerritories();
 
+            if (territoryToBeInvaded.Society == null)
+            {
+                FixDisconnectedTerritory(territoryToBeInvaded);
+            }
+
             territoriesHaveChanged = true;
+
+            return true;
         }
 
         private bool CanCellBeInvaded(ICell cell)
         {
+            if (cell.IsSea)
+            {
+                return false;
+            }
+
+            if (cell.IsNonSocietyTerritory)
+            {
+                return true;
+            }
+
             // cell cannot be invaded if same-territory-neighbour-cells are NOT contigous
             // because it could cause disconnected territories
 
@@ -116,6 +119,26 @@ namespace Grids2D
             return true;
         }
 
+        private void UpdateFrontiersAfterTerritoryChange(ICell from, ICell target)
+        {
+            var affectedCells = CellGetNeighbours(from.CellIndex)
+                .Concat(CellGetNeighbours(target.CellIndex))
+                .Where(cell => cell.TerritoryIndex > 0)
+                .Distinct();
+
+            var affectedTerritories = affectedCells
+                .Where(cell => cell.IsSocietyTerritory)
+                .Select(cell => territories[cell.TerritoryIndex])
+                .ToList();
+
+            var affectedCellIndices = affectedCells.Select(cell => cell.CellIndex).ToList();
+
+            affectedTerritories.ForEach(territory =>
+                territory.UpdateFrontiers(affectedTerritories, affectedCellIndices, this));
+
+            affectedCells.ToList().ForEach(cell => cell.CanBeInvaded = CanCellBeInvaded(cell));
+        }
+
         private bool IsCellOfTerritoryInvadable(Cell cell, ITerritory territory)
         {
             return cell.CanBeInvaded 
@@ -136,6 +159,5 @@ namespace Grids2D
 
             cellList[index] = neighbour;
         }
-
     }
 }

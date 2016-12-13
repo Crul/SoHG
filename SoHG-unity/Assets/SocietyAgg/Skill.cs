@@ -2,9 +2,8 @@
 using Sohg.TechnologyAgg;
 using System.Linq;
 using UnityEngine;
-using System;
 
-namespace Sohg.SocietyAgg.Skills
+namespace Sohg.SocietyAgg
 {
     [CreateAssetMenu(fileName = "NewSkill", menuName = "SoHG/Skill")]
     public class Skill : TechnologyDependent, ISkill
@@ -13,8 +12,11 @@ namespace Sohg.SocietyAgg.Skills
         private Sprite skillIcon;
         [SerializeField]
         private float technologyRateBonus;
-        
+        [SerializeField]
+        private float faithShrinkingRateBonus;
+
         public Sprite SkillIcon { get { return skillIcon; } }
+        public float FaithShrinkingRateBonus { get { return faithShrinkingRateBonus; } }
         public float TechnologyRateBonus { get { return technologyRateBonus; } }
 
         protected override void Activate()

@@ -29,12 +29,13 @@ namespace Sohg.GameAgg
 
         private IGameDefinition gameDefinition;
         private IEndGame endGame;
-        private IGrid grid;
         private IInstructions instructions;
         private ISocietyInfo societyInfo;
 
+        public IGrid Grid { get; private set; }
         public ISpecies PlayerSpecies { get; private set; }
         public List<ISpecies> Species { get; private set; }
+        public List<ISociety> Societies { get; private set; }
 
         public IGameInfoPanel GameInfoPanel { get { return gameInfoPanel; } }
         public ISohgFactory SohgFactory { get { return sohgFactory; } }
@@ -49,9 +50,10 @@ namespace Sohg.GameAgg
             endGame = SohgFactory.CreateEndGame();
             instructions = SohgFactory.CreateInstructions();
             societyInfo = SohgFactory.CreateSocietyInfo(this);
-            grid = SohgFactory.CreateGrid();
+            Grid = SohgFactory.CreateGrid();
 
-            grid.AddOnCellClick(cell => OnGridCellClick(cell)); // TODO fix non-blocking grid click
+            Grid.AddOnCellClick(cell => OnGridCellClick(cell));
+            Grid.AddOnTerritoryClick(territory => OnGridTerritoryClick(territory));
 
             gameInfoPanel.TechnologyPanel.Initialize(this, gameDefinition.TechnologyCategories.ToList());
 
@@ -67,6 +69,8 @@ namespace Sohg.GameAgg
             Species.Add(PlayerSpecies);
 
             Species.ForEach(species => species.Reset());
+
+            Societies = new List<ISociety>();
 
             gameDefinition.TechnologyCategories
                 .SelectMany(technologyCategory => technologyCategory.Technologies)

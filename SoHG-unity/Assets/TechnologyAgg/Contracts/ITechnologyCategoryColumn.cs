@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Sohg.TechnologyAgg.Contracts
 {
-    public interface ITechnologyCategoryBox
+    public interface ITechnologyCategoryColumn
     {
         GameObject Content { get; }
 

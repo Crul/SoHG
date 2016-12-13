@@ -1,5 +1,4 @@
-﻿using System;
-using Sohg.SocietyAgg.Contracts;
+﻿using Sohg.SocietyAgg.Contracts;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -42,6 +41,7 @@ namespace Sohg.SocietyAgg.UI
             if (game.PlayerSpecies.ConsumeFaith(societyAction.FaithCost))
             {
                 societyAction.Execute(society);
+                societyInfo.Refresh();
             }
         }
 

@@ -1,5 +1,5 @@
-﻿using Sohg.GameAgg.Contracts;
-using Sohg.Grids2D.Contracts;
+﻿using Sohg.CrossCutting.Contracts;
+using System.Collections.Generic;
 
 namespace Sohg.SocietyAgg.Contracts
 {
@@ -7,9 +7,9 @@ namespace Sohg.SocietyAgg.Contracts
     {
         ISociety We { get; }
         ISociety Them { get; }
+        List<int> MyFrontierCellIndices { get; }
 
         bool AreWeNeighbours();
-        void Evolve(IWarPlayable game);
-        void ResolveAttack(IWarPlayable game, ICell from, ICell target);
+        bool WillingToAttack(ISohgConfig config);
     }
 }

@@ -4,7 +4,7 @@ namespace Sohg.TechnologyAgg.Contracts
 {
     public interface ITechnologyBox
     {
-        void Initialize(IWarPlayable game, ITechnology technology,
+        void Initialize(IEvolvableGame game, ITechnology technology,
             ITechnologyStatesSetter technologyStatesSetter);
         void SetState(int faithPower);
     }

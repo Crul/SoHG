@@ -15,16 +15,18 @@ namespace Sohg.SocietyAgg
         private List<ISkill> skills;
         private ISohgFactory sohgFactory;
 
+        private ISohgConfig config { get { return sohgFactory.Config; } }
+
         public string Name { get; private set; }
         public Color Color { get; private set; }
         public ISpecies Species { get; private set; }
+        public ISocietyState State { get; private set; }
         public ITerritory Territory { get; private set; }
         
         public Dictionary<ISocietyAction, bool> IsEffectActive { get; private set; }
 
-        private ISohgConfig config { get { return sohgFactory.Config; } }
-
         public IEnumerable<ISocietyAction> Actions { get { return actions; } }
+        public IEnumerable<IRelationship> Relationships { get { return relationships; } }
         public IEnumerable<ISkill> Skills { get { return skills; } }
 
         public Society(ISohgFactory sohgFactory, ISpecies species, ITerritory territory)
@@ -38,7 +40,7 @@ namespace Sohg.SocietyAgg
             Color = species.Color;
             this.sohgFactory = sohgFactory;
             Species = species;
-            State = new SocietyState(species);
+            State = new SocietyState(sohgFactory.Config, this);
             Territory = territory;
         }
 
@@ -60,6 +62,11 @@ namespace Sohg.SocietyAgg
             skills.Add(skill);
         }
 
+        public void Initialize()
+        {
+            State.SetInitialPopulation();
+        }
+
         public void RemoveRelationship(ISociety society)
         {
             var relationshipToRemove = relationships.Single(relationship => relationship.Them == society);
@@ -68,7 +75,9 @@ namespace Sohg.SocietyAgg
 
         public bool IsNeighbourOf(ISociety society)
         {
-            return relationships.Single(relationship => relationship.Them == society).AreWeNeighbours();
+            var societyRelationship = relationships.FirstOrDefault(relationship => relationship.Them == society);
+
+            return societyRelationship.AreWeNeighbours();
         }
     }
 }

@@ -3,9 +3,10 @@
     public interface ISohgConfig
     {
         int NonPlayerSocietyCount { get; }
-        long InitialSocietyPopulationByCell { get; }
+        long InitialPopulationByCell { get; }
+        int InitialSocietyPopulationLimit { get; }
 
-        int WarActionsTimeInterval { get; }
+        int EvolutionActionsTimeInterval { get; }
 
         float AttackDamageTieRateThreshold { get; }
         int FightDuration { get; }
