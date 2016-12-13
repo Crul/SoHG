@@ -18,6 +18,9 @@ namespace Sohg.GameAgg.Stages
 
         private IGameFeature[] Features {get { return features; } }
 
+        private int timeForOneYearStep = 2000000;
+        private int timeDecelerationAmortiguation = 1000;
+
         public override void OnTerritoryClick(ITerritory territory)
         {
             if (territory.Society == null)
@@ -55,6 +58,11 @@ namespace Sohg.GameAgg.Stages
                 if (currentSocietyIndex >= game.Societies.Count)
                 {
                     currentSocietyIndex = 0;
+                }
+
+                if (currentSocietyIndex == 0)
+                {
+                    game.Year += (timeForOneYearStep) / (game.Year + timeDecelerationAmortiguation);
                 }
 
                 var society = game.Societies[currentSocietyIndex];

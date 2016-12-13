@@ -2,6 +2,6 @@
 {
     public interface IGameStatusInfo
     {
-        void SetValues(IRunningGame game);
+        void SetGame(IRunningGame game);
     }
 }
