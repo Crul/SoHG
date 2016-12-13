@@ -93,9 +93,8 @@ namespace Sohg.SocietyAgg
             TechnologyLevelRate *= 1.001f;
         }
 
-        public void Kill(float deathRate)
+        public void Kill(long deads)
         {
-            var deads = System.Convert.ToInt64(PopulationDensity * deathRate / (5 + deathRate));
             PopulationAmount -= deads;
         }
 

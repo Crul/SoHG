@@ -93,19 +93,24 @@ namespace Sohg.GameAgg.Features
             
             var damageRate = (float)System.Math.Pow(we.State.Power / them.State.Power, 10);
             var result = GetResult(damageRate, game.SohgFactory.Config);
-
-            var ourDeathRate = 1 / damageRate;
-            var theirDeathRate = damageRate;
             
-            we.State.Kill(ourDeathRate);
-            them.State.Kill(theirDeathRate);
+            var ourDeads = GetDeads(we, 1 / damageRate);
+            var thriDeads = GetDeads(them, damageRate);
+            
+            we.State.Kill(ourDeads);
+            them.State.Kill(thriDeads);
 
             switch (result)
             {
                 case AttackResult.Win:
                     if (we.State.ExpansionCapacity > 0)
                     {
-                        game.Invade(from, target);
+                        var theirDensityBeforeAttack = them.State.PopulationDensity;
+                        if (game.Invade(from, target))
+                        {
+                            var invasionDeads = System.Convert.ToInt64(theirDensityBeforeAttack);
+                            relationship.Them.State.Kill(invasionDeads);
+                        }
                     }
                     // TODO update stats on win
                     break;
@@ -120,6 +125,12 @@ namespace Sohg.GameAgg.Features
             attackInvolvedCells[we].Remove(from.CellIndex);
             from.IsInvolvedInAttack = false;
             target.IsInvolvedInAttack = false;
+        }
+        
+        private long GetDeads(ISociety society, float damageRate)
+        {
+            return System.Convert.ToInt64
+                (society.State.PopulationDensity * damageRate / (5 + damageRate));
         }
 
         private AttackResult GetResult(float damageRate, ISohgConfig config)

@@ -15,7 +15,7 @@
         int GetFaithEmitted();
         void Evolve();
         void Expanded();
-        void Kill(float damageRate);
+        void Kill(long deads);
         void OnSkillAdded(ISkill skill);
         void SetInitialPopulation();
     }
