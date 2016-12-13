@@ -1,4 +1,5 @@
 ﻿using Sohg.SocietyAgg.Contracts;
+using System;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
@@ -34,8 +35,10 @@ namespace Sohg.SocietyAgg.Actions
 
             for (var i = 0; i < plagueWaveCount; i++)
             {
-                var plagueDeathRate = (5 * plagueKillRate) / (1 - plagueKillRate);
-                society.State.Kill(plagueDeathRate * society.Territory.CellCount / plagueWaveCount);
+                var plagueDeads = Convert
+                    .ToInt64(society.State.PopulationAmount * plagueKillRate) / plagueWaveCount;
+
+                society.State.Kill(plagueDeads);
                 yield return new WaitForFixedUpdate();
             }
 

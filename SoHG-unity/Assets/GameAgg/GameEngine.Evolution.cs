@@ -15,7 +15,7 @@ namespace Sohg.GameAgg
             this.hasPlayerWon = hasPlayerWon;
         }
 
-        public void Invade(ICell from, ICell target)
+        public bool Invade(ICell from, ICell target)
         {
             var invadedTerritory = Grid.GetTerritory(target);
             var hasBeenInvaded = Grid.InvadeTerritory(from, target);
@@ -29,6 +29,8 @@ namespace Sohg.GameAgg
                     KillSociety(invadedTerritory.Society);
                 }
             }
+
+            return hasBeenInvaded;
         }
 
         private void KillSociety(ISociety deathSociety)
