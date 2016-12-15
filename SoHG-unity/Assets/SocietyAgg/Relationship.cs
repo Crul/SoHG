@@ -46,7 +46,7 @@ namespace Sohg.SocietyAgg
 
         private bool ShouldWeAttack(ISohgConfig config)
         {
-            return (We.State.Power / Them.State.Power) > config.PowerBalanceThresholdForAttack;
+            return ((1 + We.State.Power) / 1 + Them.State.Power) > config.PowerBalanceThresholdForAttack;
         }
     }
 }
