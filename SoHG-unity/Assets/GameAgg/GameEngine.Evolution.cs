@@ -22,7 +22,10 @@ namespace Sohg.GameAgg
             if (hasBeenInvaded)
             {
                 var invasor = Grid.GetTerritory(target);
-                Log("{0} has invaded {1}", invasor.Society.Name, invadedTerritory.Society.Name);
+
+                var invasorName = (invasor.Society != null ? invasor.Society.Name : "NONE");
+                var invadedName = (invadedTerritory.Society != null ? invadedTerritory.Society.Name : "NONE");
+                UnityEngine.Debug.Log(string.Format("{0} has invaded {1}", invasorName, invadedName));
 
                 if (invadedTerritory.CellCount == 0)
                 {
