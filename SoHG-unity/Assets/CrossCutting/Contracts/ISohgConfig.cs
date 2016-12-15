@@ -3,7 +3,6 @@
     public interface ISohgConfig
     {
         int NonPlayerSocietyCount { get; }
-        long InitialPopulationByCell { get; }
         int InitialSocietyPopulationLimit { get; }
 
         int EvolutionActionsTimeInterval { get; }

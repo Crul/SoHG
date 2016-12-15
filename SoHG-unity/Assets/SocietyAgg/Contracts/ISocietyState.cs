@@ -4,9 +4,11 @@
     {
         int ExpansionCapacity { get; }
         int MaximumAttacks { get; }
-        long PopulationAmount { get; }
+        long Population { get; }
         float PopulationDensity { get; }
         float Power { get; }
+        long Production { get; }
+        long Resources { get; }
         float TechnologyLevelRate { get; }
 
         float FaithShrinkingRateBonus { get; set; }

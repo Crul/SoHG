@@ -8,7 +8,10 @@ namespace Sohg.SocietyAgg.UI
     {
         None,
         Population,
+        PopulationDensity,
         Power,
+        Production,
+        Resources,
         Technology
     };
 
@@ -41,7 +44,10 @@ namespace Sohg.SocietyAgg.UI
             switch (societyProperty)
             {
                 case SocietyProperty.Population: return "Population";
+                case SocietyProperty.PopulationDensity: return "Pop. Density";
                 case SocietyProperty.Power: return "Power";
+                case SocietyProperty.Production: return "Production";
+                case SocietyProperty.Resources: return "Resources";
                 case SocietyProperty.Technology: return "Technology";
             }
 
@@ -53,13 +59,22 @@ namespace Sohg.SocietyAgg.UI
             switch (societyProperty)
             {
                 case SocietyProperty.Population:
-                    return society.State.PopulationAmount.ToString("### ### ### ### ### ##0"); // TODO number format
+                    return society.State.Population.ToString("### ### ### ### ### ##0"); // TODO number format
+
+                case SocietyProperty.PopulationDensity:
+                    return society.State.PopulationDensity.ToString("### ### ### ### ### ##0"); // TODO number format
 
                 case SocietyProperty.Power:
-                    return society.State.Power.ToString("### ### ###");
+                    return society.State.Power.ToString("### ### ##0"); // TODO number format
+
+                case SocietyProperty.Production:
+                    return society.State.Production.ToString("### ### ##0"); // TODO number format
+
+                case SocietyProperty.Resources:
+                    return society.State.Resources.ToString("### ### ##0"); // TODO number format
 
                 case SocietyProperty.Technology:
-                    return society.State.TechnologyLevelRate.ToString("##.# %");
+                    return society.State.TechnologyLevelRate.ToString("##.# %"); // TODO number format
             }
 
             return string.Format("ERROR - Invalid society property: {0}", societyProperty.ToString());

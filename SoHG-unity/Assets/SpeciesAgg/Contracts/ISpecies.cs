@@ -12,7 +12,8 @@ namespace Sohg.SpeciesAgg.Contracts
         List<ISociety> Societies { get; }
 
         float InitialAggressivityRate { get; }
-        float InitialTechnologyLevelRate { get;  }
+        int InitialPopulationDensity { get; }
+        float InitialTechnologyLevelRate { get; }
 
         int FaithPower { get; }
         int TotalFaith { get; }

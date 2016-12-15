@@ -69,8 +69,11 @@ namespace Sohg.SocietyAgg
 
         public void RemoveRelationship(ISociety society)
         {
-            var relationshipToRemove = relationships.Single(relationship => relationship.Them == society);
-            relationships.Remove(relationshipToRemove);
+            var relationshipToRemove = relationships.FirstOrDefault(relationship => relationship.Them == society);
+            if (relationshipToRemove != null)
+            {
+                relationships.Remove(relationshipToRemove);
+            }
         }
 
         public bool IsNeighbourOf(ISociety society)

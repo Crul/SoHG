@@ -9,6 +9,17 @@ namespace Sohg.GameAgg
     {
         private bool? hasPlayerWon;
 
+
+        public void ShrinkSociety(ISociety society)
+        {
+            Grid.ContractSingleCell(society.Territory);
+
+            if (society.Territory.CellCount == 0)
+            {
+                KillSociety(society);
+            }
+        }
+
         public void FinishEvolution(bool hasPlayerWon)
         {
             Log("evolution finish");

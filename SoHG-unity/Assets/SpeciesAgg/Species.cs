@@ -18,11 +18,14 @@ namespace Sohg.SpeciesAgg
         [SerializeField]
         private float initialAggressivityRate;
         [SerializeField]
+        private int initialPopulationByCell;
+        [SerializeField]
         private float initialTechnologyLevelRate;
 
         public string Name { get { return speciesName; } }
         public Color Color { get { return speciesColor; } }
         public float InitialAggressivityRate { get { return initialAggressivityRate; } }
+        public int InitialPopulationDensity { get { return initialPopulationByCell; } }
         public float InitialTechnologyLevelRate { get { return initialTechnologyLevelRate; } }
 
         public List<ISociety> Societies { get; private set; }

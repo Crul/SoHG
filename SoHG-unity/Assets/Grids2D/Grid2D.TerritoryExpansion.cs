@@ -1,5 +1,4 @@
-﻿using Sohg.GameAgg.Contracts;
-using Sohg.Grids2D.Contracts;
+﻿using Sohg.Grids2D.Contracts;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -8,7 +7,54 @@ namespace Grids2D
 {
     public partial class Grid2D
     {
-        public void ExpandSocietiesTerritories(int initialTerritorySizeLimit)
+        public void ContractSingleCell(ITerritory territory)
+        {
+            var abandonedCell = territory.FrontierCellIndices
+                .Select(cellIndex => cells[cellIndex])
+                .Where(cell => cell.CanBeInvaded && !cell.IsInvolvedInAttack)
+                .OrderBy(cellIndex => Random.Range(0f, 1f))
+                .FirstOrDefault();
+
+            if (abandonedCell == null)
+            {
+                return;
+            }
+
+            var nonSocietyNeighbour = CellGetNeighbours(abandonedCell)
+                .FirstOrDefault(neighbour => neighbour.IsNonSocietyTerritory);
+
+            var nonSocietyTerritory = (nonSocietyNeighbour == null
+                ? nonSocietyTerritories.First()
+                : territories[nonSocietyNeighbour.TerritoryIndex]);
+            
+            SetCellTerritory(abandonedCell, nonSocietyTerritory);
+
+            UpdateFrontiersAfterTerritoryChange(abandonedCell);
+
+            FixNonInvadableTerritories();
+
+            if (nonSocietyNeighbour == null)
+            {
+                FixDisconnectedTerritory(nonSocietyTerritory);
+            }
+            else
+            {
+                var nonSocietyNeighbourTerritories = CellGetNeighbours(abandonedCell)
+                    .Where(neighbourCell => neighbourCell.IsNonSocietyTerritory
+                        && neighbourCell.TerritoryIndex != nonSocietyNeighbour.TerritoryIndex)
+                    .Select(neighbourCell => territories[neighbourCell.TerritoryIndex])
+                    .Distinct();
+
+                nonSocietyNeighbourTerritories
+                    .SelectMany(neighbourTerritory => neighbourTerritory.cells)
+                    .ToList()
+                    .ForEach(cell => SetCellTerritory(cell, nonSocietyTerritory));
+            }
+
+            territoriesHaveChanged = true;
+        }
+
+        public void ExpandSocietiesTerritories(int initialSocietyPopulationLimit)
         {
             var unassignedSocietyCells = nonSocietyTerritories
                 .SelectMany(territory => ((Territory)territory).cells)
@@ -21,8 +67,8 @@ namespace Grids2D
             do
             {
                 expadedCellCount = societyTerritories
-                    .Where(territory => territory.CellCount < initialTerritorySizeLimit)
-                    .Sum(territory => ExpandTerritory(territory, unassignedSocietyCells, initialTerritorySizeLimit));
+                    .Where(territory => initialSocietyPopulationLimit > territory.CellCount * territory.Society.Species.InitialPopulationDensity)
+                    .Sum(territory => ExpandTerritory(territory, unassignedSocietyCells, (initialSocietyPopulationLimit / territory.Society.Species.InitialPopulationDensity)));
             }
             while (expadedCellCount > 0);
             
@@ -34,13 +80,13 @@ namespace Grids2D
             Redraw();
 
             cells.ToList().ForEach(cell => cell.CanBeInvaded = CanCellBeInvaded(cell));
-
+            
             FixNonInvadableTerritories();
         }
 
-        public bool ExpandSingleCell(ITerritory territoryToExpand)
+        public bool ExpandSingleCell(ITerritory territory)
         {
-            var fromCellIndexsList = territoryToExpand.FrontierCellIndices
+            var fromCellIndexsList = territory.FrontierCellIndices
                 .OrderBy(cellIndex => Random.Range(0f, 1f))
                 .ToList();
 
@@ -59,6 +105,9 @@ namespace Grids2D
                     var hasBeenInvaded = InvadeTerritory(from, target);
                     if (hasBeenInvaded)
                     {
+                        nonSocietyTerritories
+                            .ForEach(nonSocietyTerritory => FixDisconnectedTerritory(nonSocietyTerritory));
+
                         return true;
                     }
                 }
