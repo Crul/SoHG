@@ -17,11 +17,8 @@ namespace Sohg.GameAgg
                 var species = gameDefinition.NonPlayerSpecies[i % (nonPlayerSpeciesCount - 1)];
                 SohgFactory.CreateSociety(this, species);
             }
-
-            var initialTerritorySize = Convert.ToInt16(SohgFactory.Config.InitialSocietyPopulationLimit 
-                / SohgFactory.Config.InitialPopulationByCell);
-
-            Grid.ExpandSocietiesTerritories(initialTerritorySize);
+            
+            Grid.ExpandSocietiesTerritories(SohgFactory.Config.InitialSocietyPopulationLimit);
 
             Species.SelectMany(species => species.Societies).ToList()
                 .ForEach(society => society.Initialize());

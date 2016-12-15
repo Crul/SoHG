@@ -69,9 +69,16 @@ namespace Grids2D
         {
             CellSetTerritory(((Cell)cell).CellIndex, ((Territory)territory).TerritoryIndex);
             ((Territory)territory).cells.Add((Cell)cell);
-            if (territory.Society != null)
+            if (!cell.IsSea)
             {
-                cell.SetSocietyAssigned();
+                if (territory.Society != null)
+                {
+                    cell.SetSocietyAssigned();
+                }
+                else
+                {
+                    cell.SetSocietyUnassigned();
+                }
             }
         }
 

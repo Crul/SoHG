@@ -9,10 +9,11 @@ namespace Sohg.SocietyAgg
         private ISociety society;
         private ISohgConfig config;
         private float aggressivityRate;
-        private long resources;
+        private float resourcesConservationRate = 0.2f;
 
-        public float FriendshipRange { get; private set; }
-        public long PopulationAmount { get; private set; }
+        public long CivilizationLevel { get; private set; }
+        public long Population { get; private set; }
+        public long Resources { get; private set; }
         public float TechnologyLevelRate { get; private set; }
 
         public float FaithShrinkingRateBonus { get; set; }
@@ -20,17 +21,7 @@ namespace Sohg.SocietyAgg
 
         private long consume
         {
-            get { return Convert.ToInt64(PopulationAmount); }
-        }
-
-        private long production
-        {
-            get { return productionPerCell * territoryExtension; }
-        }
-
-        private long productionPerCell
-        {
-            get { return Convert.ToInt64(100 * Math.Pow(50000, 1.065 * TechnologyLevelRate)); }
+            get { return Population; }
         }
 
         private int territoryExtension { get { return society.Territory.CellCount; } }
@@ -44,15 +35,29 @@ namespace Sohg.SocietyAgg
         {
             get
             {
-                var expansionCapacity = Convert.ToInt32(Math.Floor(1.1f * PopulationDensity / productionPerCell));
-
-                return Math.Max(0, expansionCapacity);
+                var positiveExpansionFactor = 1.2f;
+                var expansionCapacity = 0;
+                if (positiveExpansionFactor * PopulationDensity > ProductionLimitPerCell)
+                {
+                    expansionCapacity = Convert.ToInt32(
+                        Math.Ceiling(positiveExpansionFactor * PopulationDensity / ProductionLimitPerCell));
+                }
+                else
+                {
+                    expansionCapacity = Math.Min(0, Convert.ToInt32(
+                        1 - (Math.Floor(1.4f * ProductionLimitPerCell / (1 + PopulationDensity)))));
+                }
+                
+                return expansionCapacity;
             }
         }
 
         public float PopulationDensity
         {
-            get { return PopulationAmount / System.Math.Max(1, society.Territory.CellCount); }
+            get
+            {
+                return (float)Population / (float)System.Math.Max(1, society.Territory.CellCount);
+            }
         }
 
         public float Power
@@ -62,46 +67,64 @@ namespace Sohg.SocietyAgg
                 return PowerBonus + System.Math.Max(1, 100 * PopulationDensity * aggressivityRate * TechnologyLevelRate);
             }
         }
-        
+
+        public long Production
+        {
+            get
+            {
+                return Convert.ToInt64(territoryExtension * ((99f * PopulationDensity) + (1f * ProductionLimitPerCell)) / 100);
+            }
+        }
+
+        public long ProductionLimitPerCell
+        {
+            get { return Convert.ToInt64(100 * Math.Pow(50000, 1.065 * TechnologyLevelRate)); }
+        }
+
         public SocietyState(ISohgConfig config, ISociety society)
         {
             this.config = config;
             this.society = society;
             aggressivityRate = society.Species.InitialAggressivityRate;
             TechnologyLevelRate = society.Species.InitialTechnologyLevelRate;
-            PopulationAmount = 0;
-            FriendshipRange = 0.5f;
+            CivilizationLevel = 0;
+            Population = 0;
+            Resources = 0;
         }
 
         public void Evolve()
         {
-            var resourcesGrowth = (production - consume);
-            resources += resourcesGrowth;
+            Resources = Convert.ToInt64(Resources * resourcesConservationRate);
+
+            var currentProduction = Production;
+            var currentConsume = consume;
+
+            var resourcesGrowth = (Production - consume);
+            Resources += resourcesGrowth;
 
             long populationGrowth;
-            if (resources < 0)
+            if (Resources < 0)
             {
-                populationGrowth = Convert.ToInt64(0.1 * resources);
-                resources = 0;
+                populationGrowth = Convert.ToInt64(0.5 * Resources);
+                Resources = 0;
             }
             else
             {
-                populationGrowth = Convert.ToInt64(0.002 * resources);
+                populationGrowth = Convert.ToInt64((1 + TechnologyLevelRate) * Resources);
             }
 
-            PopulationAmount += populationGrowth;
-            TechnologyLevelRate *= 1.001f;
+            Population += populationGrowth;
         }
 
         public void Kill(long deads)
         {
-            PopulationAmount -= deads;
+            Population -= deads;
         }
 
         public int GetFaithEmitted()
         {
             // TODO Society.State.GetFaithEmitted() configuration
-            var isFaithEmitted = UnityEngine.Random.Range(0f, 1f) > 0.1;
+            var isFaithEmitted = UnityEngine.Random.Range(0f, 1f) > 0.8;
             var faithEmitted = (isFaithEmitted ? UnityEngine.Random.Range(2, 10) : 0);
 
             return faithEmitted;
@@ -115,15 +138,15 @@ namespace Sohg.SocietyAgg
 
         public void SetInitialPopulation()
         {
-            PopulationAmount = territoryExtension * config.InitialPopulationByCell;
+            Population = territoryExtension * society.Species.InitialPopulationDensity;
         }
 
         public void Expanded()
         {
-            resources -= Convert.ToInt64(PopulationDensity * 3);
-            if (resources < 0)
+            Resources -= Convert.ToInt64(PopulationDensity / 2);
+            if (Resources < 0)
             {
-                resources = 0;
+                Resources = 0;
             }
         }
     }

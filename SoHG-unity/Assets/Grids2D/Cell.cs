@@ -53,5 +53,10 @@ namespace Grids2D
         {
             cellType = CellType.SocietyTerritory;
         }
+
+        public void SetSocietyUnassigned()
+        {
+            cellType = CellType.NonSocietyTerritory;
+        }
     }
 }

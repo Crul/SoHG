@@ -50,7 +50,7 @@ namespace Grids2D
             var territoryInvader = territories[from.TerritoryIndex];
             SetCellTerritory(target, territoryInvader);
 
-            UpdateFrontiersAfterTerritoryChange(from, target);
+            UpdateFrontiersAfterTerritoryChange(target, from);
 
             FixNonInvadableTerritories();
 
@@ -119,12 +119,19 @@ namespace Grids2D
             return true;
         }
 
-        private void UpdateFrontiersAfterTerritoryChange(ICell from, ICell target)
+        private void UpdateFrontiersAfterTerritoryChange(ICell target, ICell from = null)
         {
-            var affectedCells = CellGetNeighbours(from.CellIndex)
-                .Concat(CellGetNeighbours(target.CellIndex))
-                .Where(cell => cell.TerritoryIndex > 0)
-                .Distinct();
+            var neighbourCells = CellGetNeighbours(target.CellIndex);
+            if (from != null)
+            {
+                neighbourCells = neighbourCells.Concat(CellGetNeighbours(from.CellIndex)).ToList();
+            }
+            else
+            {
+                neighbourCells.Add((Cell)target);
+            }
+
+            var affectedCells = neighbourCells.Distinct();
 
             var affectedTerritories = affectedCells
                 .Where(cell => cell.IsSocietyTerritory)

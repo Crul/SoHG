@@ -35,7 +35,7 @@ namespace Grids2D
             Society = society;
 
             var societyColor = society.Color;
-            societyColor.a = 0.2f; // TODO configure territory.fillColor alpha
+            societyColor.a = 0.3f; // TODO configure territory.fillColor alpha
             fillColor = societyColor;
 
             cells.ForEach(cell => cell.SetSocietyAssigned());

@@ -45,8 +45,8 @@ namespace Grids2D
                 .Where(cellIndex => grid.CellGetNeighbours(cellIndex)
                     .Any(neighbour => neighbour.TerritoryIndex != TerritoryIndex))
                 .ToList();
-
-            myAffectedCellIndices
+            
+            affectedCellIndices
                 .Where(cellIndex => !myAffectedCellFrontierIndices.Contains(cellIndex))
                 .ToList()
                 .ForEach(cellIndex => FrontierCellIndices.Remove(cellIndex));
@@ -77,12 +77,15 @@ namespace Grids2D
         private void RemoveFrontierCells(Territory affectedTerritory, List<int> affectedCellIndices)
         {
             var territoryIndex = affectedTerritory.TerritoryIndex;
-            var territoryFrontierCellIndices = FrontierCellIndicesByTerritoryIndex[territoryIndex];
 
-            territoryFrontierCellIndices
-                .Where(cellIndex => affectedCellIndices.Contains(cellIndex))
-                .ToList()
-                .ForEach(cellIndex => territoryFrontierCellIndices.Remove(cellIndex));
+            FrontierCellIndicesByTerritoryIndex.Values.ToList()
+                .ForEach(territoryFrontierCellIndices => 
+                {
+                    territoryFrontierCellIndices
+                        .Where(cellIndex => affectedCellIndices.Contains(cellIndex))
+                        .ToList()
+                        .ForEach(cellIndex => territoryFrontierCellIndices.Remove(cellIndex));
+                });
         }
     }
 }

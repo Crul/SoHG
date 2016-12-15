@@ -11,8 +11,9 @@ namespace Sohg.SocietyAgg.Actions
     {
         [SerializeField]
         private float plagueKillRate;
-
-        private int plagueWaveCount = 10;// TODO move SendPlague.plagueWaveCount to config?
+        [SerializeField]
+        private int plagueWaveCount;
+        
         private int secondsForRespawn = 3; // TODO move SendPlague.secondsForRespawn to config?
 
         public override bool IsActionEnabled(ISociety society)
@@ -36,7 +37,7 @@ namespace Sohg.SocietyAgg.Actions
             for (var i = 0; i < plagueWaveCount; i++)
             {
                 var plagueDeads = Convert
-                    .ToInt64(society.State.PopulationAmount * plagueKillRate) / plagueWaveCount;
+                    .ToInt64(society.State.Population * plagueKillRate);
 
                 society.State.Kill(plagueDeads);
                 yield return new WaitForFixedUpdate();

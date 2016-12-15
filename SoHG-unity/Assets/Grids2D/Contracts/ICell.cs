@@ -15,5 +15,6 @@ namespace Sohg.Grids2D.Contracts
 
         void Initialize(int cellIndex, Vector3 worldPosition);
         void SetSocietyAssigned();
+        void SetSocietyUnassigned();
     }
 }

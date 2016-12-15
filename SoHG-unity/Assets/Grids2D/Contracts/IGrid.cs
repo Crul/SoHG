@@ -16,7 +16,8 @@ namespace Sohg.Grids2D.Contracts
         ICell GetRandomCell(Func<ICell, bool> cellFilter);
         ITerritory GetTerritory(ICell cell);
 
-        void ExpandSocietiesTerritories(int initialTerritorySizeLimit);
+        void ContractSingleCell(ITerritory territory);
+        void ExpandSocietiesTerritories(int initialSocietyPopulationLimit);
         bool ExpandSingleCell(ITerritory territory);
         void InitializeBoard(ISohgFactory sohgFactory);
         bool InvadeTerritory(ICell from, ICell target);

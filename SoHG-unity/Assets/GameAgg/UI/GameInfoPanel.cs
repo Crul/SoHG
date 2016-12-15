@@ -37,7 +37,7 @@ namespace Sohg.GameAgg.UI
         public void Awake()
         {
             outputText.text = string.Empty;
-            Enumerable.Range(0, outputTextLines).ToList().ForEach(
+            Enumerable.Range(0, outputTextLines - 1).ToList().ForEach(
                 i => outputText.text += Environment.NewLine);
 
             pauseButton.onClick.AddListener(() => PausedPanel.ShowPause());

@@ -52,9 +52,9 @@ namespace Sohg.GameAgg.UI
             displayingYear += GetYearIncrement();
             yearInfo.SetValue(displayingYear.ToString("### ### ### ### ### ##0")); // TODO number format
 
-            var populationAmount = game.PlayerSpecies.Societies.Sum(society => society.State.PopulationAmount);
+            var population = game.PlayerSpecies.Societies.Sum(society => society.State.Population);
             populationInfo
-                .SetValue(populationAmount.ToString("### ### ### ### ### ##0")); // TODO number format
+                .SetValue(population.ToString("### ### ### ### ### ##0")); // TODO number format
 
             faithPowerInfo
                 .SetValue(game.PlayerSpecies.FaithPower.ToString("### ### ### ### ### ##0")); // TODO number format
