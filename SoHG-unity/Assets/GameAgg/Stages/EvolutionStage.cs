@@ -50,28 +50,15 @@ namespace Sohg.GameAgg.Stages
         public override void FixedUpdate()
         {
             time++;
-
-            // TODO fix time for full cycle
+            
             if (!game.IsPaused() && (time % game.SohgFactory.Config.EvolutionActionsTimeInterval == 0))
             {
-                currentSocietyIndex++;
-                if (currentSocietyIndex >= game.Societies.Count)
-                {
-                    currentSocietyIndex = 0;
-                }
+                game.Societies.ForEach(society =>
+                    Features.ToList().ForEach(feature => feature.Run(game, society)));
 
-                if (currentSocietyIndex == 0)
-                {
-                    game.Year += (timeForOneYearStep) / (game.Year + timeDecelerationAmortiguation);
-                }
+                game.Year += (timeForOneYearStep) / (game.Year + timeDecelerationAmortiguation);
 
-                var society = game.Societies[currentSocietyIndex];
-                Features.ToList().ForEach(feature => feature.Run(game, society));
                 CheckWinOrLoose();
-            }
-            else
-            {
-                GC.Collect();
             }
         }
 
