@@ -8,6 +8,7 @@ namespace Sohg.SocietyAgg.UI
     public class Fight : PooledObject, IFight
     {
         private int time;
+        private IRelationship relationship;
         private ICell from;
         private ICell target;
         private System.Action resolveAttack;
@@ -22,17 +23,18 @@ namespace Sohg.SocietyAgg.UI
             if (time > 0)
             {
                 time--;
-                CheckTime();
+                CheckResult();
             }
         }
 
         public void Update()
         {
-            CheckTime();
+            CheckResult();
         }
 
-        public void Initialize(ICell from, ICell target, int time, System.Action resolveAttack)
+        public void Initialize(IRelationship relationship, ICell from, ICell target, int time, System.Action resolveAttack)
         {
+            this.relationship = relationship;
             this.from = from;
             this.target = target;
             this.time = time;
@@ -46,14 +48,23 @@ namespace Sohg.SocietyAgg.UI
             ); ;
         }
 
-        private void CheckTime()
+        private void CheckResult()
         {
-            if (time == 0 && resolveAttack != null)
+            if (relationship.We.IsDead || relationship.Them.IsDead)
+            {
+                FinishFight();
+            }
+            else if (time == 0 && resolveAttack != null)
             {
                 resolveAttack();
-                resolveAttack = null;
-                ReturnToPool();
+                FinishFight();
             }
+        }
+
+        private void FinishFight()
+        {
+            resolveAttack = null;
+            ReturnToPool();
         }
     }
 }
