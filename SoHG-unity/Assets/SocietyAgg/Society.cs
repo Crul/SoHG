@@ -25,6 +25,7 @@ namespace Sohg.SocietyAgg
         
         public Dictionary<ISocietyAction, bool> IsEffectActive { get; private set; }
 
+        public bool IsDead { get { return State.Population == 0 || Territory.CellCount == 0; } }
         public IEnumerable<ISocietyAction> Actions { get { return actions; } }
         public IEnumerable<IRelationship> Relationships { get { return relationships; } }
         public IEnumerable<ISkill> Skills { get { return skills; } }

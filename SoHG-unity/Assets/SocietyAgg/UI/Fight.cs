@@ -7,53 +7,74 @@ namespace Sohg.SocietyAgg.UI
 {
     public class Fight : PooledObject, IFight
     {
+        private int duration;
         private int time;
+        private IRelationship relationship;
         private ICell from;
         private ICell target;
         private System.Action resolveAttack;
 
         public void Awake()
         {
-            time = 10 + Random.Range(0, 6);
+            time = 0;
         }
 
         public void FixedUpdate()
         {
-            if (time > 0)
+            if (time < duration)
             {
-                time--;
-                CheckTime();
+                time++;
+                CheckResult();
             }
         }
 
         public void Update()
         {
-            CheckTime();
+            transform.position = GetPosition();
+            CheckResult();
         }
 
-        public void Initialize(ICell from, ICell target, int time, System.Action resolveAttack)
+        public void Initialize(IRelationship relationship, ICell from, ICell target, int duration, System.Action resolveAttack)
         {
+            this.relationship = relationship;
             this.from = from;
             this.target = target;
-            this.time = time;
+            this.duration = duration;
             this.resolveAttack = resolveAttack;
-            
-            transform.position = new Vector3
-            (
-                (from.WorldPosition.x + target.WorldPosition.x) / 2,
-                (from.WorldPosition.y + target.WorldPosition.y) / 2,
-                -10
-            ); ;
+            time = 0;
+
+            transform.position = GetPosition();
         }
 
-        private void CheckTime()
+        private Vector3 GetPosition()
         {
-            if (time == 0 && resolveAttack != null)
+            var progress = ((float)time / duration);
+
+            return new Vector3
+            (
+                ((1 - progress) * from.WorldPosition.x) + (progress * target.WorldPosition.x),
+                ((1 - progress) * from.WorldPosition.y) + (progress * target.WorldPosition.y),
+                -10
+            );
+        }
+
+        private void CheckResult()
+        {
+            if (relationship.We.IsDead || relationship.Them.IsDead)
+            {
+                FinishFight();
+            }
+            else if (time >= duration && resolveAttack != null)
             {
                 resolveAttack();
-                resolveAttack = null;
-                ReturnToPool();
+                FinishFight();
             }
+        }
+
+        private void FinishFight()
+        {
+            resolveAttack = null;
+            ReturnToPool();
         }
     }
 }

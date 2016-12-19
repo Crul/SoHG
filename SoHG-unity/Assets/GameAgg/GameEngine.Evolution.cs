@@ -8,13 +8,12 @@ namespace Sohg.GameAgg
     public partial class GameEngine : IEvolvableGame
     {
         private bool? hasPlayerWon;
-
-
+        
         public void ShrinkSociety(ISociety society)
         {
             Grid.ContractSingleCell(society.Territory);
 
-            if (society.Territory.CellCount == 0)
+            if (society.IsDead)
             {
                 KillSociety(society);
             }
@@ -38,7 +37,7 @@ namespace Sohg.GameAgg
                 var invadedName = (invadedTerritory.Society != null ? invadedTerritory.Society.Name : "NONE");
                 UnityEngine.Debug.Log(string.Format("{0} has invaded {1}", invasorName, invadedName));
 
-                if (invadedTerritory.CellCount == 0)
+                if (invadedTerritory.Society.IsDead)
                 {
                     KillSociety(invadedTerritory.Society);
                 }
@@ -47,7 +46,7 @@ namespace Sohg.GameAgg
             return hasBeenInvaded;
         }
 
-        private void KillSociety(ISociety deathSociety)
+        public void KillSociety(ISociety deathSociety)
         {
             Societies.Remove(deathSociety);
             Species.SelectMany(species => species.Societies)

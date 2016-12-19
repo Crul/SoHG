@@ -11,6 +11,11 @@ namespace Sohg.GameAgg.Features
         {
             society.Species.Evolve(game);
             society.State.Evolve();
+
+            if (society.IsDead)
+            {
+                game.KillSociety(society);
+            }
         }
     }
 }

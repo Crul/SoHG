@@ -44,10 +44,10 @@ namespace Sohg.CrossCutting.Factories
             return faithRecolectable;
         }
 
-        public IFight CreateFight(ICell from, ICell target, Action resolveAttack)
+        public IFight CreateFight(IRelationship relationship, ICell from, ICell target, Action resolveAttack)
         {
             var fight = prefabFactory.InstantiateFight(boardOverCanvas, "Fight");
-            fight.Initialize(from, target, Config.FightDuration, resolveAttack);
+            fight.Initialize(relationship, from, target, Config.FightDuration, resolveAttack);
 
             return fight;
         }

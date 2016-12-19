@@ -5,6 +5,6 @@ namespace Sohg.SocietyAgg.Contracts
 {
     public interface IFight
     {
-        void Initialize(ICell from, ICell target, int time, Action resolveAttack);
+        void Initialize(IRelationship relationship, ICell from, ICell target, int duration, Action resolveAttack);
     }
 }

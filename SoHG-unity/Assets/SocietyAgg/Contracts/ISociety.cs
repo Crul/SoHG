@@ -13,6 +13,7 @@ namespace Sohg.SocietyAgg.Contracts
         ITerritory Territory { get; }
         Color Color { get; }
         
+        bool IsDead { get; }
         Dictionary<ISocietyAction, bool> IsEffectActive { get; }
         IEnumerable<ISocietyAction> Actions { get; }
         IEnumerable<IRelationship> Relationships { get; }
