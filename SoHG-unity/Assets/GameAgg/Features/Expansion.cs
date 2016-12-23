@@ -25,7 +25,7 @@ namespace Sohg.GameAgg.Features
             {
                 Enumerable.Range(0, System.Math.Abs(expansion))
                     .ToList()
-                    .ForEach(i => game.ShrinkSociety(society));
+                    .ForEach(i => game.Shrink(society));
             }
         }
 

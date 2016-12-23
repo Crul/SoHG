@@ -8,16 +8,6 @@ namespace Sohg.GameAgg
     public partial class GameEngine : IEvolvableGame
     {
         private bool? hasPlayerWon;
-        
-        public void ShrinkSociety(ISociety society)
-        {
-            Grid.ContractSingleCell(society.Territory);
-
-            if (society.IsDead)
-            {
-                KillSociety(society);
-            }
-        }
 
         public void FinishEvolution(bool hasPlayerWon)
         {
@@ -39,14 +29,14 @@ namespace Sohg.GameAgg
 
                 if (invadedTerritory.Society.IsDead)
                 {
-                    KillSociety(invadedTerritory.Society);
+                    Kill(invadedTerritory.Society);
                 }
             }
 
             return hasBeenInvaded;
         }
 
-        public void KillSociety(ISociety deathSociety)
+        public void Kill(ISociety deathSociety)
         {
             Societies.Remove(deathSociety);
             Species.SelectMany(species => species.Societies)
@@ -61,6 +51,16 @@ namespace Sohg.GameAgg
             {
                 Species.Remove(deathSociety.Species);
                 Log("{0} is now extinct", deathSociety.Species.Name);
+            }
+        }
+
+        public void Shrink(ISociety society)
+        {
+            Grid.ContractSingleCell(society.Territory);
+
+            if (society.IsDead)
+            {
+                Kill(society);
             }
         }
     }
