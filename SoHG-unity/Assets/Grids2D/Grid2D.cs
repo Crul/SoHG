@@ -82,16 +82,15 @@ namespace Grids2D
             }
         }
 
-        private void SetMask(string maskPath)
+        private void SetMask(Texture2D mask)
         {
-            gridMask = Resources.Load<Texture2D>(maskPath);
+            gridMask = mask;
         }
 
-        private void SetTexture(string texturePath)
+        private void SetTexture(Texture2D texture)
         {
-            var textureResource = Resources.Load<Texture2D>(texturePath);
             var material = GetComponent<Renderer>().materials[0];
-            material.mainTexture = textureResource;
+            material.mainTexture = texture;
             material.color = new Color(1, 1, 1);
         }
     }

@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using Sohg.GameAgg.Contracts;
 
 namespace Grids2D
 {
@@ -20,7 +21,7 @@ namespace Grids2D
                 territoryIndex => onTerritoryClick(territories[territoryIndex]);
         }
 
-        public void InitializeBoard(ISohgFactory sohgFactory)
+        public void InitializeBoard(ISohgFactory sohgFactory, IGameDefinition gameDefinition)
         {
             this.sohgFactory = sohgFactory;
 
@@ -29,9 +30,7 @@ namespace Grids2D
                 territories.Clear();
             }
 
-            SetGridProperties();
-            SetTexture("Textures/worldMap");
-            SetMask("Textures/worldMask");
+            SetGridProperties(gameDefinition);
 
             Enumerable.Range(0, cells.Count).ToList()
                 .ForEach(cellIndex => InitializeCell(cellIndex));
@@ -67,21 +66,23 @@ namespace Grids2D
             cells[cellIndex].Initialize(cellIndex, cellWorldPosition);
         }
 
-        private void SetGridProperties()
+        private void SetGridProperties(IGameDefinition gameDefinition)
         {
             gridTopology = GRID_TOPOLOGY.Hexagonal;
             SetGridSelectionToNone();
-
-            // TODO configure in MapSettings:
+            
             numTerritories = 1;
-            columnCount = 36;
-            rowCount = 24;
+            columnCount = gameDefinition.BoardColumns;
+            rowCount = gameDefinition.BoardRows;
             showTerritories = true;
             colorizeTerritories = true;
             allowTerritoriesInsideTerritories = true;
             territoryHighlightColor = new Color(1, 1, 1, 0.3f);
             cellBorderColor = new Color(0, 0, 0, 0.1f);
             territoryFrontiersColor = new Color(0, 0, 0, 0.3f);
+
+            SetTexture(gameDefinition.BoardBackground);
+            SetMask(gameDefinition.BoardMask);
         }
     }
 }

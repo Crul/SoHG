@@ -1,4 +1,5 @@
 ﻿using Sohg.CrossCutting.Contracts;
+using Sohg.GameAgg.Contracts;
 using System;
 using System.Collections.Generic;
 
@@ -20,7 +21,7 @@ namespace Sohg.Grids2D.Contracts
         void ContractSingleCell(ITerritory territory);
         void ExpandSocietiesTerritories(int initialSocietyPopulationLimit);
         bool ExpandSingleCell(ITerritory territory);
-        void InitializeBoard(ISohgFactory sohgFactory);
+        void InitializeBoard(ISohgFactory sohgFactory, IGameDefinition gameDefinition);
         bool InvadeTerritory(ICell from, ICell target);
         void OnTerritorySplit(ITerritory territory1, ITerritory territory2);
         void RedrawIfChanged();

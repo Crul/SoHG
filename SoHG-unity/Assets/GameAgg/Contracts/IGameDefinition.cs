@@ -1,6 +1,7 @@
 ﻿using Sohg.TechnologyAgg.Contracts;
 using Sohg.SocietyAgg.Contracts;
 using Sohg.SpeciesAgg.Contracts;
+using UnityEngine;
 
 namespace Sohg.GameAgg.Contracts
 {
@@ -10,14 +11,18 @@ namespace Sohg.GameAgg.Contracts
         IGameStage[] Stages { get; }
         ITechnologyCategory[] TechnologyCategories { get; }
 
+        int BoardColumns { get; }
+        int BoardRows { get; }
+        Texture2D BoardBackground { get; }
+        Texture2D BoardMask { get; }
+
         ISpecies PlayerSpecies { get; }
         ISpecies[] NonPlayerSpecies { get; }
         int NonPlayerSocietyCount { get; }
+        int InitialSocietyPopulationLimit { get; }
         ISkill[] Skills { get; }
         ISocietyAction[] SocietyActions { get; }
-
-        int InitialSocietyPopulationLimit { get; }
-
+        
         int EvolutionActionsTimeInterval { get; }
 
         float AttackDamageTieRateThreshold { get; }
