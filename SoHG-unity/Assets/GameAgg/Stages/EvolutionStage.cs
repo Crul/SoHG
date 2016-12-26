@@ -1,6 +1,4 @@
-﻿using Sohg.GameAgg.Features;
-using Sohg.GameAgg.Contracts;
-using System;
+﻿using Sohg.GameAgg.Contracts;
 using System.Linq;
 using UnityEngine;
 using Sohg.Grids2D.Contracts;
@@ -12,11 +10,6 @@ namespace Sohg.GameAgg.Stages
     {
         private int time;
         private int currentSocietyIndex;
-
-        [SerializeField]
-        private GameFeature[] features;
-
-        private IGameFeature[] Features {get { return features; } }
 
         private int timeForOneYearStep = 2000000;
         private int timeDecelerationAmortiguation = 1000;
@@ -51,10 +44,10 @@ namespace Sohg.GameAgg.Stages
         {
             time++;
             
-            if (!game.IsPaused() && (time % game.SohgFactory.Config.EvolutionActionsTimeInterval == 0))
+            if (!game.IsPaused() && (time % game.GameDefinition.EvolutionActionsTimeInterval == 0))
             {
                 game.Societies.ForEach(society =>
-                    Features.ToList().ForEach(feature =>
+                    game.GameDefinition.Features.ToList().ForEach(feature =>
                     {
                         if (!society.IsDead)
                         {

@@ -1,4 +1,4 @@
-﻿using Sohg.CrossCutting.Contracts;
+﻿using Sohg.GameAgg.Contracts;
 using System.Collections.Generic;
 
 namespace Sohg.SocietyAgg.Contracts
@@ -11,6 +11,6 @@ namespace Sohg.SocietyAgg.Contracts
         float FriendshipRange { get; }
 
         bool AreWeNeighbours();
-        bool WillingToAttack(ISohgConfig config);
+        bool WillingToAttack(IGameDefinition gameDefinition);
     }
 }

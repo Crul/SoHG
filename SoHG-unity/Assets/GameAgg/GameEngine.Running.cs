@@ -2,6 +2,8 @@
 using Sohg.SocietyAgg.Contracts;
 using System.Collections;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Sohg.GameAgg
 {
@@ -28,12 +30,12 @@ namespace Sohg.GameAgg
         public void NextStage()
         {
             currentStageIndex++;
-            if (currentStageIndex >= gameDefinition.Stages.Length)
+            if (currentStageIndex >= GameDefinition.Stages.Length)
             {
                 throw new System.Exception("GameEngine.NextStage() - Not enough stages");
             }
 
-            currentStage = gameDefinition.Stages[currentStageIndex];
+            currentStage = GameDefinition.Stages[currentStageIndex];
             currentStage.SetGame(this);
             currentStage.Start();
         }

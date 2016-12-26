@@ -2,6 +2,7 @@
 using Sohg.CrossCutting.Contracts;
 using Sohg.SocietyAgg.Contracts;
 using UnityEngine;
+using Sohg.GameAgg.Contracts;
 
 namespace Sohg.SocietyAgg
 {
@@ -36,18 +37,18 @@ namespace Sohg.SocietyAgg
                 && We.Territory.FrontierCellIndicesByTerritoryIndex[theirTerritoryIndex].Count > 0;
         }
 
-        public bool WillingToAttack(ISohgConfig config)
+        public bool WillingToAttack(IGameDefinition gameDefinition)
         {
             var friendshipThreshold = (Random.Range(0f, 1f) // TODO configure willing to attack
-                * config.FriendshipRangeBottomThresholdForAttack
+                * gameDefinition.FriendshipRangeBottomThresholdForAttack
                 * (We.Species == Them.Species ? 0.1 : 1));
 
-            return (FriendshipRange < friendshipThreshold) && ShouldWeAttack(config);
+            return (FriendshipRange < friendshipThreshold) && ShouldWeAttack(gameDefinition);
         }
 
-        private bool ShouldWeAttack(ISohgConfig config)
+        private bool ShouldWeAttack(IGameDefinition gameDefinition)
         {
-            return ((1 + We.State.Power) / 1 + Them.State.Power) > config.PowerBalanceThresholdForAttack;
+            return ((1 + We.State.Power) / 1 + Them.State.Power) > gameDefinition.PowerBalanceThresholdForAttack;
         }
     }
 }

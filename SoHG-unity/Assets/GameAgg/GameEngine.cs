@@ -27,11 +27,11 @@ namespace Sohg.GameAgg
         [SerializeField]
         private SohgFactory sohgFactory;
 
-        private IGameDefinition gameDefinition;
         private IEndGame endGame;
         private IInstructions instructions;
         private ISocietyInfo societyInfo;
 
+        public IGameDefinition GameDefinition { get; private set; }
         public IGrid Grid { get; private set; }
         public ISpecies PlayerSpecies { get; private set; }
         public List<ISpecies> Species { get; private set; }
@@ -45,7 +45,7 @@ namespace Sohg.GameAgg
         {
             SohgFactory.SetCanvas(boardCanvas, boardOverCanvas, fixedOverCanvas);
             
-            gameDefinition = SohgFactory.GameDefinition;
+            GameDefinition = SohgFactory.GameDefinition;
 
             // TODO remove single-instance-using unity prefabs from prefabFactory
             endGame = SohgFactory.CreateEndGame();
@@ -57,32 +57,32 @@ namespace Sohg.GameAgg
             Grid.AddOnTerritoryClick(territory => OnGridTerritoryClick(territory));
 
             gameInfoPanel.GameStatusInfo.SetGame(this);
-            gameInfoPanel.TechnologyPanel.Initialize(this, gameDefinition.TechnologyCategories.ToList());
+            gameInfoPanel.TechnologyPanel.Initialize(this, GameDefinition.TechnologyCategories.ToList());
 
-            PlayerSpecies = gameDefinition.PlayerSpecies;
+            PlayerSpecies = GameDefinition.PlayerSpecies;
         }
 
         public void ResetGame()
         {
             hasPlayerWon = null;
 
-            var nonPlayerSpeciesCount = Math.Min(SohgFactory.Config.NonPlayerSocietyCount, gameDefinition.NonPlayerSpecies.Length);
-            Species = gameDefinition.NonPlayerSpecies.Take(nonPlayerSpeciesCount).ToList();
+            var nonPlayerSpeciesCount = Math.Min(GameDefinition.NonPlayerSocietyCount, GameDefinition.NonPlayerSpecies.Length);
+            Species = GameDefinition.NonPlayerSpecies.Take(nonPlayerSpeciesCount).ToList();
             Species.Add(PlayerSpecies);
 
             Species.ForEach(species => species.Reset());
 
             Societies = new List<ISociety>();
 
-            gameDefinition.TechnologyCategories
+            GameDefinition.TechnologyCategories
                 .SelectMany(technologyCategory => technologyCategory.Technologies)
                 .ToList()
                 .ForEach(technology => technology.Reset());
 
-            gameDefinition.SocietyActions.ToList()
+            GameDefinition.SocietyActions.ToList()
                 .ForEach(action => action.Initialize(this));
 
-            gameDefinition.Skills.ToList()
+            GameDefinition.Skills.ToList()
                 .ForEach(skill => skill.Initialize(this));
 
             Year = 0;

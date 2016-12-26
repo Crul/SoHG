@@ -34,7 +34,7 @@ namespace Sohg.GameAgg.Features
 
             society.Relationships
                 .Where(relationship => relationship.AreWeNeighbours()
-                                    && relationship.WillingToAttack(game.SohgFactory.Config))
+                                    && relationship.WillingToAttack(game.GameDefinition))
                 .SelectMany(relationship => relationship.MyFrontierCellIndices
                     .Select(cellIndex => new
                     {
@@ -81,7 +81,7 @@ namespace Sohg.GameAgg.Features
             target.IsInvolvedInAttack = true;
 
             game.SohgFactory
-                .CreateFight(relationship, from, target, () => ResolveAttack(game, relationship, from, target));
+                .CreateFight(game, relationship, from, target, () => ResolveAttack(game, relationship, from, target));
 
             return true;
         }
@@ -93,7 +93,7 @@ namespace Sohg.GameAgg.Features
             var them = relationship.Them;
             
             var damageRate = (float)System.Math.Pow(we.State.Power / them.State.Power, 10);
-            var result = GetResult(damageRate, game.SohgFactory.Config);
+            var result = GetResult(damageRate, game.GameDefinition);
             
             var ourDeads = GetDeads(we, 1 / damageRate);
             var thriDeads = GetDeads(them, damageRate);
@@ -134,11 +134,11 @@ namespace Sohg.GameAgg.Features
                 (society.State.PopulationDensity * damageRate / (5 + damageRate));
         }
 
-        private AttackResult GetResult(float damageRate, ISohgConfig config)
+        private AttackResult GetResult(float damageRate, IGameDefinition gameDefinition)
         {
             var result = damageRate * Random.Range(0.8f, 1.2f);
 
-            if (System.Math.Abs(result - 1) < config.AttackDamageTieRateThreshold)
+            if (System.Math.Abs(result - 1) < gameDefinition.AttackDamageTieRateThreshold)
                 return AttackResult.Tie;
 
             if (result > 1)
