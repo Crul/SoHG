@@ -9,6 +9,7 @@ namespace Sohg.SpeciesAgg.Contracts
     {
         string Name { get; }
         Color Color { get; }
+        string NextSocietyName { get; }
         List<ISociety> Societies { get; }
 
         float InitialAggressivityRate { get; }

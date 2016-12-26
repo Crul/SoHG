@@ -12,6 +12,7 @@ namespace Sohg.SocietyAgg.UI
         Power,
         Production,
         Resources,
+        SpeciesName,
         Technology
     };
 
@@ -48,6 +49,7 @@ namespace Sohg.SocietyAgg.UI
                 case SocietyProperty.Power: return "Power";
                 case SocietyProperty.Production: return "Production";
                 case SocietyProperty.Resources: return "Resources";
+                case SocietyProperty.SpeciesName: return "Species";
                 case SocietyProperty.Technology: return "Technology";
             }
 
@@ -72,6 +74,9 @@ namespace Sohg.SocietyAgg.UI
 
                 case SocietyProperty.Resources:
                     return society.State.Resources.ToString("### ### ##0"); // TODO number format
+
+                case SocietyProperty.SpeciesName:
+                    return society.Species.Name;
 
                 case SocietyProperty.Technology:
                     return society.State.TechnologyLevelRate.ToString("##.# %"); // TODO number format
