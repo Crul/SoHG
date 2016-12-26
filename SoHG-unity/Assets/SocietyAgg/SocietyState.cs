@@ -1,4 +1,4 @@
-﻿using Sohg.CrossCutting.Contracts;
+﻿using Sohg.GameAgg.Contracts;
 using Sohg.SocietyAgg.Contracts;
 using System;
 
@@ -7,7 +7,6 @@ namespace Sohg.SocietyAgg
     public class SocietyState : ISocietyState
     {
         private ISociety society;
-        private ISohgConfig config;
         private float aggressivityRate;
         private float resourcesConservationRate = 0.2f;
         private int minCellToSplit = 30;
@@ -96,9 +95,8 @@ namespace Sohg.SocietyAgg
             }
         }
         
-        public SocietyState(ISohgConfig config, ISociety society)
+        public SocietyState(ISociety society)
         {
-            this.config = config;
             this.society = society;
             aggressivityRate = society.Species.InitialAggressivityRate;
             TechnologyLevelRate = society.Species.InitialTechnologyLevelRate;

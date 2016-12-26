@@ -1,41 +1,32 @@
 ﻿using Sohg.CrossCutting;
 using Sohg.GameAgg.Contracts;
 using Sohg.GameAgg.Stages;
-using Sohg.SocietyAgg.Contracts;
 using UnityEngine;
-using Sohg.SocietyAgg.Actions;
 using Sohg.TechnologyAgg;
 using Sohg.TechnologyAgg.Contracts;
-using Sohg.SpeciesAgg;
-using Sohg.SpeciesAgg.Contracts;
-using Sohg.SocietyAgg;
+using Sohg.GameAgg.Features;
 
 namespace Sohg.GameAgg
 {
     [CreateAssetMenu(fileName = "GameDefinition", menuName = "SoHG/Game Definition")]
-    public class GameDefinition : ScriptableBaseObject, IGameDefinition
+    public partial class GameDefinition : ScriptableBaseObject, IGameDefinition
     {
+        [Header("Game")]
+        [SerializeField]
+        private GameFeature[] features;
         [SerializeField]
         private GameStage[] stages;
         [SerializeField]
         private TechnologyCategory[] technologyCategories;
-
-        [Header("Society")]
+        
+        [Header("Evolution")]
         [SerializeField]
-        private Species playerSpecies;
-        [SerializeField]
-        private Species[] nonPlayerSpecies;
-        [Space]
-        [SerializeField]
-        private Skill[] skills;
-        [SerializeField]
-        private SocietyAction[] societyActions;
-
+        private int evolutionActionsTimeInterval;
+        
+        public IGameFeature[] Features { get { return features; } }
         public IGameStage[] Stages { get { return stages; } }
         public ITechnologyCategory[] TechnologyCategories { get { return technologyCategories; } }
-        public ISpecies PlayerSpecies { get { return playerSpecies; } }
-        public ISpecies[] NonPlayerSpecies { get { return nonPlayerSpecies; } }
-        public ISkill[] Skills { get { return skills; } }
-        public ISocietyAction[] SocietyActions { get { return societyActions; } }
+
+        public int EvolutionActionsTimeInterval { get { return evolutionActionsTimeInterval; } }
     }
 }

@@ -11,12 +11,11 @@ namespace Sohg.CrossCutting.Contracts
 {
     public interface ISohgFactory
     {
-        ISohgConfig Config { get; }
         IGameDefinition GameDefinition { get; }
 
         IEndGame CreateEndGame();
         IFaithRecolectable CreateFaith(ISociety society, ICell faithCell, int faithAmount);
-        IFight CreateFight(IRelationship relationship, ICell from, ICell target, Action resolveAttack);
+        IFight CreateFight(IRunningGame game, IRelationship relationship, ICell from, ICell target, Action resolveAttack);
         IGrid CreateGrid();
         IInstructions CreateInstructions();
         IRelationship CreateRelationship(ISociety we, ISociety them, IRelationship originRelationship = null);

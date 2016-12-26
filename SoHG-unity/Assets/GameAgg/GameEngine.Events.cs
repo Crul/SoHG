@@ -10,7 +10,7 @@ namespace Sohg.GameAgg
 
         public void Start()
         {
-            Grid.InitializeBoard(SohgFactory);
+            Grid.InitializeBoard(SohgFactory, GameDefinition);
             currentStageIndex = -1;
             NextStage();
         }

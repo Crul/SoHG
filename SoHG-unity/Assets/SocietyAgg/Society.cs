@@ -16,9 +16,7 @@ namespace Sohg.SocietyAgg
         private List<ISkill> skills;
         private ISohgFactory sohgFactory;
         private ISociety originSociety;
-
-        private ISohgConfig config { get { return sohgFactory.Config; } }
-
+        
         public string Name { get; private set; }
         public Color Color { get; private set; }
         public ISpecies Species { get; private set; }
@@ -43,7 +41,7 @@ namespace Sohg.SocietyAgg
             Color = species.Color;
             this.sohgFactory = sohgFactory;
             Species = species;
-            State = new SocietyState(sohgFactory.Config, this);
+            State = new SocietyState(this);
             Territory = territory;
         }
 

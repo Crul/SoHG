@@ -20,15 +20,12 @@ namespace Sohg.CrossCutting.Factories
         [SerializeField]
         private PrefabFactory prefabFactory;
         [SerializeField]
-        private SohgConfig sohgConfig;
-        [SerializeField]
         private GameDefinition gameDefinition;
 
         private Canvas boardCanvas;
         private Canvas boardOverCanvas;
         private Canvas fixedOverCanvas;
-
-        public ISohgConfig Config { get { return sohgConfig; } }
+        
         public IGameDefinition GameDefinition { get { return gameDefinition; } }
 
         public IEndGame CreateEndGame()
@@ -44,10 +41,10 @@ namespace Sohg.CrossCutting.Factories
             return faithRecolectable;
         }
 
-        public IFight CreateFight(IRelationship relationship, ICell from, ICell target, Action resolveAttack)
+        public IFight CreateFight(IRunningGame game, IRelationship relationship, ICell from, ICell target, Action resolveAttack)
         {
             var fight = prefabFactory.InstantiateFight(boardOverCanvas, "Fight");
-            fight.Initialize(relationship, from, target, Config.FightDuration, resolveAttack);
+            fight.Initialize(relationship, from, target, game.GameDefinition.FightDuration, resolveAttack);
 
             return fight;
         }

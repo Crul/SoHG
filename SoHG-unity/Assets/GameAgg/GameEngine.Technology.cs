@@ -7,7 +7,7 @@ namespace Sohg.GameAgg
     {
         public bool CheckDependentTechnologies(ITechnologyDependent technologyDependent)
         {
-            var activeTechnologies = gameDefinition.TechnologyCategories.SelectMany
+            var activeTechnologies = GameDefinition.TechnologyCategories.SelectMany
                 (
                     technologyCategory => technologyCategory.Technologies
                         .Where(technology => technology.IsActive)
@@ -19,10 +19,10 @@ namespace Sohg.GameAgg
         
         public void OnTechnologyActivated()
         {
-            gameDefinition.SocietyActions.ToList()
+            GameDefinition.SocietyActions.ToList()
                 .ForEach(action => action.CheckActivation());
 
-            gameDefinition.Skills.ToList()
+            GameDefinition.Skills.ToList()
                 .ForEach(skill => skill.CheckActivation());
         }
     }

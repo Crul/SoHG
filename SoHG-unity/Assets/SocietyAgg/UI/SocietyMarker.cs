@@ -15,12 +15,13 @@ namespace Sohg.SocietyAgg.UI
     {
         [SerializeField]
         private Text SocietyName;
+        [SerializeField]
+        [Range(0, 1)]
+        private float transparency;
 
         private IRunningGame game;
         private ISociety society;
-
         private CanvasGroup canvasGroup;
-        private static float transparency = 0.66f; // TODO
 
         private void Awake()
         {

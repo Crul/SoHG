@@ -13,8 +13,8 @@ namespace Sohg.SocietyAgg.Actions
         private float plagueKillRate;
         [SerializeField]
         private int plagueWaveCount;
-        
-        private int secondsForRespawn = 3; // TODO move SendPlague.secondsForRespawn to config?
+        [SerializeField]
+        private int secondsForRespawn;
 
         public override bool IsActionEnabled(ISociety society)
         {
