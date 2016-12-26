@@ -25,7 +25,7 @@ namespace Sohg.GameAgg.Features
             {
                 Enumerable.Range(0, System.Math.Abs(expansion))
                     .ToList()
-                    .ForEach(i => game.ShrinkSociety(society));
+                    .ForEach(i => game.Shrink(society));
             }
         }
 
@@ -34,7 +34,7 @@ namespace Sohg.GameAgg.Features
             var hasBeenExpanded = game.Grid.ExpandSingleCell(society.Territory);
             if (hasBeenExpanded)
             {
-                society.State.Expanded();
+                society.State.OnExpanded();
                 game.Log(society.Name + " has expanded");
             }
         }

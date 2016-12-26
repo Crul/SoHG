@@ -1,6 +1,5 @@
 ﻿using Sohg.GameAgg.Contracts;
 using Sohg.Grids2D.Contracts;
-using System;
 using System.Linq;
 
 namespace Sohg.GameAgg

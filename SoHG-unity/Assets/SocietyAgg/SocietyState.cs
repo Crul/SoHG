@@ -10,6 +10,8 @@ namespace Sohg.SocietyAgg
         private ISohgConfig config;
         private float aggressivityRate;
         private float resourcesConservationRate = 0.2f;
+        private int minCellToSplit = 30;
+        private float destabilizationFactorPerCell = 0.0001f;
 
         public long CivilizationLevel { get; private set; }
         public long Population { get; private set; }
@@ -81,6 +83,19 @@ namespace Sohg.SocietyAgg
             get { return Convert.ToInt64(100 * Math.Pow(50000, 1.065 * TechnologyLevelRate)); }
         }
 
+        public float SplitingProbability
+        {
+            get
+            {   
+                if (territoryExtension < minCellToSplit)
+                {
+                    return 0;
+                }
+
+                return territoryExtension * destabilizationFactorPerCell;
+            }
+        }
+        
         public SocietyState(ISohgConfig config, ISociety society)
         {
             this.config = config;
@@ -130,24 +145,36 @@ namespace Sohg.SocietyAgg
             return faithEmitted;
         }
 
-        public void OnSkillAdded(ISkill skill)
-        {
-            TechnologyLevelRate += skill.TechnologyRateBonus;
-            FaithShrinkingRateBonus += skill.FaithShrinkingRateBonus;
-        }
-
-        public void SetInitialPopulation()
-        {
-            Population = territoryExtension * society.Species.InitialPopulationDensity;
-        }
-
-        public void Expanded()
+        public void OnExpanded()
         {
             Resources -= Convert.ToInt64(PopulationDensity / 2);
             if (Resources < 0)
             {
                 Resources = 0;
             }
+        }
+
+        public void OnSkillAdded(ISkill skill)
+        {
+            TechnologyLevelRate += skill.TechnologyRateBonus;
+            FaithShrinkingRateBonus += skill.FaithShrinkingRateBonus;
+        }
+
+        public void OnSplit(ISociety splitSociety, long totalPopulation, long totalResources)
+        {
+            var totalTerritoryExtension = (territoryExtension + splitSociety.Territory.CellCount);
+            var territoryProportion = ((float)territoryExtension / totalTerritoryExtension);
+
+            Population = Convert.ToInt32(territoryProportion * totalPopulation);
+            Resources = Convert.ToInt32(territoryProportion * totalResources);
+            CivilizationLevel = Math.Max(CivilizationLevel, splitSociety.State.CivilizationLevel);
+            TechnologyLevelRate = Math.Max(TechnologyLevelRate, splitSociety.State.TechnologyLevelRate);
+            FaithShrinkingRateBonus = Math.Max(FaithShrinkingRateBonus, splitSociety.State.FaithShrinkingRateBonus);
+        }
+
+        public void SetInitialPopulation()
+        {
+            Population = territoryExtension * society.Species.InitialPopulationDensity;
         }
     }
 }

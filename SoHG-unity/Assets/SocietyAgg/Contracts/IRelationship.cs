@@ -8,6 +8,7 @@ namespace Sohg.SocietyAgg.Contracts
         ISociety We { get; }
         ISociety Them { get; }
         List<int> MyFrontierCellIndices { get; }
+        float FriendshipRange { get; }
 
         bool AreWeNeighbours();
         bool WillingToAttack(ISohgConfig config);

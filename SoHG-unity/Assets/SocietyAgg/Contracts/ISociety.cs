@@ -20,7 +20,7 @@ namespace Sohg.SocietyAgg.Contracts
         IEnumerable<ISkill> Skills { get; }
 
         void AddAction(ISocietyAction societyAction);
-        void AddRelationship(ISociety society);
+        void AddRelationship(ISociety society, IRelationship originRelationship = null);
         void AddSkill(ISkill skill);
         void RemoveRelationship(ISociety deathSociety);
         

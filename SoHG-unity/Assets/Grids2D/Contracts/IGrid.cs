@@ -1,5 +1,6 @@
 ﻿using Sohg.CrossCutting.Contracts;
 using System;
+using System.Collections.Generic;
 
 namespace Sohg.Grids2D.Contracts
 {
@@ -21,9 +22,12 @@ namespace Sohg.Grids2D.Contracts
         bool ExpandSingleCell(ITerritory territory);
         void InitializeBoard(ISohgFactory sohgFactory);
         bool InvadeTerritory(ICell from, ICell target);
+        void OnTerritorySplit(ITerritory territory1, ITerritory territory2);
+        void RedrawIfChanged();
+        void RemoveSocietyTerritory(ITerritory territory);
         void SetGridSelectionToNone();
         void SetGridSelectionToCell();
         void SetGridSelectionToTerritory();
-        void RedrawIfChanged();
+        List<ICell> SplitTerritory(ITerritory territory);
     }
 }

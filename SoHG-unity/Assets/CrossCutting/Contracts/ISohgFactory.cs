@@ -19,7 +19,8 @@ namespace Sohg.CrossCutting.Contracts
         IFight CreateFight(IRelationship relationship, ICell from, ICell target, Action resolveAttack);
         IGrid CreateGrid();
         IInstructions CreateInstructions();
-        IRelationship CreateRelationship(ISociety we, ISociety them);
+        IRelationship CreateRelationship(ISociety we, ISociety them, IRelationship originRelationship = null);
+        ISociety CreateSociety(IRunningGame game, ISociety originSociety, params ICell[] cells);
         void CreateSociety(IRunningGame game, ISpecies species, params ICell[] cells);
         ISocietyActionButton CreateSocietyActionButton(ISocietyAction action, ISocietyInfo societyInfo);
         ISocietyEffectIcon CreateSocietyEffectIcon(ISocietyAction action, ISocietyInfo societyInfo);
@@ -28,7 +29,7 @@ namespace Sohg.CrossCutting.Contracts
         ITechnologyCategoryColumn CreateTechnologyCategoryColumn(IEvolvableGame game, ITechnologyCategory technologyCategory, 
             ITechnologyStatesSetter technologyStatesSetter, GameObject technologyPanel);
         ISocietyPropertyInfo CreateSocietyPropertyInfo(SocietyProperty property, ISocietyInfo societyInfo);
-        ITerritory CreateTerritory(params ICell[] cells);
+        ITerritory CreateTerritory(string name, params ICell[] cells);
 
         IGrid GetGrid();
         void SetCanvas(Canvas boardCanvas, Canvas boardOverCanvas, Canvas fixedOverCanvas);

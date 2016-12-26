@@ -54,7 +54,13 @@ namespace Sohg.GameAgg.Stages
             if (!game.IsPaused() && (time % game.SohgFactory.Config.EvolutionActionsTimeInterval == 0))
             {
                 game.Societies.ForEach(society =>
-                    Features.ToList().ForEach(feature => feature.Run(game, society)));
+                    Features.ToList().ForEach(feature =>
+                    {
+                        if (!society.IsDead)
+                        {
+                            feature.Run(game, society);
+                        }
+                    }));
 
                 game.Year += (timeForOneYearStep) / (game.Year + timeDecelerationAmortiguation);
 

@@ -14,7 +14,7 @@ namespace Sohg.GameAgg.Features
 
             if (society.IsDead)
             {
-                game.KillSociety(society);
+                game.Kill(society);
             }
         }
     }

@@ -9,8 +9,9 @@ namespace Sohg.GameAgg.Contracts
         bool CheckDependentTechnologies(ITechnologyDependent technologyDependent);
         void FinishEvolution(bool hasPlayerWon);
         bool Invade(ICell from, ICell target);
-        void KillSociety(ISociety society);
+        void Kill(ISociety society);
         void OnTechnologyActivated();
-        void ShrinkSociety(ISociety society);
+        void Shrink(ISociety society);
+        void Split(ISociety society);
     }
 }

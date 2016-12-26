@@ -8,16 +8,6 @@ namespace Sohg.GameAgg
     public partial class GameEngine : IEvolvableGame
     {
         private bool? hasPlayerWon;
-        
-        public void ShrinkSociety(ISociety society)
-        {
-            Grid.ContractSingleCell(society.Territory);
-
-            if (society.IsDead)
-            {
-                KillSociety(society);
-            }
-        }
 
         public void FinishEvolution(bool hasPlayerWon)
         {
@@ -39,20 +29,22 @@ namespace Sohg.GameAgg
 
                 if (invadedTerritory.Society.IsDead)
                 {
-                    KillSociety(invadedTerritory.Society);
+                    Kill(invadedTerritory.Society);
                 }
             }
 
             return hasBeenInvaded;
         }
 
-        public void KillSociety(ISociety deathSociety)
+        public void Kill(ISociety deathSociety)
         {
             Societies.Remove(deathSociety);
             Species.SelectMany(species => species.Societies)
                 // remove relationships first to prevent pointing to removed societies
                 .Where(society => society != deathSociety).ToList()
                 .ForEach(society => society.RemoveRelationship(deathSociety));
+
+            Grid.RemoveSocietyTerritory(deathSociety.Territory);
 
             deathSociety.Species.Societies.Remove(deathSociety);
             Log("{0} has dissapear", deathSociety.Name);
@@ -62,6 +54,30 @@ namespace Sohg.GameAgg
                 Species.Remove(deathSociety.Species);
                 Log("{0} is now extinct", deathSociety.Species.Name);
             }
+        }
+
+        public void Shrink(ISociety society)
+        {
+            Grid.ContractSingleCell(society.Territory);
+
+            if (society.IsDead)
+            {
+                Kill(society);
+            }
+        }
+
+        public void Split(ISociety society)
+        {
+            var newSocietyCells = Grid.SplitTerritory(society.Territory);
+
+            var newSociety = SohgFactory.CreateSociety(this, society, newSocietyCells.ToArray());
+            
+            var totalPopulation = society.State.Population + newSociety.State.Population;
+            var totalResources = society.State.Resources + newSociety.State.Resources;
+            society.State.OnSplit(newSociety, totalPopulation, totalResources);
+            newSociety.State.OnSplit(society, totalPopulation, totalResources);
+
+            Grid.OnTerritorySplit(society.Territory, newSociety.Territory);
         }
     }
 }
