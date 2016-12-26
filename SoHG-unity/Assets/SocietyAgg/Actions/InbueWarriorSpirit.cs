@@ -9,8 +9,8 @@ namespace Sohg.SocietyAgg.Actions
     {
         [SerializeField]
         private int powerBonus;
-
-        private int fixedUpdateCyclesDuration = 30; // TODO move InbueWarriorSpirit.duration to config?
+        [SerializeField]
+        private int fixedUpdateCyclesDuration;
 
         protected override IEnumerator ExecuteAction(ISociety society)
         {
