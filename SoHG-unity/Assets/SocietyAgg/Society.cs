@@ -5,6 +5,7 @@ using Sohg.SpeciesAgg.Contracts;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Sohg.CrossCutting.Factories;
 
 namespace Sohg.SocietyAgg
 {
@@ -14,6 +15,7 @@ namespace Sohg.SocietyAgg
         private List<IRelationship> relationships;
         private List<ISkill> skills;
         private ISohgFactory sohgFactory;
+        private ISociety originSociety;
 
         private ISohgConfig config { get { return sohgFactory.Config; } }
 
@@ -45,15 +47,23 @@ namespace Sohg.SocietyAgg
             Territory = territory;
         }
 
+        public Society(SohgFactory sohgFactory, ISociety originSociety, ITerritory territory)
+            : this(sohgFactory, originSociety.Species, territory)
+        {
+            actions = originSociety.Actions.ToList();
+            IsEffectActive = originSociety.IsEffectActive.ToDictionary(xx => xx.Key, xx => false);
+            skills = originSociety.Skills.ToList();
+        }
+
         public void AddAction(ISocietyAction societyAction)
         {
             IsEffectActive.Add(societyAction, false);
             actions.Add(societyAction);
         }
 
-        public void AddRelationship(ISociety otherSociety)
+        public void AddRelationship(ISociety otherSociety, IRelationship originRelationship = null)
         {
-            var newRelationship = sohgFactory.CreateRelationship(this, otherSociety);
+            var newRelationship = sohgFactory.CreateRelationship(this, otherSociety, originRelationship);
             relationships.Add(newRelationship);
         }
 

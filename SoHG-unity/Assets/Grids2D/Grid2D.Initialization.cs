@@ -41,13 +41,13 @@ namespace Grids2D
             
             Redraw();
         }
-
+        
         private List<ITerritory> CreateTerritoriesByCellType(Func<ICell, bool> cellFilter)
         {
             var filteredCells = cells.Where(cell => cellFilter(cell)).ToList();
-            var allCellsTerritory = sohgFactory.CreateTerritory(filteredCells.ToArray());
+            var allCellsTerritory = sohgFactory.CreateTerritory("Land", filteredCells.ToArray());
 
-            return FixDisconnectedTerritory(allCellsTerritory);
+            return FixDisconnectedTerritory((Territory)allCellsTerritory);
         }
 
         private void FixNonInvadableTerritories()

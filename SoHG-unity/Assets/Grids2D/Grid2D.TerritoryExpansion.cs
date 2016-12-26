@@ -28,20 +28,18 @@ namespace Grids2D
                 : territories[nonSocietyNeighbour.TerritoryIndex]);
             
             SetCellTerritory(abandonedCell, nonSocietyTerritory);
-
             UpdateFrontiersAfterTerritoryChange(abandonedCell);
-
             FixNonInvadableTerritories();
 
             if (nonSocietyNeighbour == null)
             {
-                FixDisconnectedTerritory(nonSocietyTerritory);
+                FixDisconnectedTerritory((Territory)nonSocietyTerritory);
             }
             else
             {
                 var nonSocietyNeighbourTerritories = CellGetNeighbours(abandonedCell)
                     .Where(neighbourCell => neighbourCell.IsNonSocietyTerritory
-                        && neighbourCell.TerritoryIndex != nonSocietyNeighbour.TerritoryIndex)
+                        && neighbourCell.TerritoryIndex != abandonedCell.TerritoryIndex)
                     .Select(neighbourCell => territories[neighbourCell.TerritoryIndex])
                     .Distinct();
 
@@ -73,14 +71,13 @@ namespace Grids2D
             while (expadedCellCount > 0);
             
             nonSocietyTerritories
-                .ForEach(nonSocietyTerritory => FixDisconnectedTerritory(nonSocietyTerritory));
-
-            societyTerritories.ForEach(territory => territory.InitializeFrontier(this));
-
+                .ForEach(nonSocietyTerritory => FixDisconnectedTerritory((Territory)nonSocietyTerritory));
             Redraw();
+            
+            territories.ToList().ForEach(territory => territory.InitializeFrontier(this));
 
             cells.ToList().ForEach(cell => cell.CanBeInvaded = CanCellBeInvaded(cell));
-            
+
             FixNonInvadableTerritories();
         }
 
@@ -106,7 +103,7 @@ namespace Grids2D
                     if (hasBeenInvaded)
                     {
                         nonSocietyTerritories
-                            .ForEach(nonSocietyTerritory => FixDisconnectedTerritory(nonSocietyTerritory));
+                            .ForEach(nonSocietyTerritory => FixDisconnectedTerritory((Territory)nonSocietyTerritory));
 
                         return true;
                     }
@@ -119,6 +116,55 @@ namespace Grids2D
             return false;
         }
         
+        public void RemoveSocietyTerritory(ITerritory territory)
+        {
+            if (territory.CellCount == 0)
+            {
+                return;
+            }
+
+            var territoryCells = ((Territory)territory).cells;
+
+            var nonSocietyNeighbourTerritory = territoryCells
+                .SelectMany(cell => CellGetNeighbours(cell))
+                .Where(neighbour => neighbour.IsNonSocietyTerritory)
+                .Select(neighbour => GetTerritory(neighbour))
+                .FirstOrDefault();
+
+            var isThereNonSocietyNeighbourTerritory = (nonSocietyNeighbourTerritory != null);
+
+            if (!isThereNonSocietyNeighbourTerritory)
+            {
+                nonSocietyNeighbourTerritory = nonSocietyTerritories.First();
+            }
+
+            territoryCells.ForEach(cell =>
+            {
+                SetCellTerritory(cell, nonSocietyNeighbourTerritory);
+                UpdateFrontiersAfterTerritoryChange(cell);
+            });
+            FixNonInvadableTerritories();
+
+            if (!isThereNonSocietyNeighbourTerritory)
+            {
+                FixDisconnectedTerritory((Territory)nonSocietyNeighbourTerritory);
+            }
+            else
+            {
+                var nonSocietyNeighbourTerritories = ((Territory)nonSocietyNeighbourTerritory).cells
+                    .SelectMany(cell => CellGetNeighbours(cell))
+                    .Where(neighbourCell => neighbourCell.IsNonSocietyTerritory
+                        && neighbourCell.TerritoryIndex != nonSocietyNeighbourTerritory.TerritoryIndex)
+                    .Select(neighbourCell => territories[neighbourCell.TerritoryIndex])
+                    .Distinct();
+
+                nonSocietyNeighbourTerritories
+                    .SelectMany(neighbourTerritory => neighbourTerritory.cells)
+                    .ToList()
+                    .ForEach(cell => SetCellTerritory(cell, nonSocietyNeighbourTerritory));
+            }
+        }
+
         private int ExpandTerritory(Territory territory, List<Cell> unassignedCells, int territorySizeLimit)
         {
             var cellsToBeExpanded = territory.cells
@@ -142,10 +188,10 @@ namespace Grids2D
             return cellsToBeExpanded.Count;
         }
         
-        private List<ITerritory> FixDisconnectedTerritory(ITerritory territory)
+        private List<ITerritory> FixDisconnectedTerritory(Territory territory)
         {
             var connectedTerritories = new List<ITerritory>() { territory };
-            var disconnectedCells = ((Territory)territory).cells;
+            var disconnectedCells = territory.cells;
             while (disconnectedCells.Count > 0)
             {
                 var currentTerritoryCells = disconnectedCells.Take(1).ToList();
@@ -168,7 +214,7 @@ namespace Grids2D
 
                 if (disconnectedCells.Count > 0)
                 {
-                    var newTerritory = sohgFactory.CreateTerritory(currentTerritoryCells.ToArray());
+                    var newTerritory = sohgFactory.CreateTerritory(territory.name, currentTerritoryCells.ToArray());
                     connectedTerritories.Add(newTerritory);
                 }
             }

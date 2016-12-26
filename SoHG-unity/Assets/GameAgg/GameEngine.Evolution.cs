@@ -44,6 +44,8 @@ namespace Sohg.GameAgg
                 .Where(society => society != deathSociety).ToList()
                 .ForEach(society => society.RemoveRelationship(deathSociety));
 
+            Grid.RemoveSocietyTerritory(deathSociety.Territory);
+
             deathSociety.Species.Societies.Remove(deathSociety);
             Log("{0} has dissapear", deathSociety.Name);
 
@@ -62,6 +64,20 @@ namespace Sohg.GameAgg
             {
                 Kill(society);
             }
+        }
+
+        public void Split(ISociety society)
+        {
+            var newSocietyCells = Grid.SplitTerritory(society.Territory);
+
+            var newSociety = SohgFactory.CreateSociety(this, society, newSocietyCells.ToArray());
+            
+            var totalPopulation = society.State.Population + newSociety.State.Population;
+            var totalResources = society.State.Resources + newSociety.State.Resources;
+            society.State.OnSplit(newSociety, totalPopulation, totalResources);
+            newSociety.State.OnSplit(society, totalPopulation, totalResources);
+
+            Grid.OnTerritorySplit(society.Territory, newSociety.Territory);
         }
     }
 }

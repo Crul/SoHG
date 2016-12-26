@@ -12,5 +12,6 @@ namespace Sohg.GameAgg.Contracts
         void Kill(ISociety society);
         void OnTechnologyActivated();
         void Shrink(ISociety society);
+        void Split(ISociety society);
     }
 }

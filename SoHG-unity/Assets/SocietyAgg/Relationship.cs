@@ -10,6 +10,8 @@ namespace Sohg.SocietyAgg
         public ISociety We { get; private set; }
         public ISociety Them { get; private set; }
 
+        public float FriendshipRange { get; private set; }
+
         public List<int> MyFrontierCellIndices
         {
             get
@@ -18,14 +20,12 @@ namespace Sohg.SocietyAgg
                     .FrontierCellIndicesByTerritoryIndex[Them.Territory.TerritoryIndex];
             }
         }
-        
-        private float friendshipRange;
 
-        public Relationship(ISociety we, ISociety them)
+        public Relationship(ISociety we, ISociety them, IRelationship originRelationship = null)
         {
             We = we;
             Them = them;
-            friendshipRange = 0.5f; // TODO update Relationship.firendshipRange
+            FriendshipRange = (originRelationship == null ? 0.5f : originRelationship.FriendshipRange); // TODO update Relationship.firendshipRange
         }
 
         public bool AreWeNeighbours()
@@ -38,10 +38,11 @@ namespace Sohg.SocietyAgg
 
         public bool WillingToAttack(ISohgConfig config)
         {
-            var friendShipThreshold = (Random.Range(0f, 1f) // TODO configure willing to attack
-                * config.FriendshipRangeBottomThresholdForAttack);
+            var friendshipThreshold = (Random.Range(0f, 1f) // TODO configure willing to attack
+                * config.FriendshipRangeBottomThresholdForAttack
+                * (We.Species == Them.Species ? 0.1 : 1));
 
-            return (friendshipRange < friendShipThreshold) && ShouldWeAttack(config);
+            return (FriendshipRange < friendshipThreshold) && ShouldWeAttack(config);
         }
 
         private bool ShouldWeAttack(ISohgConfig config)

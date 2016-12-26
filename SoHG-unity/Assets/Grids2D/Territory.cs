@@ -2,7 +2,6 @@
 using Sohg.SocietyAgg.Contracts;
 using UnityEngine;
 using System.Linq;
-using System.Collections.Generic;
 
 namespace Grids2D
 {
@@ -17,7 +16,6 @@ namespace Grids2D
             : this(territoryIndex.ToString())
         {
             TerritoryIndex = territoryIndex;
-            FrontierCellIndicesByTerritoryIndex = new Dictionary<int, List<int>>();
             fillColor = new Color(1, 1, 1, 0f);
         }
 
@@ -33,6 +31,7 @@ namespace Grids2D
         public void SetSociety(ISociety society)
         {
             Society = society;
+            name = society.Name;
 
             var societyColor = society.Color;
             societyColor.a = 0.3f; // TODO configure territory.fillColor alpha
