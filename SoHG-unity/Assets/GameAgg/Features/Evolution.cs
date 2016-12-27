@@ -1,5 +1,6 @@
 ﻿using Sohg.GameAgg.Contracts;
 using Sohg.SocietyAgg.Contracts;
+using System.Linq;
 using UnityEngine;
 
 namespace Sohg.GameAgg.Features
@@ -11,11 +12,8 @@ namespace Sohg.GameAgg.Features
         {
             society.Species.Evolve(game);
             society.State.Evolve();
-
-            if (society.IsDead)
-            {
-                game.Kill(society);
-            }
+            society.Relationships.ToList()
+                .ForEach(relationship => relationship.Evolve(game.GameDefinition));
         }
     }
 }

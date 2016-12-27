@@ -22,12 +22,19 @@ namespace Sohg.GameAgg.Contracts
         int InitialSocietyPopulationLimit { get; }
         ISkill[] Skills { get; }
         ISocietyAction[] SocietyActions { get; }
-        
+        float FriendshipChangeRate { get; }
+        float InitialFriendshipRange { get; }
+
         int EvolutionActionsTimeInterval { get; }
 
         float AttackDamageTieRateThreshold { get; }
         int FightDuration { get; }
+        float FriendshipDecreaseOnLooseAttack { get; }
+        float FriendshipDecreaseOnStartedAttack { get; }
+        float FriendshipDecreaseOnTieAttack { get; }
+        float FriendshipDecreaseOnWinAttack { get; }
         float FriendshipRangeBottomThresholdForAttack { get; }
         float PowerBalanceThresholdForAttack { get; }
+        float SameSpeciesWillingToAttackFactor { get; }
     }
 }

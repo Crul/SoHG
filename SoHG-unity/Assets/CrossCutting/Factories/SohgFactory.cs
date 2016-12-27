@@ -25,7 +25,7 @@ namespace Sohg.CrossCutting.Factories
         private Canvas boardCanvas;
         private Canvas boardOverCanvas;
         private Canvas fixedOverCanvas;
-        
+
         public IGameDefinition GameDefinition { get { return gameDefinition; } }
 
         public IEndGame CreateEndGame()
@@ -59,11 +59,6 @@ namespace Sohg.CrossCutting.Factories
             return prefabFactory.InstantiateInstructions(fixedOverCanvas);
         }
 
-        public IRelationship CreateRelationship(ISociety we, ISociety them, IRelationship originRelationship = null)
-        {
-            return new Relationship(we, them, originRelationship);
-        }
-
         public ISociety CreateSociety(IRunningGame game, ISociety originSociety, params ICell[] cells)
         {
             var societyConstructor = (Func<ITerritory, Society>)
@@ -72,7 +67,7 @@ namespace Sohg.CrossCutting.Factories
             var society = CreateSociety(game, societyConstructor, cells);
 
             game.Societies
-                .ForEach(otherSociety => AddSocietyRelationships(society, otherSociety, originSociety));
+                .ForEach(otherSociety => AddSocietyRelationships(game.GameDefinition, society, otherSociety, originSociety));
 
             return society;
         }
@@ -85,7 +80,7 @@ namespace Sohg.CrossCutting.Factories
             var society = CreateSociety(game, societyConstructor, cells);
 
             game.Societies
-                .ForEach(otherSociety => AddSocietyRelationships(society, otherSociety));
+                .ForEach(otherSociety => AddSocietyRelationships(game.GameDefinition, society, otherSociety));
         }
 
         private ISociety CreateSociety(IRunningGame game, Func<ITerritory, Society> societyConstructor, ICell[] cells)
@@ -188,20 +183,23 @@ namespace Sohg.CrossCutting.Factories
             this.boardOverCanvas = boardOverCanvas;
             this.fixedOverCanvas = fixedOverCanvas;
         }
-        
-        private void AddSocietyRelationships(ISociety society, ISociety otherSociety, ISociety originSociety = null)
+
+        private void AddSocietyRelationships(IGameDefinition gameDefinitiion, ISociety society, ISociety otherSociety, ISociety originSociety = null)
         {
             var isOtherOrigin = (otherSociety == originSociety);
-            var otherSocietyRelationship = (originSociety == null || isOtherOrigin ? null 
-                : otherSociety.Relationships.Single(relationship => relationship.Them == originSociety));
+            var originOtherSocietyRelationship = (originSociety == null || isOtherOrigin ? null
+                : otherSociety.GetRelationship(originSociety));
 
             // TODO add special relationship if isOtherOrigin 
-            otherSociety.AddRelationship(society, otherSocietyRelationship);
+
+            var otherSocietyRelationship = new Relationship(gameDefinition, otherSociety, society, originOtherSocietyRelationship);
+            otherSociety.AddRelationship(otherSocietyRelationship);
 
             var originSocietyRelationship = (originSociety == null || isOtherOrigin ? null
-                : originSociety.Relationships.Single(relationship => relationship.Them == otherSociety));
+                : originSociety.GetRelationship(otherSociety));
 
-            society.AddRelationship(otherSociety, originSocietyRelationship);
+            var societyRelationship = new Relationship(gameDefinition, society, otherSociety, originSocietyRelationship);
+            society.AddRelationship(societyRelationship);
         }
 
         private ITechnologyBox CreateTechnologyBox(IEvolvableGame game, ITechnology technology, ITechnologyCategory technologyCategory,

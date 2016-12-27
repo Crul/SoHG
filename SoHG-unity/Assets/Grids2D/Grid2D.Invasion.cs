@@ -41,6 +41,7 @@ namespace Grids2D
         {
             if (target.IsSocietyTerritory && !CanCellBeInvaded(target))
             {
+                // TODO Ring territories are not invaded
                 return false;
             }
 

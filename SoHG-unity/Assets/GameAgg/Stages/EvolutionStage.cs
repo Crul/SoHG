@@ -2,6 +2,7 @@
 using System.Linq;
 using UnityEngine;
 using Sohg.Grids2D.Contracts;
+using Sohg.SocietyAgg.Contracts;
 
 namespace Sohg.GameAgg.Stages
 {
@@ -43,21 +44,31 @@ namespace Sohg.GameAgg.Stages
         public override void FixedUpdate()
         {
             time++;
-            
+
             if (!game.IsPaused() && (time % game.GameDefinition.EvolutionActionsTimeInterval == 0))
             {
-                game.Societies.ForEach(society =>
-                    game.GameDefinition.Features.ToList().ForEach(feature =>
-                    {
-                        if (!society.IsDead)
-                        {
-                            feature.Run(game, society);
-                        }
-                    }));
+                game.Societies.ForEach(society => RunFeatures(society));
 
                 game.Year += (timeForOneYearStep) / (game.Year + timeDecelerationAmortiguation);
 
                 CheckWinOrLoose();
+            }
+        }
+
+        private void RunFeatures(ISociety society)
+        {
+            var features = game.GameDefinition.Features.ToList();
+            for (var featureIndex = 0; featureIndex < features.Count; featureIndex++)
+            {
+                if (society.IsDead)
+                {
+                    game.Kill(society);
+                    return;
+                }
+                else
+                {
+                    features[featureIndex].Run(game, society);
+                }
             }
         }
 
@@ -71,7 +82,7 @@ namespace Sohg.GameAgg.Stages
             else
             {
                 // TODO: this should be enough (but is not): var hasPlayerWon = (game.Species.Count == 1);
-                var hasPlayerWon = (game.Species.Count(species =>  species.Societies.Sum(society => society.Territory.CellCount) > 0) == 1);
+                var hasPlayerWon = (game.Species.Count(species => species.Societies.Sum(society => society.Territory.CellCount) > 0) == 1);
                 if (hasPlayerWon)
                 {
                     Finish(true);

@@ -18,7 +18,6 @@ namespace Sohg.CrossCutting.Contracts
         IFight CreateFight(IRunningGame game, IRelationship relationship, ICell from, ICell target, Action resolveAttack);
         IGrid CreateGrid();
         IInstructions CreateInstructions();
-        IRelationship CreateRelationship(ISociety we, ISociety them, IRelationship originRelationship = null);
         ISociety CreateSociety(IRunningGame game, ISociety originSociety, params ICell[] cells);
         void CreateSociety(IRunningGame game, ISpecies species, params ICell[] cells);
         ISocietyActionButton CreateSocietyActionButton(ISocietyAction action, ISocietyInfo societyInfo);

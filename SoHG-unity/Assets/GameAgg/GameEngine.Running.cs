@@ -2,8 +2,6 @@
 using Sohg.SocietyAgg.Contracts;
 using System.Collections;
 using UnityEngine;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Sohg.GameAgg
 {
