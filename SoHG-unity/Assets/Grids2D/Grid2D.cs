@@ -1,7 +1,6 @@
 ﻿using Sohg.CrossCutting.Contracts;
 using Sohg.Grids2D.Contracts;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -11,8 +10,6 @@ namespace Grids2D
     {
         private ISohgFactory sohgFactory;
         private bool territoriesHaveChanged = false;
-        private List<ITerritory> seaTerritories;
-        private List<ITerritory> nonSocietyTerritories;
 
         public int TerritoryCount { get { return territories.Count; } }
 
@@ -65,13 +62,21 @@ namespace Grids2D
             highlightMode = HIGHLIGHT_MODE.Territories;
         }
 
-        private void SetCellTerritory(ICell cell, ITerritory territory)
+        private void SetCellTerritory(ICell cell, ITerritory territory = null)
         {
-            CellSetTerritory(((Cell)cell).CellIndex, ((Territory)territory).TerritoryIndex);
-            ((Territory)territory).cells.Add((Cell)cell);
+            if (territory != null)
+            {
+                CellSetTerritory(cell.CellIndex, territory.TerritoryIndex);
+                ((Territory)territory).cells.Add((Cell)cell);
+            }
+            else
+            {
+                CellSetTerritory(cell.CellIndex, -1);
+            }
+
             if (!cell.IsSea)
             {
-                if (territory.Society != null)
+                if (territory != null)
                 {
                     cell.SetSocietyAssigned();
                 }

@@ -45,8 +45,11 @@ namespace Grids2D
                 return false;
             }
 
-            var territoryToBeInvaded = territories[target.TerritoryIndex];
-            territoryToBeInvaded.cells.Remove((Cell)target);
+            if (target.TerritoryIndex > -1)
+            {
+                var territoryToBeInvaded = territories[target.TerritoryIndex];
+                territoryToBeInvaded.cells.Remove((Cell)target);
+            }
 
             var territoryInvader = territories[from.TerritoryIndex];
             SetCellTerritory(target, territoryInvader);
@@ -54,12 +57,7 @@ namespace Grids2D
             UpdateFrontiersAfterTerritoryChange(target, from);
 
             FixNonInvadableTerritories();
-
-            if (territoryToBeInvaded.Society == null)
-            {
-                FixDisconnectedTerritory(territoryToBeInvaded);
-            }
-
+            
             territoriesHaveChanged = true;
 
             return true;

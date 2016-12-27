@@ -1,10 +1,9 @@
 ﻿using Sohg.CrossCutting.Contracts;
 using Sohg.Grids2D.Contracts;
+using Sohg.GameAgg.Contracts;
+using System;
 using System.Linq;
 using UnityEngine;
-using System;
-using System.Collections.Generic;
-using Sohg.GameAgg.Contracts;
 
 namespace Grids2D
 {
@@ -25,28 +24,12 @@ namespace Grids2D
         {
             this.sohgFactory = sohgFactory;
 
-            if (territories != null)
-            {
-                territories.Clear();
-            }
-
             SetGridProperties(gameDefinition);
 
             Enumerable.Range(0, cells.Count).ToList()
                 .ForEach(cellIndex => InitializeCell(cellIndex));
-
-            seaTerritories = CreateTerritoriesByCellType(cell => cell.IsSea);
-            nonSocietyTerritories = CreateTerritoriesByCellType(cell => cell.IsNonSocietyTerritory);
             
             Redraw();
-        }
-        
-        private List<ITerritory> CreateTerritoriesByCellType(Func<ICell, bool> cellFilter)
-        {
-            var filteredCells = cells.Where(cell => cellFilter(cell)).ToList();
-            var allCellsTerritory = sohgFactory.CreateTerritory("Land", filteredCells.ToArray());
-
-            return FixDisconnectedTerritory((Territory)allCellsTerritory);
         }
 
         private void FixNonInvadableTerritories()
@@ -62,8 +45,10 @@ namespace Grids2D
 
         private void InitializeCell(int cellIndex)
         {
+            var cell = cells[cellIndex];
             var cellWorldPosition = CellGetPosition(cellIndex);
-            cells[cellIndex].Initialize(cellIndex, cellWorldPosition);
+            cell.Initialize(cellIndex, cellWorldPosition);
+            SetCellTerritory(cell);
         }
 
         private void SetGridProperties(IGameDefinition gameDefinition)
@@ -83,6 +68,8 @@ namespace Grids2D
 
             SetTexture(gameDefinition.BoardBackground);
             SetMask(gameDefinition.BoardMask);
+
+            territories[0].fillColor = new Color(1, 1, 1, 0);
         }
     }
 }
