@@ -1,5 +1,7 @@
 ﻿using Sohg.SocietyAgg.Contracts;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Sohg.SocietyAgg
 {
@@ -133,13 +135,13 @@ namespace Sohg.SocietyAgg
             Population -= deads;
         }
 
-        public int GetFaithEmitted()
+        public List<int> GetFaithEmitted()
         {
             // TODO Society.State.GetFaithEmitted() configuration
-            var isFaithEmitted = UnityEngine.Random.Range(0f, 1f) > 0.8;
-            var faithEmitted = (isFaithEmitted ? UnityEngine.Random.Range(2, 10) : 0);
-
-            return faithEmitted;
+            return Enumerable.Range(0, territoryExtension)
+                .Where(cell => UnityEngine.Random.Range(0f, 1f) > 0.995f)
+                .Select(cell => UnityEngine.Random.Range(3, 9))
+                .ToList();
         }
 
         public void OnExpanded()
