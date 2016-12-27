@@ -38,6 +38,11 @@ namespace Sohg.GameAgg
 
         public void Kill(ISociety deathSociety)
         {
+            if (!Societies.Contains(deathSociety))
+            {
+                return;
+            }
+
             Societies.Remove(deathSociety);
             Species.SelectMany(species => species.Societies)
                 // remove relationships first to prevent pointing to removed societies
