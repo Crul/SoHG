@@ -4,15 +4,14 @@ using System.Linq;
 using UnityEngine;
 using Sohg.Grids2D.Contracts;
 using System.Collections.Generic;
-using Sohg.CrossCutting.Contracts;
 
 namespace Sohg.GameAgg.Features
 {
+    public enum AttackResult { Undefined, Win, Tie, Loose }
+
     [CreateAssetMenu(fileName = "AttackFeature", menuName = "SoHG/Features/Attack")]
     public class Attack : GameFeature
     {
-        private enum AttackResult { Undefined, Win, Tie, Loose }
-
         private Dictionary<ISociety, List<int>> attackInvolvedCells;
 
         public Attack()
@@ -77,6 +76,10 @@ namespace Sohg.GameAgg.Features
                 return false;
             }
 
+            relationship.OnAttackStarted(game.GameDefinition, relationship.We);
+            relationship.Them.GetRelationship(relationship.We)
+                .OnAttackStarted(game.GameDefinition, relationship.We);
+
             from.IsInvolvedInAttack = true;
             target.IsInvolvedInAttack = true;
 
@@ -126,6 +129,10 @@ namespace Sohg.GameAgg.Features
             attackInvolvedCells[we].Remove(from.CellIndex);
             from.IsInvolvedInAttack = false;
             target.IsInvolvedInAttack = false;
+            
+            relationship.OnAttackEnded(game.GameDefinition, relationship.We, result);
+            relationship.Them.GetRelationship(relationship.We)
+                .OnAttackEnded(game.GameDefinition, relationship.We, result);
         }
         
         private long GetDeads(ISociety society, float damageRate)
@@ -146,6 +153,5 @@ namespace Sohg.GameAgg.Features
 
             return AttackResult.Loose;
         }
-
     }
 }

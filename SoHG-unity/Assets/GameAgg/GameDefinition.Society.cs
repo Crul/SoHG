@@ -18,6 +18,12 @@ namespace Sohg.GameAgg
         private int nonPlayerSocietyCount;
         [SerializeField]
         private int initialSocietyPopulationLimit;
+        [SerializeField]
+        [Range(0, 1)]
+        private float friendshipChangeRate;
+        [SerializeField]
+        [Range(0, 1)]
+        private float initialFriendshipRange;
 
         [Space]
         [SerializeField]
@@ -32,5 +38,8 @@ namespace Sohg.GameAgg
 
         public ISkill[] Skills { get { return skills; } }
         public ISocietyAction[] SocietyActions { get { return societyActions; } }
+
+        public float FriendshipChangeRate { get { return friendshipChangeRate; } }
+        public float InitialFriendshipRange { get { return initialFriendshipRange; } }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Sohg.GameAgg.Contracts;
-using Sohg.SocietyAgg.Contracts;
+﻿using Sohg.SocietyAgg.Contracts;
 using System;
 
 namespace Sohg.SocietyAgg
@@ -154,7 +153,10 @@ namespace Sohg.SocietyAgg
 
         public void OnSkillAdded(ISkill skill)
         {
+            var populationOverProduction = (Population / ProductionLimitPerCell);
             TechnologyLevelRate += skill.TechnologyRateBonus;
+            Population = populationOverProduction * ProductionLimitPerCell;
+
             FaithShrinkingRateBonus += skill.FaithShrinkingRateBonus;
         }
 

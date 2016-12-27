@@ -59,10 +59,9 @@ namespace Sohg.SocietyAgg
             actions.Add(societyAction);
         }
 
-        public void AddRelationship(ISociety otherSociety, IRelationship originRelationship = null)
+        public void AddRelationship(IRelationship relationship)
         {
-            var newRelationship = sohgFactory.CreateRelationship(this, otherSociety, originRelationship);
-            relationships.Add(newRelationship);
+            relationships.Add(relationship);
         }
 
         public void AddSkill(ISkill skill)
@@ -76,6 +75,18 @@ namespace Sohg.SocietyAgg
             State.SetInitialPopulation();
         }
 
+        public bool IsNeighbourOf(ISociety society)
+        {
+            var societyRelationship = relationships.FirstOrDefault(relationship => relationship.Them == society);
+
+            return societyRelationship.AreWeNeighbours();
+        }
+
+        public IRelationship GetRelationship(ISociety society)
+        {
+            return Relationships.Single(relationship => relationship.Them == society);
+        }
+
         public void RemoveRelationship(ISociety society)
         {
             var relationshipToRemove = relationships.FirstOrDefault(relationship => relationship.Them == society);
@@ -83,13 +94,6 @@ namespace Sohg.SocietyAgg
             {
                 relationships.Remove(relationshipToRemove);
             }
-        }
-
-        public bool IsNeighbourOf(ISociety society)
-        {
-            var societyRelationship = relationships.FirstOrDefault(relationship => relationship.Them == society);
-
-            return societyRelationship.AreWeNeighbours();
         }
     }
 }
