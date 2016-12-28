@@ -13,23 +13,18 @@ namespace Sohg.CrossCutting.Contracts
     {
         IGameDefinition GameDefinition { get; }
 
-        IEndGame CreateEndGame();
         IFaithRecolectable CreateFaith(ISociety society, ICell faithCell, int faithAmount);
         IFight CreateFight(IRunningGame game, IRelationship relationship, ICell from, ICell target, Action resolveAttack);
-        IGrid CreateGrid();
-        IInstructions CreateInstructions();
         ISociety CreateSociety(IRunningGame game, ISociety originSociety, params ICell[] cells);
         void CreateSociety(IRunningGame game, ISpecies species, params ICell[] cells);
         ISocietyActionButton CreateSocietyActionButton(ISocietyAction action, ISocietyInfo societyInfo);
         ISocietyEffectIcon CreateSocietyEffectIcon(ISocietyAction action, ISocietyInfo societyInfo);
-        ISocietyInfo CreateSocietyInfo(IRunningGame game);
         ISocietySkillIcon CreateSocietySkillIcon(ISkill skill, ISocietyInfo societyInfo);
-        ITechnologyCategoryColumn CreateTechnologyCategoryColumn(IEvolvableGame game, ITechnologyCategory technologyCategory, 
+        ITechnologyCategoryColumn CreateTechnologyCategoryColumn(IEvolvableGame game, ITechnologyCategory technologyCategory,
             ITechnologyStatesSetter technologyStatesSetter, GameObject technologyPanel);
         ISocietyPropertyInfo CreateSocietyPropertyInfo(SocietyProperty property, ISocietyInfo societyInfo);
         ITerritory CreateTerritory(string name, params ICell[] cells);
 
-        IGrid GetGrid();
         void SetCanvas(Canvas boardCanvas, Canvas boardOverCanvas, Canvas fixedOverCanvas);
     }
 }

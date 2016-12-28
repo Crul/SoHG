@@ -28,11 +28,6 @@ namespace Sohg.CrossCutting.Factories
 
         public IGameDefinition GameDefinition { get { return gameDefinition; } }
 
-        public IEndGame CreateEndGame()
-        {
-            return prefabFactory.InstantiateEndGame(boardCanvas);
-        }
-
         public IFaithRecolectable CreateFaith(ISociety society, ICell faithCell, int faithAmount)
         {
             var faithRecolectable = prefabFactory.InstantiateFaithRecolectable(boardOverCanvas, "FaithRecolectable");
@@ -47,16 +42,6 @@ namespace Sohg.CrossCutting.Factories
             fight.Initialize(relationship, from, target, game.GameDefinition.FightDuration, resolveAttack);
 
             return fight;
-        }
-
-        public IGrid CreateGrid()
-        {
-            return prefabFactory.InstantiateGrid(boardCanvas);
-        }
-
-        public IInstructions CreateInstructions()
-        {
-            return prefabFactory.InstantiateInstructions(fixedOverCanvas);
         }
 
         public ISociety CreateSociety(IRunningGame game, ISociety originSociety, params ICell[] cells)
@@ -120,14 +105,6 @@ namespace Sohg.CrossCutting.Factories
             effectIcon.Initialize(action, societyInfo);
 
             return effectIcon;
-        }
-
-        public ISocietyInfo CreateSocietyInfo(IRunningGame game)
-        {
-            var societyInfo = prefabFactory.InstantiateSocietyInfo(boardOverCanvas, "SocietyInfo");
-            societyInfo.Initialize(game);
-
-            return societyInfo;
         }
 
         public ISocietySkillIcon CreateSocietySkillIcon(ISkill skill, ISocietyInfo societyInfo)
