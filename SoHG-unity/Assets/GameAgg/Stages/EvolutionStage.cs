@@ -82,7 +82,7 @@ namespace Sohg.GameAgg.Stages
             else
             {
                 // TODO: this should be enough (but is not): var hasPlayerWon = (game.Species.Count == 1);
-                var hasPlayerWon = (game.Species.Count(species => species.Societies.Sum(society => society.Territory.CellCount) > 0) == 1);
+                var hasPlayerWon = !game.Species.Any(species => species != game.PlayerSpecies && species.Societies.All(society => !society.IsDead));
                 if (hasPlayerWon)
                 {
                     Finish(true);

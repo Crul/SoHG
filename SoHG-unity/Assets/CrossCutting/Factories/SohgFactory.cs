@@ -56,6 +56,19 @@ namespace Sohg.CrossCutting.Factories
             return society;
         }
 
+        public ISociety CreateSociety(ISociety originSociety, ITerritory societyTerritory)
+        {
+            var societyConstructor = (Func<ITerritory, Society>)
+                ((territory) => new Society(this, originSociety, territory));
+
+            var society = CreateSociety(societyConstructor, ((Territory)societyTerritory).cells.ToArray());
+
+            game.Societies
+                .ForEach(otherSociety => AddSocietyRelationships(game.GameDefinition, society, otherSociety, originSociety));
+
+            return society;
+        }
+
         public void CreateSociety(ISpecies species, params ICell[] cells)
         {
             var societyConstructor = (Func<ITerritory, Society>)

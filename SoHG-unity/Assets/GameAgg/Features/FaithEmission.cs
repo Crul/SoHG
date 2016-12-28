@@ -17,12 +17,15 @@ namespace Sohg.GameAgg.Features
 
         public void EmitFaith(IEvolvableGame game, ISociety society)
         {
-            society.State.GetFaithEmitted().ForEach(faithAmount =>
+            society.Territories.ForEach(territory =>
             {
-                var faithCell = game.Grid
-                    .GetRandomCell(cell => cell.TerritoryIndex == society.Territory.TerritoryIndex);
+                society.State.GetFaithEmitted(territory).ForEach(faithAmount =>
+                {
+                    var faithCell = game.Grid
+                        .GetRandomCell(cell => cell.TerritoryIndex == territory.TerritoryIndex);
 
-                game.SohgFactory.CreateFaith(society, faithCell, faithAmount);
+                    game.SohgFactory.CreateFaith(society, faithCell, faithAmount);
+                });
             });
         }
     }

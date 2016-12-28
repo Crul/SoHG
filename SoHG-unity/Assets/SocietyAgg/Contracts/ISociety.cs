@@ -10,8 +10,9 @@ namespace Sohg.SocietyAgg.Contracts
         string Name { get; }
         ISpecies Species { get; }
         ISocietyState State { get; }
-        ITerritory Territory { get; }
+        List<ITerritory> Territories { get; }
         Color Color { get; }
+        int TerritoryExtension { get; }
         
         bool IsDead { get; }
         Dictionary<ISocietyAction, bool> IsEffectActive { get; }

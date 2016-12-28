@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
-using Sohg.SocietyAgg.Contracts;
+﻿using Sohg.SocietyAgg.Contracts;
 using UnityEngine;
 using Sohg.GameAgg.Contracts;
 using Sohg.GameAgg.Features;
+using System.Linq;
+using Sohg.Grids2D.Contracts;
 
 namespace Sohg.SocietyAgg
 {
@@ -16,30 +17,21 @@ namespace Sohg.SocietyAgg
 
         public float FriendshipRange { get; private set; }
 
-        public List<int> MyFrontierCellIndices
-        {
-            get
-            {
-                return We.Territory
-                    .FrontierCellIndicesByTerritoryIndex[Them.Territory.TerritoryIndex];
-            }
-        }
-
         public Relationship(IGameDefinition gameDefinition, ISociety we, ISociety them, IRelationship originRelationship = null)
         {
             We = we;
             Them = them;
-            FriendshipRange = (originRelationship == null 
+            FriendshipRange = (originRelationship == null
                 ? gameDefinition.InitialFriendshipRange
                 : originRelationship.FriendshipRange);
         }
 
         public bool AreWeNeighbours()
         {
-            var theirTerritoryIndex = Them.Territory.TerritoryIndex;
-
-            return We.Territory.FrontierCellIndicesByTerritoryIndex.ContainsKey(theirTerritoryIndex)
-                && We.Territory.FrontierCellIndicesByTerritoryIndex[theirTerritoryIndex].Count > 0;
+            return We.Territories
+                .Any(ourTerritory => Them.Territories
+                    .Any(theirTerritory => ourTerritory.FrontierCellIndicesByTerritoryIndex.ContainsKey(theirTerritory.TerritoryIndex)
+                        && ourTerritory.FrontierCellIndicesByTerritoryIndex[theirTerritory.TerritoryIndex].Count > 0));
         }
 
         public void Evolve(IGameDefinition gameDefinition)
@@ -88,6 +80,11 @@ namespace Sohg.SocietyAgg
 
         public bool WillingToAttack(IGameDefinition gameDefinition)
         {
+            if (!AreWeNeighbours())
+            {
+                return false;
+            }
+
             // TODO Add PopulationDensity?, Aggresivity?, Stability?, ...
             var friendshipThreshold = (Random.Range(0f, 1f)
                 * gameDefinition.FriendshipRangeBottomThresholdForAttack

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Sohg.Grids2D.Contracts;
+using System.Collections.Generic;
 
 namespace Sohg.SocietyAgg.Contracts
 {
@@ -18,7 +19,7 @@ namespace Sohg.SocietyAgg.Contracts
         float FaithShrinkingRateBonus { get; set; }
         int PowerBonus { get; set; }
 
-        List<int> GetFaithEmitted();
+        List<int> GetFaithEmitted(ITerritory territory);
         void Evolve();
         void Kill(long deads);
         void OnExpanded();

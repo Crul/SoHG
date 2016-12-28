@@ -1,4 +1,5 @@
-﻿using Sohg.SocietyAgg.Contracts;
+﻿using Sohg.Grids2D.Contracts;
+using Sohg.SocietyAgg.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,9 +26,7 @@ namespace Sohg.SocietyAgg
         {
             get { return Population; }
         }
-
-        private int territoryExtension { get { return society.Territory.CellCount; } }
-
+        
         public int MaximumAttacks
         {
             get { return System.Math.Max(1, System.Convert.ToInt32(Power / 500)); } // TODO calculate MaximumAttacks
@@ -58,7 +57,7 @@ namespace Sohg.SocietyAgg
         {
             get
             {
-                return (float)Population / (float)System.Math.Max(1, society.Territory.CellCount);
+                return (float)Population / (float)System.Math.Max(1, society.TerritoryExtension);
             }
         }
 
@@ -74,7 +73,7 @@ namespace Sohg.SocietyAgg
         {
             get
             {
-                return Convert.ToInt64(territoryExtension * ((99f * PopulationDensity) + (1f * ProductionLimitPerCell)) / 100);
+                return Convert.ToInt64(society.TerritoryExtension * ((99f * PopulationDensity) + (1f * ProductionLimitPerCell)) / 100);
             }
         }
 
@@ -87,12 +86,12 @@ namespace Sohg.SocietyAgg
         {
             get
             {   
-                if (territoryExtension < minCellToSplit)
+                if (society.TerritoryExtension < minCellToSplit)
                 {
                     return 0;
                 }
 
-                return territoryExtension * destabilizationFactorPerCell;
+                return society.TerritoryExtension * destabilizationFactorPerCell;
             }
         }
         
@@ -135,10 +134,10 @@ namespace Sohg.SocietyAgg
             Population -= deads;
         }
 
-        public List<int> GetFaithEmitted()
+        public List<int> GetFaithEmitted(ITerritory territory)
         {
             // TODO Society.State.GetFaithEmitted() configuration
-            return Enumerable.Range(0, territoryExtension)
+            return Enumerable.Range(0, territory.CellCount)
                 .Where(cell => UnityEngine.Random.Range(0f, 1f) > 0.995f)
                 .Select(cell => UnityEngine.Random.Range(3, 9))
                 .ToList();
@@ -164,8 +163,8 @@ namespace Sohg.SocietyAgg
 
         public void OnSplit(ISociety splitSociety, long totalPopulation, long totalResources)
         {
-            var totalTerritoryExtension = (territoryExtension + splitSociety.Territory.CellCount);
-            var territoryProportion = ((float)territoryExtension / totalTerritoryExtension);
+            var totalTerritoryExtension = (society.TerritoryExtension + splitSociety.TerritoryExtension);
+            var territoryProportion = ((float)society.TerritoryExtension / totalTerritoryExtension);
 
             Population = Convert.ToInt32(territoryProportion * totalPopulation);
             Resources = Convert.ToInt32(territoryProportion * totalResources);
@@ -176,7 +175,7 @@ namespace Sohg.SocietyAgg
 
         public void SetInitialPopulation()
         {
-            Population = territoryExtension * society.Species.InitialPopulationDensity;
+            Population = society.TerritoryExtension * society.Species.InitialPopulationDensity;
         }
     }
 }

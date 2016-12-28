@@ -31,11 +31,16 @@ namespace Sohg.GameAgg.Features
 
         private void ExpandSociety(IEvolvableGame game, ISociety society)
         {
-            var hasBeenExpanded = game.Grid.ExpandSingleCell(society.Territory);
-            if (hasBeenExpanded)
+            for (int territoryIndex = 0; territoryIndex < society.Territories.Count; territoryIndex++)
             {
-                society.State.OnExpanded();
-                game.Log(society.Name + " has expanded");
+                var territory = society.Territories[territoryIndex];
+                var hasBeenExpanded = game.Grid.ExpandSingleCell(territory);
+                if (hasBeenExpanded)
+                {
+                    society.State.OnExpanded();
+                    game.Log(society.Name + " has expanded");
+                    return;
+                }
             }
         }
     }

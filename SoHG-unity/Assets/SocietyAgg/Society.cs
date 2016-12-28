@@ -21,11 +21,12 @@ namespace Sohg.SocietyAgg
         public Color Color { get; private set; }
         public ISpecies Species { get; private set; }
         public ISocietyState State { get; private set; }
-        public ITerritory Territory { get; private set; }
+        public List<ITerritory> Territories { get; private set; }
         
         public Dictionary<ISocietyAction, bool> IsEffectActive { get; private set; }
 
-        public bool IsDead { get { return State.Population == 0 || Territory.CellCount == 0; } }
+        public int TerritoryExtension { get { return Territories.Sum(territory => territory.CellCount); } }
+        public bool IsDead { get { return State.Population == 0 || Territories.All(territory => territory.CellCount == 0); } }
         public IEnumerable<ISocietyAction> Actions { get { return actions; } }
         public IEnumerable<IRelationship> Relationships { get { return relationships; } }
         public IEnumerable<ISkill> Skills { get { return skills; } }
@@ -42,7 +43,7 @@ namespace Sohg.SocietyAgg
             this.sohgFactory = sohgFactory;
             Species = species;
             State = new SocietyState(this);
-            Territory = territory;
+            Territories = new List<ITerritory>() { territory };
         }
 
         public Society(SohgFactory sohgFactory, ISociety originSociety, ITerritory territory)

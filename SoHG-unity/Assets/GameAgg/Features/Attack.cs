@@ -32,9 +32,11 @@ namespace Sohg.GameAgg.Features
             }
 
             society.Relationships
-                .Where(relationship => relationship.AreWeNeighbours()
-                                    && relationship.WillingToAttack(game.GameDefinition))
-                .SelectMany(relationship => relationship.MyFrontierCellIndices
+                .Where(relationship => relationship.WillingToAttack(game.GameDefinition))
+                .SelectMany(relationship => relationship.We.Territories
+                        .SelectMany(ourTerritory => relationship.Them.Territories
+                            .Where(theirTerritory => ourTerritory.FrontierCellIndicesByTerritoryIndex.ContainsKey(theirTerritory.TerritoryIndex))
+                            .SelectMany(theirTerritory => ourTerritory.FrontierCellIndicesByTerritoryIndex[theirTerritory.TerritoryIndex]))
                     .Select(cellIndex => new
                     {
                         from = cellIndex,
@@ -69,7 +71,7 @@ namespace Sohg.GameAgg.Features
                 return false;
             }
 
-            var target = game.Grid.GetInvadableCell(from, relationship.Them.Territory);
+            var target = game.Grid.GetInvadableCell(from, relationship.Them.Territories);
 
             if (target == null || target.IsInvolvedInAttack)
             {

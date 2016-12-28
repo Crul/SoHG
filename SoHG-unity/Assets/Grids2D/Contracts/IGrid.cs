@@ -14,7 +14,7 @@ namespace Sohg.Grids2D.Contracts
         void AddTerritory(ITerritory territory, params ICell[] cells);
 
         ICell GetCell(int cellIndex);
-        ICell GetInvadableCell(ICell from, ITerritory territory);
+        ICell GetInvadableCell(ICell from, List<ITerritory> territories);
         ICell GetRandomCell(Func<ICell, bool> cellFilter);
         ITerritory GetTerritory(ICell cell);
 
@@ -23,9 +23,9 @@ namespace Sohg.Grids2D.Contracts
         bool ExpandSingleCell(ITerritory territory);
         void InitializeBoard(ISohgFactory sohgFactory, IGameDefinition gameDefinition);
         bool InvadeTerritory(ICell from, ICell target);
-        void OnTerritorySplit(ITerritory territory1, ITerritory territory2);
+        void OnTerritorySplit(ITerritory territory1, ITerritory territory2 = null);
         void RedrawIfChanged();
-        void RemoveSocietyTerritory(ITerritory territory);
+        void RemoveSocietyTerritories(List<ITerritory> territories);
         void SetGridSelectionToNone();
         void SetGridSelectionToCell();
         void SetGridSelectionToTerritory();

@@ -85,21 +85,10 @@ namespace Grids2D
 
             return false;
         }
-        
-        public void RemoveSocietyTerritory(ITerritory territory)
-        {
-            if (territory.CellCount == 0)
-            {
-                return;
-            }
 
-            var territoryCells = ((Territory)territory).cells;
-            territoryCells.ForEach(cell =>
-            {
-                SetCellTerritory(cell);
-                UpdateFrontiersAfterTerritoryChange(cell);
-            });
-            FixNonInvadableTerritories();
+        public void RemoveSocietyTerritories(List<ITerritory> territories)
+        {
+            territories.ForEach(territory => RemoveSocietyTerritory(territory));
         }
 
         private int ExpandTerritory(Territory territory, List<Cell> unassignedCells, int territorySizeLimit)
@@ -123,6 +112,22 @@ namespace Grids2D
             });
 
             return cellsToBeExpanded.Count;
+        }
+
+        private void RemoveSocietyTerritory(ITerritory territory)
+        {
+            if (territory.CellCount == 0)
+            {
+                return;
+            }
+
+            var territoryCells = ((Territory)territory).cells;
+            territoryCells.ForEach(cell =>
+            {
+                SetCellTerritory(cell);
+                UpdateFrontiersAfterTerritoryChange(cell);
+            });
+            FixNonInvadableTerritories();
         }
     }
 }
