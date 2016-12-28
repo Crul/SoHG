@@ -75,7 +75,7 @@ namespace Sohg.GameAgg
         {
             var newSocietyCells = Grid.SplitTerritory(society.Territory);
 
-            var newSociety = SohgFactory.CreateSociety(this, society, newSocietyCells.ToArray());
+            var newSociety = SohgFactory.CreateSociety(society, newSocietyCells.ToArray());
             
             var totalPopulation = society.State.Population + newSociety.State.Population;
             var totalResources = society.State.Resources + newSociety.State.Resources;

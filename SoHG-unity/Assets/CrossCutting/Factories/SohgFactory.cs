@@ -21,10 +21,9 @@ namespace Sohg.CrossCutting.Factories
         private PrefabFactory prefabFactory;
         [SerializeField]
         private GameDefinition gameDefinition;
-
-        private Canvas boardCanvas;
-        private Canvas boardOverCanvas;
-        private Canvas fixedOverCanvas;
+        
+        private IRunningGame game;
+        private Canvas boardOverCanvas { get { return game.BoardOverCanvas; } }
 
         public IGameDefinition GameDefinition { get { return gameDefinition; } }
 
@@ -36,7 +35,7 @@ namespace Sohg.CrossCutting.Factories
             return faithRecolectable;
         }
 
-        public IFight CreateFight(IRunningGame game, IRelationship relationship, ICell from, ICell target, Action resolveAttack)
+        public IFight CreateFight(IRelationship relationship, ICell from, ICell target, Action resolveAttack)
         {
             var fight = prefabFactory.InstantiateFight(boardOverCanvas, "Fight");
             fight.Initialize(relationship, from, target, game.GameDefinition.FightDuration, resolveAttack);
@@ -44,12 +43,12 @@ namespace Sohg.CrossCutting.Factories
             return fight;
         }
 
-        public ISociety CreateSociety(IRunningGame game, ISociety originSociety, params ICell[] cells)
+        public ISociety CreateSociety(ISociety originSociety, params ICell[] cells)
         {
             var societyConstructor = (Func<ITerritory, Society>)
                 ((territory) => new Society(this, originSociety, territory));
 
-            var society = CreateSociety(game, societyConstructor, cells);
+            var society = CreateSociety(societyConstructor, cells);
 
             game.Societies
                 .ForEach(otherSociety => AddSocietyRelationships(game.GameDefinition, society, otherSociety, originSociety));
@@ -57,38 +56,15 @@ namespace Sohg.CrossCutting.Factories
             return society;
         }
 
-        public void CreateSociety(IRunningGame game, ISpecies species, params ICell[] cells)
+        public void CreateSociety(ISpecies species, params ICell[] cells)
         {
             var societyConstructor = (Func<ITerritory, Society>)
                 ((territory) => new Society(this, species, territory));
 
-            var society = CreateSociety(game, societyConstructor, cells);
+            var society = CreateSociety(societyConstructor, cells);
 
             game.Societies
                 .ForEach(otherSociety => AddSocietyRelationships(game.GameDefinition, society, otherSociety));
-        }
-
-        private ISociety CreateSociety(IRunningGame game, Func<ITerritory, Society> societyConstructor, ICell[] cells)
-        {
-            if (cells.Length == 0)
-            {
-                cells = new ICell[]
-                {
-                    GetGrid().GetRandomCell(cell => cell.IsNonSocietyTerritory)
-                };
-            }
-
-            var territory = CreateTerritory("SocietyTerritory", cells);
-            var society = societyConstructor(territory);
-            territory.SetSociety(society);
-
-            var societyMarker = prefabFactory.InstantiateSocietyMarker(boardOverCanvas, society.Name + "Marker");
-            societyMarker.Initialize(game, society);
-
-            society.Species.Societies.Add(society);
-            game.Societies.Add(society);
-
-            return society;
         }
 
         public ISocietyActionButton CreateSocietyActionButton(ISocietyAction action, ISocietyInfo societyInfo)
@@ -125,13 +101,13 @@ namespace Sohg.CrossCutting.Factories
             return societyPropertyInfo;
         }
 
-        public ITechnologyCategoryColumn CreateTechnologyCategoryColumn(IEvolvableGame game, ITechnologyCategory technologyCategory,
+        public ITechnologyCategoryColumn CreateTechnologyCategoryColumn(ITechnologyCategory technologyCategory,
             ITechnologyStatesSetter technologyStatesSetter, GameObject technologyPanel)
         {
             var technologyCategoryColumn = prefabFactory.InstantiateTechnologyCategoryColumn(technologyPanel, technologyCategory.Name);
 
             technologyCategory.Technologies.Reverse().ToList()
-                .ForEach(technology => CreateTechnologyBox(game, technology, technologyCategory, technologyCategoryColumn, technologyStatesSetter));
+                .ForEach(technology => CreateTechnologyBox((IEvolvableGame)game, technology, technologyCategory, technologyCategoryColumn, technologyStatesSetter));
 
             technologyCategoryColumn.Initialize(technologyCategory);
 
@@ -149,16 +125,9 @@ namespace Sohg.CrossCutting.Factories
             return territory;
         }
 
-        public IGrid GetGrid()
+        public void SetGame(IRunningGame game)
         {
-            return Grid2D.instance;
-        }
-
-        public void SetCanvas(Canvas boardCanvas, Canvas boardOverCanvas, Canvas fixedOverCanvas)
-        {
-            this.boardCanvas = boardCanvas;
-            this.boardOverCanvas = boardOverCanvas;
-            this.fixedOverCanvas = fixedOverCanvas;
+            this.game = game;
         }
 
         private void AddSocietyRelationships(IGameDefinition gameDefinitiion, ISociety society, ISociety otherSociety, ISociety originSociety = null)
@@ -179,6 +148,29 @@ namespace Sohg.CrossCutting.Factories
             society.AddRelationship(societyRelationship);
         }
 
+        private ISociety CreateSociety(Func<ITerritory, Society> societyConstructor, ICell[] cells)
+        {
+            if (cells.Length == 0)
+            {
+                cells = new ICell[]
+                {
+                    GetGrid().GetRandomCell(cell => cell.IsNonSocietyTerritory)
+                };
+            }
+
+            var territory = CreateTerritory("SocietyTerritory", cells);
+            var society = societyConstructor(territory);
+            territory.SetSociety(society);
+
+            var societyMarker = prefabFactory.InstantiateSocietyMarker(boardOverCanvas, society.Name + "Marker");
+            societyMarker.Initialize(game, society);
+
+            society.Species.Societies.Add(society);
+            game.Societies.Add(society);
+
+            return society;
+        }
+
         private ITechnologyBox CreateTechnologyBox(IEvolvableGame game, ITechnology technology, ITechnologyCategory technologyCategory,
             ITechnologyCategoryColumn technologyCategoryColumn, ITechnologyStatesSetter technologyStatesSetter)
         {
@@ -186,6 +178,11 @@ namespace Sohg.CrossCutting.Factories
             technologyBox.Initialize(game, technology, technologyStatesSetter);
 
             return technologyBox;
+        }
+
+        private IGrid GetGrid()
+        {
+            return Grid2D.instance;
         }
     }
 }

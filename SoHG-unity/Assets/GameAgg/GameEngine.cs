@@ -1,17 +1,17 @@
-﻿using System;
+﻿using Grids2D;
 using Sohg.CrossCutting;
+using Sohg.CrossCutting.Contracts;
 using Sohg.CrossCutting.Factories;
 using Sohg.GameAgg.Contracts;
 using Sohg.GameAgg.UI;
 using Sohg.Grids2D.Contracts;
 using Sohg.SocietyAgg.Contracts;
-using UnityEngine;
-using Sohg.CrossCutting.Contracts;
-using System.Collections.Generic;
-using Sohg.SpeciesAgg.Contracts;
-using System.Linq;
-using Grids2D;
 using Sohg.SocietyAgg.UI;
+using Sohg.SpeciesAgg.Contracts;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace Sohg.GameAgg
 {
@@ -20,13 +20,9 @@ namespace Sohg.GameAgg
     {
         [SerializeField]
         private SohgFactory sohgFactory;
-
-        [SerializeField]
-        private Canvas boardCanvas;
+        
         [SerializeField]
         private Canvas boardOverCanvas;
-        [SerializeField]
-        private Canvas fixedOverCanvas;
 
         [SerializeField]
         private EndGame endGame;
@@ -39,7 +35,6 @@ namespace Sohg.GameAgg
         [SerializeField]
         private SocietyInfo societyInfo;
 
-        public IGrid Grid { get { return grid; } }
         private IEndGame EndGame { get { return endGame; } }
         private IInstructions Instructions { get { return instructions; } }
         private ISocietyInfo SocietyInfo { get { return societyInfo; } }
@@ -48,14 +43,16 @@ namespace Sohg.GameAgg
         public List<ISociety> Societies { get; private set; }
         public int Year { get; set; }
 
+        public Canvas BoardOverCanvas { get { return boardOverCanvas; } }
         public IGameDefinition GameDefinition { get { return SohgFactory.GameDefinition; } }
         public IGameInfoPanel GameInfoPanel { get { return gameInfoPanel; } }
+        public IGrid Grid { get { return grid; } }
         public ISpecies PlayerSpecies { get { return GameDefinition.PlayerSpecies; } }
         public ISohgFactory SohgFactory { get { return sohgFactory; } }
 
         public void Awake()
         {
-            SohgFactory.SetCanvas(boardCanvas, boardOverCanvas, fixedOverCanvas);
+            SohgFactory.SetGame(this);
             
             Grid.AddOnCellClick(cell => OnGridCellClick(cell));
             Grid.AddOnTerritoryClick(territory => OnGridTerritoryClick(territory));

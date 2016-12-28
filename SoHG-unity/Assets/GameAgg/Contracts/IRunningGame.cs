@@ -10,6 +10,7 @@ namespace Sohg.GameAgg.Contracts
 {
     public interface IRunningGame
     {
+        Canvas BoardOverCanvas { get; }
         IGameDefinition GameDefinition { get; }
         ISohgFactory SohgFactory { get; }
         IGrid Grid { get; }
