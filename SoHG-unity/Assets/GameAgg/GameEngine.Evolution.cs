@@ -38,6 +38,11 @@ namespace Sohg.GameAgg
 
         public void Kill(ISociety deathSociety)
         {
+            if (!Societies.Contains(deathSociety))
+            {
+                return;
+            }
+
             Societies.Remove(deathSociety);
             Species.SelectMany(species => species.Societies)
                 // remove relationships first to prevent pointing to removed societies
@@ -70,7 +75,7 @@ namespace Sohg.GameAgg
         {
             var newSocietyCells = Grid.SplitTerritory(society.Territory);
 
-            var newSociety = SohgFactory.CreateSociety(this, society, newSocietyCells.ToArray());
+            var newSociety = SohgFactory.CreateSociety(society, newSocietyCells.ToArray());
             
             var totalPopulation = society.State.Population + newSociety.State.Population;
             var totalResources = society.State.Resources + newSociety.State.Resources;

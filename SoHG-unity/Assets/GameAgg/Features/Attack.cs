@@ -84,7 +84,7 @@ namespace Sohg.GameAgg.Features
             target.IsInvolvedInAttack = true;
 
             game.SohgFactory
-                .CreateFight(game, relationship, from, target, () => ResolveAttack(game, relationship, from, target));
+                .CreateFight(relationship, from, target, () => ResolveAttack(game, relationship, from, target));
 
             return true;
         }

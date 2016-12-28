@@ -61,7 +61,7 @@ namespace Sohg.TechnologyAgg.UI
         private void AddTechnologyCategory(ISohgFactory factory, ITechnologyCategory technologyCategory)
         {
             technologyCategoryColumns
-                .Add(factory.CreateTechnologyCategoryColumn(game, technologyCategory, this, technologyCategoriesPanel));
+                .Add(factory.CreateTechnologyCategoryColumn(technologyCategory, this, technologyCategoriesPanel));
         }
     }
 }

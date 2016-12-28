@@ -1,4 +1,6 @@
-﻿namespace Sohg.SocietyAgg.Contracts
+﻿using System.Collections.Generic;
+
+namespace Sohg.SocietyAgg.Contracts
 {
     public interface ISocietyState
     {
@@ -16,7 +18,7 @@
         float FaithShrinkingRateBonus { get; set; }
         int PowerBonus { get; set; }
 
-        int GetFaithEmitted();
+        List<int> GetFaithEmitted();
         void Evolve();
         void Kill(long deads);
         void OnExpanded();

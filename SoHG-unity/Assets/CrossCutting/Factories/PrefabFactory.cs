@@ -14,15 +14,7 @@ namespace Sohg.CrossCutting.Factories
     [CreateAssetMenu(fileName = "PrefabFactory", menuName = "SoHG/Prefab Factory")]
     public class PrefabFactory : ScriptableBaseObject
     {
-        // TODO instantiate prefabs into "folder objects" to avoid canvas-children-hell
-
-        [SerializeField]
-        private Grid2D gridPrefab;
-        [SerializeField]
-        private EndGame endGamePrefab;
-        [SerializeField]
-        private Instructions instructionsPrefab;
-
+        // TODO instantiate prefabs into "folder objects" to avoid canvas-children-hell        
         [SerializeField]
         private FaithRecolectable faithRecolectablePrefab;
         [SerializeField]
@@ -46,32 +38,14 @@ namespace Sohg.CrossCutting.Factories
         [SerializeField]
         private TechnologyCategoryColumn technologyCategoryColumnPrefab;
 
-        public IGrid InstantiateGrid(Canvas canvas)
-        {
-            return InstantiateIntoCanvas(gridPrefab, canvas, "Grid2D");
-        }
-
         public IFaithRecolectable InstantiateFaithRecolectable(Canvas canvas, string name)
         {
             return InstantiatePooledInto(faithRecolectablePrefab, canvas.gameObject, name);
         }
 
-        public IEndGame InstantiateEndGame(Canvas canvas)
-        {
-            return InstantiateIntoCanvas(endGamePrefab, canvas, "EndGame");
-        }
-
         public IFight InstantiateFight(Canvas canvas, string name)
         {
             return InstantiatePooledInto(fightPrefab, canvas.gameObject, name);
-        }
-
-        public IInstructions InstantiateInstructions(Canvas canvas)
-        {
-            var instructions = InstantiateIntoCanvas(instructionsPrefab, canvas, "Instructions");
-            instructions.transform.localScale = Vector3.one; // TODO why scale = 1 needed?
-
-            return instructions;
         }
 
         public ISocietyMarker InstantiateSocietyMarker(Canvas canvas, string name)
@@ -82,16 +56,6 @@ namespace Sohg.CrossCutting.Factories
             societyMarker.transform.position = societyMarkerPosition;
 
             return societyMarker;
-        }
-
-        public ISocietyInfo InstantiateSocietyInfo(Canvas canvas, string name)
-        {
-            var societyInfo = InstantiateIntoCanvas(societyInfoPrefab, canvas, name);
-            var societyInfoPosition = societyInfo.transform.position;
-            societyInfoPosition.z = -50; // TODO why z = -50 needed
-            societyInfo.transform.position = societyInfoPosition;
-
-            return societyInfo;
         }
 
         public ISocietyActionButton InstantiateSocietyActionButton(GameObject gameObject, string name)

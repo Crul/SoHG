@@ -8,13 +8,13 @@ namespace Sohg.GameAgg
     {
         public void CreateSocieties(ICell humanInitialCell)
         {
-            SohgFactory.CreateSociety(this, GameDefinition.PlayerSpecies, humanInitialCell);
+            SohgFactory.CreateSociety(GameDefinition.PlayerSpecies, humanInitialCell);
 
             var nonPlayerSpeciesCount = GameDefinition.NonPlayerSpecies.Length;
             for (var i = 0; i < GameDefinition.NonPlayerSocietyCount; i++)
             {
                 var species = GameDefinition.NonPlayerSpecies[i % (nonPlayerSpeciesCount - 1)];
-                SohgFactory.CreateSociety(this, species);
+                SohgFactory.CreateSociety(species);
             }
 
             Grid.ExpandSocietiesTerritories(GameDefinition.InitialSocietyPopulationLimit);

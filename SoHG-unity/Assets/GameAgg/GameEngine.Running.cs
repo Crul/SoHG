@@ -17,7 +17,7 @@ namespace Sohg.GameAgg
             // TODO fix pause, now is not working with Fight animation (and execution)
             return GameInfoPanel.PausedPanel.IsVisible() 
                 || GameInfoPanel.TechnologyPanel.IsVisible()
-                || instructions.IsOpened();
+                || Instructions.IsOpened();
         }
 
         public void Log(string log, params object[] logParams)
@@ -40,26 +40,26 @@ namespace Sohg.GameAgg
 
         public IInstructions OpenInstructions(string instructionsText)
         {
-            instructions.Show(instructionsText);
+            Instructions.Show(instructionsText);
 
-            return instructions;
+            return Instructions;
         }
 
         public void OpenSocietyInfo(ISociety society)
         {
-            if (societyInfo.Society == society)
+            if (SocietyInfo.Society == society)
             {
                 CloseSocietyInfo();
             }
             else
             {
-                societyInfo.Show(society);
+                SocietyInfo.Show(society);
             }
         }
 
         public void CloseSocietyInfo()
         {
-            societyInfo.Hide();
+            SocietyInfo.Hide();
         }
     }
 }

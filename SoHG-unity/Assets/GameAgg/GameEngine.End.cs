@@ -6,7 +6,7 @@ namespace Sohg.GameAgg
     {
         public void OpenGameEnding()
         {
-            endGame.Show(hasPlayerWon.Value);
+            EndGame.Show(hasPlayerWon.Value);
         }
     }
 }
