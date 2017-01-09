@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Sohg.SocietyAgg.UI
 {
+    [DisallowMultipleComponent]
     public class Fight : PooledObject, IFight
     {
         private int duration;

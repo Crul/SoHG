@@ -7,6 +7,7 @@ using System;
 
 namespace Sohg.SocietyAgg.UI
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Button))]
     [RequireComponent(typeof(CanvasGroup))]
     public class FaithRecolectable : PooledObject, IFaithRecolectable
