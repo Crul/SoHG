@@ -38,7 +38,7 @@ namespace Sohg.SocietyAgg
             skills = new List<ISkill>();
             IsEffectActive = new Dictionary<ISocietyAction, bool>();
 
-            Name = species.NextSocietyName;
+            Name = species.GetNextSocietyName();
             Color = species.Color;
             this.sohgFactory = sohgFactory;
             Species = species;

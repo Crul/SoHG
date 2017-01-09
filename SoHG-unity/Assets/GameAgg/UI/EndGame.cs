@@ -14,10 +14,13 @@ namespace Sohg.GameAgg.UI
         [SerializeField]
         private Text contentText;
         [SerializeField]
+        private Button continueButton;
+        [SerializeField]
         private Button exitButton;
 
         public void Awake()
         {
+            continueButton.onClick.AddListener(() => gameObject.SetActive(false));
             exitButton.onClick.AddListener(() => SceneManager.LoadScene("Menu"));
             transform.SetAsLastSibling();
             gameObject.SetActive(false);

@@ -6,8 +6,9 @@ namespace Sohg.GameAgg.Contracts
 {
     public interface IEvolvableGame : IRunningGame
     {
+        IEndGame EndGame { get; }
+
         bool CheckDependentTechnologies(ITechnologyDependent technologyDependent);
-        void FinishEvolution(bool hasPlayerWon);
         bool Invade(ICell from, ICell target);
         void Kill(ISociety society);
         void OnTechnologyActivated();

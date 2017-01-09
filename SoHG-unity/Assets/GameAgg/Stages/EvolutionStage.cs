@@ -10,7 +10,6 @@ namespace Sohg.GameAgg.Stages
     public class EvolutionStage : GameStage<IEvolvableGame>
     {
         private int time;
-        private int currentSocietyIndex;
 
         private int timeForOneYearStep = 2000000;
         private int timeDecelerationAmortiguation = 1000;
@@ -30,7 +29,6 @@ namespace Sohg.GameAgg.Stages
         public override void Start()
         {
             time = 0;
-            currentSocietyIndex = 0;
 
             game.OpenInstructions(
                     "The Stories begin" + System.Environment.NewLine +
@@ -74,26 +72,16 @@ namespace Sohg.GameAgg.Stages
 
         private void CheckWinOrLoose()
         {
-            var hasPlayerLosen = (game.PlayerSpecies.Societies.Count == 0);
-            if (hasPlayerLosen)
+            if (game.IsPlayerDead)
             {
                 Finish(false);
-            }
-            else
-            {
-                // TODO: this should be enough (but is not): var hasPlayerWon = (game.Species.Count == 1);
-                var hasPlayerWon = !game.Species.Any(species => species != game.PlayerSpecies && species.Societies.All(society => !society.IsDead));
-                if (hasPlayerWon)
-                {
-                    Finish(true);
-                }
             }
         }
 
         private void Finish(bool hasPlayerWon)
         {
-            game.FinishEvolution(hasPlayerWon);
-            game.NextStage();
+            game.EndGame.Show(hasPlayerWon);
+            game.Log("End game!");
         }
     }
 }

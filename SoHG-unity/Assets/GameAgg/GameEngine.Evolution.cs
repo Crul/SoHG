@@ -9,13 +9,7 @@ namespace Sohg.GameAgg
     public partial class GameEngine : IEvolvableGame
     {
         private bool? hasPlayerWon;
-
-        public void FinishEvolution(bool hasPlayerWon)
-        {
-            Log("evolution finish");
-            this.hasPlayerWon = hasPlayerWon;
-        }
-
+        
         public bool Invade(ICell from, ICell target)
         {
             var invadedTerritory = Grid.GetTerritory(target);

@@ -20,6 +20,9 @@ namespace Sohg.GameAgg.Contracts
         List<ISpecies> Species { get; }
         int Year { get; set; }
 
+        bool IsPlayerDead { get; }
+        bool AreNonPlayerSpeciesDead { get; }
+
         Coroutine ExecuteRoutine(IEnumerator actionExecution);
         bool IsPaused();
         void Log(string log, params object[] logParams);
