@@ -14,9 +14,12 @@ namespace Sohg.SocietyAgg
         private float technologyRateBonus;
         [SerializeField]
         private float faithShrinkingRateBonus;
+        [SerializeField]
+        private float seaMovementCapacityBonus;
 
         public Sprite SkillIcon { get { return skillIcon; } }
         public float FaithShrinkingRateBonus { get { return faithShrinkingRateBonus; } }
+        public float SeaMovementCapacityBonus { get { return seaMovementCapacityBonus; } }
         public float TechnologyRateBonus { get { return technologyRateBonus; } }
 
         protected override void Activate()

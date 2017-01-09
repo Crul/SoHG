@@ -7,6 +7,7 @@ namespace Sohg.SocietyAgg.Contracts
     {
         Sprite SkillIcon { get; }
         float FaithShrinkingRateBonus { get; }
+        float SeaMovementCapacityBonus { get; }
         float TechnologyRateBonus { get; }
     }
 }

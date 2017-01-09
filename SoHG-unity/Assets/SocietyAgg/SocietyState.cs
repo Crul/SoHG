@@ -17,8 +17,10 @@ namespace Sohg.SocietyAgg
         public long CivilizationLevel { get; private set; }
         public long Population { get; private set; }
         public long Resources { get; private set; }
+        public float SeaMovementCapacity { get; private set; }
         public float TechnologyLevelRate { get; private set; }
 
+        public int BoatCount { get; set; }
         public float FaithShrinkingRateBonus { get; set; }
         public int PowerBonus { get; set; }
 
@@ -26,12 +28,14 @@ namespace Sohg.SocietyAgg
         {
             get { return Population; }
         }
-        
-        public int MaximumAttacks
-        {
-            get { return System.Math.Max(1, System.Convert.ToInt32(Power / 500)); } // TODO calculate MaximumAttacks
-        }
 
+        public int BoatCapacity
+        {
+            get
+            {
+                return 1; // TODO BoatCapacity
+            }
+        }
         public int ExpansionCapacity
         {
             get
@@ -51,6 +55,10 @@ namespace Sohg.SocietyAgg
                 
                 return expansionCapacity;
             }
+        }
+        public int MaximumAttacks
+        {
+            get { return System.Math.Max(1, System.Convert.ToInt32(Power / 500)); } // TODO calculate MaximumAttacks
         }
 
         public float PopulationDensity
@@ -103,6 +111,7 @@ namespace Sohg.SocietyAgg
             CivilizationLevel = 0;
             Population = 0;
             Resources = 0;
+            SeaMovementCapacity = 0;
         }
 
         public void Evolve()
@@ -157,6 +166,7 @@ namespace Sohg.SocietyAgg
             var populationOverProduction = (Population / ProductionLimitPerCell);
             TechnologyLevelRate += skill.TechnologyRateBonus;
             Population = populationOverProduction * ProductionLimitPerCell;
+            SeaMovementCapacity += skill.SeaMovementCapacityBonus;
 
             FaithShrinkingRateBonus += skill.FaithShrinkingRateBonus;
         }

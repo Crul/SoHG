@@ -8,6 +8,7 @@ using Sohg.GameAgg.Contracts;
 using Sohg.CrossCutting.Pooling;
 using Sohg.TechnologyAgg.Contracts;
 using Sohg.TechnologyAgg.UI;
+using System;
 
 namespace Sohg.CrossCutting.Factories
 {
@@ -16,14 +17,14 @@ namespace Sohg.CrossCutting.Factories
     {
         // TODO instantiate prefabs into "folder objects" to avoid canvas-children-hell        
         [SerializeField]
+        private Boat boatPrefab;
+        [SerializeField]
         private FaithRecolectable faithRecolectablePrefab;
         [SerializeField]
         private Fight fightPrefab;
 
         [SerializeField]
         private SocietyMarker societyMarkerPrefab;
-        [SerializeField]
-        private SocietyInfo societyInfoPrefab;
         [SerializeField]
         private SocietyActionButton societyActionButtonPrefab;
         [SerializeField]
@@ -37,6 +38,11 @@ namespace Sohg.CrossCutting.Factories
         private TechnologyBox technologyBoxPrefab;
         [SerializeField]
         private TechnologyCategoryColumn technologyCategoryColumnPrefab;
+
+        public IBoat InstantiateBoat(Canvas canvas, string name)
+        {
+            return InstantiatePooledInto(boatPrefab, canvas.gameObject, name);
+        }
 
         public IFaithRecolectable InstantiateFaithRecolectable(Canvas canvas, string name)
         {

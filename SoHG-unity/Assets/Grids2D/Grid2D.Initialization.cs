@@ -4,6 +4,7 @@ using Sohg.GameAgg.Contracts;
 using System;
 using System.Linq;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace Grids2D
 {
@@ -26,9 +27,11 @@ namespace Grids2D
 
             SetGridProperties(gameDefinition);
 
-            Enumerable.Range(0, cells.Count).ToList()
-                .ForEach(cellIndex => InitializeCell(cellIndex));
-            
+            var cellIndices = Enumerable.Range(0, cells.Count).ToList();
+
+            cellIndices.ForEach(cellIndex => InitializeCell(cellIndex));
+            cellIndices.ForEach(cellIndex => SetCellDistanceToCoast(cellIndex));
+
             Redraw();
         }
 
@@ -51,11 +54,38 @@ namespace Grids2D
             SetCellTerritory(cell);
         }
 
+        private void SetCellDistanceToCoast(int cellIndex)
+        {
+            var cellToSetDistanceToCoast = cells[cellIndex];
+            if (cellToSetDistanceToCoast.IsSea)
+            {
+                cellToSetDistanceToCoast.DistanceToCoast = -1;
+
+                return;
+            }
+
+            var distanceToCoast = 0;
+            var exploredCells = new List<Cell>();
+            var nextRingCells = CellGetNeighbours(cellToSetDistanceToCoast);
+            while (!nextRingCells.Any(neighbour => neighbour.IsSea))
+            {
+                distanceToCoast++;
+
+                exploredCells.AddRange(nextRingCells);
+
+                nextRingCells = nextRingCells
+                    .SelectMany(cell => CellGetNeighbours(cell).Where(neighbour => !exploredCells.Contains(neighbour)))
+                    .ToList();
+            }
+
+            cellToSetDistanceToCoast.DistanceToCoast = distanceToCoast;
+        }
+
         private void SetGridProperties(IGameDefinition gameDefinition)
         {
             gridTopology = GRID_TOPOLOGY.Hexagonal;
             SetGridSelectionToNone();
-            
+
             numTerritories = 1;
             columnCount = gameDefinition.BoardColumns;
             rowCount = gameDefinition.BoardRows;

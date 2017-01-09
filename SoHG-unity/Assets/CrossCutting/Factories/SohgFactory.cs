@@ -35,6 +35,12 @@ namespace Sohg.CrossCutting.Factories
             return faithRecolectable;
         }
 
+        public void CreateBoat(ISociety society, ICell boatCreationCell)
+        {
+            var boat = prefabFactory.InstantiateBoat(boardOverCanvas, society.Name + " Boat");
+            boat.Initialize(game, society, boatCreationCell);
+        }
+
         public IFight CreateFight(IRelationship relationship, ICell from, ICell target, Action resolveAttack)
         {
             var fight = prefabFactory.InstantiateFight(boardOverCanvas, "Fight");

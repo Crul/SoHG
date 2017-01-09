@@ -16,13 +16,19 @@ namespace Grids2D
         private CellType cellType;
 
         public int CellIndex { get; private set; }
-        public Vector3 WorldPosition { get; private set; }
         public bool CanBeInvaded { get; set; }
+        public int DistanceToCoast { get; set; }
         public bool IsInvolvedInAttack { get; set; }
+        public Vector3 WorldPosition { get; private set; }
 
         public bool IsNonSocietyTerritory
         {
             get { return cellType == CellType.NonSocietyTerritory; }
+        }
+
+        public bool IsCoast
+        {
+            get { return IsSocietyTerritory && DistanceToCoast == 0; }
         }
 
         public bool IsSea

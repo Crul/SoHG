@@ -14,8 +14,10 @@ namespace Sohg.Grids2D.Contracts
         void AddTerritory(ITerritory territory, params ICell[] cells);
 
         ICell GetCell(int cellIndex);
+        List<ICell> GetCoast(ITerritory territory);
         ICell GetInvadableCell(ICell from, List<ITerritory> territories);
         ICell GetRandomCell(Func<ICell, bool> cellFilter);
+        ICell GetSeaNextTo(ICell cell);
         ITerritory GetTerritory(ICell cell);
 
         void ContractSingleCell(ITerritory territory);

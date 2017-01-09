@@ -13,6 +13,7 @@ namespace Sohg.CrossCutting.Contracts
     {
         IGameDefinition GameDefinition { get; }
 
+        void CreateBoat(ISociety society, ICell boatCreationCell);
         IFaithRecolectable CreateFaith(ISociety society, ICell faithCell, int faithAmount);
         IFight CreateFight(IRelationship relationship, ICell from, ICell target, Action resolveAttack);
         ISociety CreateSociety(ISociety originSociety, params ICell[] cells);

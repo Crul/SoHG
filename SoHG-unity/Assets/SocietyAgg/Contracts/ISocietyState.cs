@@ -5,6 +5,7 @@ namespace Sohg.SocietyAgg.Contracts
 {
     public interface ISocietyState
     {
+        int BoatCapacity { get; }
         long CivilizationLevel { get; }
         int ExpansionCapacity { get; }
         int MaximumAttacks { get; }
@@ -13,9 +14,11 @@ namespace Sohg.SocietyAgg.Contracts
         float Power { get; }
         long Production { get; }
         long Resources { get; }
+        float SeaMovementCapacity { get; }
         float SplitingProbability { get; }
         float TechnologyLevelRate { get; }
 
+        int BoatCount { get; set; }
         float FaithShrinkingRateBonus { get; set; }
         int PowerBonus { get; set; }
 
