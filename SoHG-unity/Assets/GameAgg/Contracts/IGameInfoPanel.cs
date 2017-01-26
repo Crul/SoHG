@@ -8,6 +8,7 @@ namespace Sohg.GameAgg.Contracts
         IGameStatusInfo GameStatusInfo { get; }
         ITechnologyPanel TechnologyPanel { get; }
 
+        void EnableTechnologyTree();
         void LogOutput(string log);
     }
 }

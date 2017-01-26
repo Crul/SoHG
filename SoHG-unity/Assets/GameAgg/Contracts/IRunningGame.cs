@@ -12,6 +12,7 @@ namespace Sohg.GameAgg.Contracts
     {
         Canvas BoardOverCanvas { get; }
         IGameDefinition GameDefinition { get; }
+        IGameInfoPanel GameInfoPanel { get; }
         ISohgFactory SohgFactory { get; }
         IGrid Grid { get; }
 

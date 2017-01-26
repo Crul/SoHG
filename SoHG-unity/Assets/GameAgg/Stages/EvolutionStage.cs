@@ -30,6 +30,8 @@ namespace Sohg.GameAgg.Stages
         {
             time = 0;
 
+            game.GameInfoPanel.EnableTechnologyTree();
+
             game.OpenInstructions(
                     "The Stories begin" + System.Environment.NewLine +
                     "The human species has born and they are not alone." + System.Environment.NewLine +
