@@ -20,7 +20,7 @@ namespace Sohg.GameAgg
             Grid.ExpandSocietiesTerritories(GameDefinition.InitialSocietyPopulationLimit);
 
             Species.SelectMany(species => species.Societies).ToList()
-                .ForEach(society => society.Initialize());
+                .ForEach(society => society.State.SetInitialPopulation(society.Species.InitialPopulationDensity));
         }
     }
 }

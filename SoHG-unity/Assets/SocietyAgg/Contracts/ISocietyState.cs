@@ -5,7 +5,7 @@ namespace Sohg.SocietyAgg.Contracts
 {
     public interface ISocietyState
     {
-        int BoatCapacity { get; }
+        float AggressivityRate { get; }
         long CivilizationLevel { get; }
         int ExpansionCapacity { get; }
         int MaximumAttacks { get; }
@@ -17,17 +17,20 @@ namespace Sohg.SocietyAgg.Contracts
         float SeaMovementCapacity { get; }
         float SplitingProbability { get; }
         float TechnologyLevelRate { get; }
-
-        int BoatCount { get; set; }
+        
         float FaithShrinkingRateBonus { get; set; }
         int PowerBonus { get; set; }
 
+        int BoatCapacity { get; }
+        List<IBoat> Boats { get; }
+        
         List<int> GetFaithEmitted(ITerritory territory);
         void Evolve();
+        void InheritState(ISociety originSociety);
         void Kill(long deads);
         void OnExpanded();
         void OnSkillAdded(ISkill skill);
         void OnSplit(ISociety splitSociety, long totalPopulation, long totalResources);
-        void SetInitialPopulation();
+        void SetInitialPopulation(float initialPopulationDensity);
     }
 }

@@ -10,7 +10,7 @@ namespace Sohg.SocietyAgg.Contracts
         string Name { get; }
         ISpecies Species { get; }
         ISocietyState State { get; }
-        List<ITerritory> Territories { get; }
+        ITerritory Territory { get; }
         Color Color { get; }
         int TerritoryExtension { get; }
         
@@ -27,7 +27,6 @@ namespace Sohg.SocietyAgg.Contracts
         IRelationship GetRelationship(ISociety society);
         void RemoveRelationship(ISociety deathSociety);
         
-        void Initialize();
         bool IsNeighbourOf(ISociety society);
     }
 }

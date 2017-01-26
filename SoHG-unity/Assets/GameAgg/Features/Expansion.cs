@@ -8,7 +8,7 @@ namespace Sohg.GameAgg.Features
     [CreateAssetMenu(fileName = "ExpansionFeature", menuName = "SoHG/Features/Expansion")]
     public class Expansion : GameFeature
     {
-        private int expansionMarginForOtherFeatures = 1;
+        private int expansionMarginForOtherFeatures = 0;
 
         public override void Run(IEvolvableGame game, ISociety society)
         {
@@ -36,19 +36,13 @@ namespace Sohg.GameAgg.Features
 
         private bool ExpandSociety(IEvolvableGame game, ISociety society)
         {
-            for (int territoryIndex = 0; territoryIndex < society.Territories.Count; territoryIndex++)
+            var hasBeenExpanded = game.Grid.ExpandSingleCell(society.Territory);
+            if (hasBeenExpanded)
             {
-                var territory = society.Territories[territoryIndex];
-                var hasBeenExpanded = game.Grid.ExpandSingleCell(territory);
-                if (hasBeenExpanded)
-                {
-                    society.State.OnExpanded();
-
-                    return true;
-                }
+                society.State.OnExpanded();
             }
 
-            return false;
+            return hasBeenExpanded;
         }
     }
 }

@@ -72,8 +72,7 @@ namespace Sohg.SocietyAgg.UI
                 }
                 else
                 {
-                    // TODO SocietyMarker.position for multiple territories society?
-                    SetPosition(society.Territories[0].GetCenter());
+                    SetPosition(society.Territory.GetCenter());
                 }
             }
         }

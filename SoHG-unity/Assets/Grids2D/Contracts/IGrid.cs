@@ -2,6 +2,7 @@
 using Sohg.GameAgg.Contracts;
 using System;
 using System.Collections.Generic;
+using Sohg.SocietyAgg.Contracts;
 
 namespace Sohg.Grids2D.Contracts
 {
@@ -15,7 +16,7 @@ namespace Sohg.Grids2D.Contracts
 
         ICell GetCell(int cellIndex);
         List<ICell> GetCoast(ITerritory territory);
-        ICell GetInvadableCell(ICell from, List<ITerritory> territories);
+        ICell GetInvadableCell(ICell from, ITerritory territory);
         ICell GetRandomCell(Func<ICell, bool> cellFilter);
         ICell GetSeaNextTo(ICell cell);
         ITerritory GetTerritory(ICell cell);
@@ -27,10 +28,11 @@ namespace Sohg.Grids2D.Contracts
         bool InvadeTerritory(ICell from, ICell target);
         void OnTerritorySplit(ITerritory territory1, ITerritory territory2 = null);
         void RedrawIfChanged();
-        void RemoveSocietyTerritories(List<ITerritory> territories);
+        void RemoveSocietyTerritory(ITerritory territory);
         void SetGridSelectionToNone();
         void SetGridSelectionToCell();
         void SetGridSelectionToTerritory();
+        bool SettleFromSea(ISociety society, ICell cell);
         List<ICell> SplitTerritory(ITerritory territory);
     }
 }

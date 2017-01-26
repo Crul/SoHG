@@ -142,8 +142,7 @@ namespace Sohg.SocietyAgg.UI
 
         private void SetPosition()
         {
-            // TODO SocietyInfo.position for multiple territories society?
-            var territoryCenter = Society.Territories[0].GetCenter();
+            var territoryCenter = Society.Territory.GetCenter();
             var societyInfoPosition = gameObject.transform.position;
             societyInfoPosition.x = territoryCenter.x;
             societyInfoPosition.y = territoryCenter.y;

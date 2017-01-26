@@ -39,6 +39,7 @@ namespace Sohg.CrossCutting.Factories
         {
             var boat = prefabFactory.InstantiateBoat(boardOverCanvas, society.Name + " Boat");
             boat.Initialize(game, society, boatCreationCell);
+            society.State.Boats.Add(boat);
         }
 
         public IFight CreateFight(IRelationship relationship, ICell from, ICell target, Action resolveAttack)

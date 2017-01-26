@@ -13,15 +13,14 @@ namespace Sohg.SocietyAgg.UI
     {
         private ICell cell;
         private IRunningGame game;
-        private int navigationDuration;
         private ISociety society;
+        private float settleProbability = 0.1f;
 
         public void Initialize(IRunningGame game, ISociety society, ICell boatCreationCell)
         {
             this.game = game;
             this.society = society;
             cell = boatCreationCell;
-            navigationDuration = 0;
 
             GetComponent<Image>().color = society.Color;
             MoveBoat();
@@ -29,12 +28,35 @@ namespace Sohg.SocietyAgg.UI
 
         public void FixedUpdate()
         {
-            MoveBoat();
-            navigationDuration++;
+            if (game == null || game.IsPaused())
+            {
+                return;
+            }
 
-            // TODO Add Boat return to land
+            if (!TryToSettle())
+            {
+                MoveBoat();
+            }
+
+            // TODO Add Boat return to land (add resources)
             // TODO Add Boat attack
-            // TODO Add Boat expansion
+        }
+
+        public bool TryToSettle()
+        {
+            if (Random.Range(0f, 1f) > settleProbability)
+            {
+                return false;
+            }
+
+            var hasBeenExpanded = game.Grid.SettleFromSea(society, cell);
+            if (hasBeenExpanded)
+            {
+                society.State.Boats.Remove(this);
+                ReturnToPool();
+            }
+
+            return hasBeenExpanded;
         }
 
         private void MoveBoat()

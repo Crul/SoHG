@@ -35,9 +35,8 @@ namespace Sohg.SocietyAgg.UI
             iconImage.sprite = skill.SkillIcon;
 
             discoveryText.text = string.Format("{0} discovered!", skill.Name);
-
-            // TODO SocietyMarker.position for multiple territories society?
-            var societyCenter = society.Territories[0].GetCenter();
+            
+            var societyCenter = society.Territory.GetCenter();
             var newPosition = new Vector3(societyCenter.x, societyCenter.y, transform.position.z);
             transform.position = newPosition;
 

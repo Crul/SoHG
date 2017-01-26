@@ -1,7 +1,7 @@
 ﻿using Sohg.Grids2D.Contracts;
+using Sohg.SocietyAgg.Contracts;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace Grids2D
 {
@@ -9,6 +9,11 @@ namespace Grids2D
     {
         public void ContractSingleCell(ITerritory territory)
         {
+            if (territory.CellCount == 1)
+            {
+                return;
+            }
+
             var abandonedCell = territory.FrontierCellIndices
                 .Select(cellIndex => cells[cellIndex])
                 .Where(cell => cell.CanBeInvaded && !cell.IsInvolvedInAttack)
@@ -87,10 +92,44 @@ namespace Grids2D
             return false;
         }
 
-        public void RemoveSocietyTerritories(List<ITerritory> territories)
+        public void RemoveSocietyTerritory(ITerritory territory)
         {
-            territories.ForEach(territory => RemoveSocietyTerritory(territory));
+            if (territory.CellCount == 0)
+            {
+                return;
+            }
+
+            var territoryCells = ((Territory)territory).cells;
+            territoryCells.ForEach(cell =>
+            {
+                SetCellTerritory(cell);
+                UpdateFrontiersAfterTerritoryChange(cell);
+            });
+            FixNonInvadableTerritories();
+
             territoriesHaveChanged = true;
+        }
+
+        public bool SettleFromSea(ISociety society, ICell cell)
+        {
+            var targetLandCell = CellGetNeighbours(cell.CellIndex)
+                .Where(neighbour => neighbour.IsNonSocietyTerritory
+                    && !CellGetNeighbours(neighbour).Any(neighbourNeighbour => neighbourNeighbour.IsSocietyTerritory))
+                .OrderByDescending(neighbour => neighbour.FertilityRatio)
+                .FirstOrDefault();
+
+            if (targetLandCell == null)
+            {
+                return false;
+            }
+
+            var newSociety = sohgFactory.CreateSociety(society, targetLandCell);
+            newSociety.State.SetInitialPopulation(newSociety.State.PopulationDensity);
+            newSociety.Territory.InitializeFrontier(this);
+
+            territoriesHaveChanged = true;
+
+            return true;
         }
 
         private int ExpandTerritory(Territory territory, List<Cell> unassignedCells, int territorySizeLimit)
@@ -114,22 +153,6 @@ namespace Grids2D
             });
 
             return cellsToBeExpanded.Count;
-        }
-
-        private void RemoveSocietyTerritory(ITerritory territory)
-        {
-            if (territory.CellCount == 0)
-            {
-                return;
-            }
-
-            var territoryCells = ((Territory)territory).cells;
-            territoryCells.ForEach(cell =>
-            {
-                SetCellTerritory(cell);
-                UpdateFrontiersAfterTerritoryChange(cell);
-            });
-            FixNonInvadableTerritories();
         }
     }
 }

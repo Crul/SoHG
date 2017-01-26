@@ -81,7 +81,7 @@ namespace Grids2D
             var fertilityByLatitude = (1f - (2f * latitude));
             var fertilityByDistanceToCoast = (3f / (DistanceToCoast + 3f));
 
-            FertilityRatio = 0.97f + ((fertilityByLatitude + fertilityByDistanceToCoast) / 40f);
+            FertilityRatio = 0.98f + ((fertilityByLatitude + fertilityByDistanceToCoast) / 40f);
         }
     }
 }

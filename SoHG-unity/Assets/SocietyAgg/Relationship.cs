@@ -28,10 +28,8 @@ namespace Sohg.SocietyAgg
 
         public bool AreWeNeighbours()
         {
-            return We.Territories
-                .Any(ourTerritory => Them.Territories
-                    .Any(theirTerritory => ourTerritory.FrontierCellIndicesByTerritoryIndex.ContainsKey(theirTerritory.TerritoryIndex)
-                        && ourTerritory.FrontierCellIndicesByTerritoryIndex[theirTerritory.TerritoryIndex].Count > 0));
+            return We.Territory.FrontierCellIndicesByTerritoryIndex.ContainsKey(Them.Territory.TerritoryIndex)
+                && We.Territory.FrontierCellIndicesByTerritoryIndex[Them.Territory.TerritoryIndex].Count > 0;
         }
 
         public void Evolve(IGameDefinition gameDefinition)

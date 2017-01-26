@@ -2,7 +2,6 @@
 using Sohg.SocietyAgg.Contracts;
 using System.Linq;
 using UnityEngine;
-using Sohg.Grids2D.Contracts;
 
 namespace Sohg.GameAgg.Features
 {
@@ -19,24 +18,17 @@ namespace Sohg.GameAgg.Features
             }
 
             var boatCapacity = society.State.BoatCapacity;
-            if (society.State.BoatCount < boatCapacity && Random.Range(0f, 1f) < boatCreationProbability)
+            if (society.State.Boats.Count < boatCapacity && Random.Range(0f, 1f) < boatCreationProbability)
             {
-                var boatCreationCell = society.Territories
-                    .SelectMany(territory => game.Grid.GetCoast(territory))
+                var boatCreationCell = game.Grid.GetCoast(society.Territory)
                     .OrderBy(cell => Random.Range(0f, 1f))
                     .FirstOrDefault();
 
                 if (boatCreationCell != null)
                 {
-                    CreateBoat(game, society, boatCreationCell);
+                    game.SohgFactory.CreateBoat(society, boatCreationCell);
                 }
             }
-        }
-
-        private void CreateBoat(IEvolvableGame game, ISociety society, ICell boatCreationCell)
-        {
-            game.SohgFactory.CreateBoat(society, boatCreationCell);
-            society.State.BoatCount++;
         }
     }
 }

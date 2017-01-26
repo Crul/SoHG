@@ -44,7 +44,7 @@ namespace Sohg.GameAgg
                 .Where(society => society != deathSociety).ToList()
                 .ForEach(society => society.RemoveRelationship(deathSociety));
 
-            Grid.RemoveSocietyTerritories(deathSociety.Territories);
+            Grid.RemoveSocietyTerritory(deathSociety.Territory);
 
             deathSociety.Species.Societies.Remove(deathSociety);
             Log("{0} has dissapear", deathSociety.Name);
@@ -58,11 +58,7 @@ namespace Sohg.GameAgg
 
         public void Shrink(ISociety society)
         {
-            var territoryToShrink = society.Territories
-                .OrderBy(territory => Random.Range(0f, 1f))
-                .First();
-
-            Grid.ContractSingleCell(territoryToShrink);
+            Grid.ContractSingleCell(society.Territory);
 
             if (society.IsDead)
             {
@@ -72,43 +68,20 @@ namespace Sohg.GameAgg
 
         public void Split(ISociety society)
         {
-            ISociety newSociety;
-            if (society.Territories.Count > 1)
-            {
-                newSociety = SplitMultipleTerritorySociety(society);
-            }
-            else
-            {
-                newSociety = SplitSingleTerritorySociety(society);
-            }
-
+            var newSociety = SplitTerritory(society);
             var totalPopulation = society.State.Population + newSociety.State.Population;
             var totalResources = society.State.Resources + newSociety.State.Resources;
             society.State.OnSplit(newSociety, totalPopulation, totalResources);
             newSociety.State.OnSplit(society, totalPopulation, totalResources);
         }
 
-        private ISociety SplitMultipleTerritorySociety(ISociety society)
+        private ISociety SplitTerritory(ISociety society)
         {
-            var newSocietyTerritory = society.Territories
-                .OrderBy(territory => Random.Range(0f, 1f))
-                .First();
-
-            var newSociety = SohgFactory.CreateSociety(society, newSocietyTerritory);
-
-            Grid.OnTerritorySplit(newSociety.Territories[0]);
-
-            return newSociety;
-        }
-
-        private ISociety SplitSingleTerritorySociety(ISociety society)
-        {
-            var territory = society.Territories[0];
-            var newSocietyCells = Grid.SplitTerritory(territory);
+            var newSocietyCells = Grid.SplitTerritory(society.Territory);
 
             var newSociety = SohgFactory.CreateSociety(society, newSocietyCells.ToArray());
             
-            Grid.OnTerritorySplit(territory, newSociety.Territories[0]);
+            Grid.OnTerritorySplit(society.Territory, newSociety.Territory);
 
             return newSociety;
         }

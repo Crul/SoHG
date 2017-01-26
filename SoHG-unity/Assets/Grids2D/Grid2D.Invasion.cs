@@ -30,11 +30,11 @@ namespace Grids2D
         };
         #endregion
 
-        public ICell GetInvadableCell(ICell from, List<ITerritory> territories)
+        public ICell GetInvadableCell(ICell from, ITerritory territory)
         {
             return CellGetNeighbours(from.CellIndex)
                 .Where(neighbour => neighbour.CanBeInvaded 
-                    && territories.Any(territory => territory.TerritoryIndex == neighbour.TerritoryIndex))
+                    && territory.TerritoryIndex == neighbour.TerritoryIndex)
                 .FirstOrDefault();
         }
 
