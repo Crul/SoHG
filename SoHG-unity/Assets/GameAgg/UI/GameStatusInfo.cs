@@ -21,8 +21,9 @@ namespace Sohg.GameAgg.UI
         private IRunningGame game;
         private int currentUpdatesWithNoYearIncrement;
         private int lastUpdatesWithNoYearIncrement;
-        private int displayingYear;
         private int realYear;
+
+        public int DisplayingYear { get; private set; }
 
         public void Awake()
         {
@@ -35,7 +36,7 @@ namespace Sohg.GameAgg.UI
         public void SetGame(IRunningGame game)
         {
             this.game = game;
-            displayingYear = 0;
+            DisplayingYear = 0;
             realYear = -1;
         }
 
@@ -49,8 +50,8 @@ namespace Sohg.GameAgg.UI
 
         private void Refresh()
         {
-            displayingYear += GetYearIncrement();
-            yearInfo.SetValue(displayingYear.ToString("### ### ### ### ### ##0")); // TODO number format
+            DisplayingYear += GetYearIncrement();
+            yearInfo.SetValue(DisplayingYear.ToString("### ### ### ### ### ##0")); // TODO number format
 
             var population = game.PlayerSpecies.Societies.Sum(society => society.State.Population);
             populationInfo
@@ -73,7 +74,7 @@ namespace Sohg.GameAgg.UI
             }
             currentUpdatesWithNoYearIncrement++;
 
-            return System.Math.Max(0, (realYear - displayingYear)
+            return System.Math.Max(0, (realYear - DisplayingYear)
                 / System.Math.Max(1, lastUpdatesWithNoYearIncrement - currentUpdatesWithNoYearIncrement));
         }
     }
