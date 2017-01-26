@@ -4,6 +4,7 @@ using Sohg.Grids2D.Contracts;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using Sohg.GameAgg.Contracts;
 
 namespace Sohg.SocietyAgg.UI
 {
@@ -33,6 +34,7 @@ namespace Sohg.SocietyAgg.UI
         private CanvasGroup canvasGroup;
         private FaithRecolectableState state;
 
+        private IRunningGame game;
         private int faithAmount;
         private ISociety society;
 
@@ -46,8 +48,9 @@ namespace Sohg.SocietyAgg.UI
             button.onClick.AddListener(() => RecolectFaith());
         }
 
-        public void Initialize(ISociety society, ICell faithCell, int faithAmount)
+        public void Initialize(IRunningGame game, ISociety society, ICell faithCell, int faithAmount)
         {
+            this.game = game;
             this.society = society;
             this.faithAmount = faithAmount;
             transform.position = faithCell.WorldPosition;
@@ -69,6 +72,11 @@ namespace Sohg.SocietyAgg.UI
 
         public void Update()
         {
+            if (game == null || game.IsPaused())
+            {
+                return;
+            }
+
             switch (state)
             {
                 case FaithRecolectableState.Initialized:

@@ -30,7 +30,7 @@ namespace Sohg.CrossCutting.Factories
         public IFaithRecolectable CreateFaith(ISociety society, ICell faithCell, int faithAmount)
         {
             var faithRecolectable = prefabFactory.InstantiateFaithRecolectable(boardOverCanvas, "FaithRecolectable");
-            faithRecolectable.Initialize(society, faithCell, faithAmount);
+            faithRecolectable.Initialize(game, society, faithCell, faithAmount);
 
             return faithRecolectable;
         }
@@ -44,7 +44,7 @@ namespace Sohg.CrossCutting.Factories
         public IFight CreateFight(IRelationship relationship, ICell from, ICell target, Action resolveAttack)
         {
             var fight = prefabFactory.InstantiateFight(boardOverCanvas, "Fight");
-            fight.Initialize(relationship, from, target, game.GameDefinition.FightDuration, resolveAttack);
+            fight.Initialize(relationship, from, target, game, resolveAttack);
 
             return fight;
         }
