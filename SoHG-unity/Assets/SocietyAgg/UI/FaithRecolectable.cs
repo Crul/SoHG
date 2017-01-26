@@ -3,17 +3,18 @@ using Sohg.CrossCutting.Pooling;
 using Sohg.Grids2D.Contracts;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
 using Sohg.GameAgg.Contracts;
+using Sohg.CrossCutting.UI;
 
 namespace Sohg.SocietyAgg.UI
 {
     [DisallowMultipleComponent]
+    [RequireComponent(typeof(Shrinkable))]
     [RequireComponent(typeof(Button))]
     [RequireComponent(typeof(CanvasGroup))]
     public class FaithRecolectable : PooledObject, IFaithRecolectable
     {
-        private  enum FaithRecolectableState
+        private enum FaithRecolectableState
         {
             Undefined,
             Disabled,
@@ -21,18 +22,10 @@ namespace Sohg.SocietyAgg.UI
             Recolected
         }
 
-        [SerializeField]
-        [Range(0, 1)]
-        private float shrinkingBaseRate;
-
-        [SerializeField]
-        [Range(0, 1)]
-        private float shrinkingLimit;
-
-        private float shrinkingRate;
-        private float deShrinkingRate;
+        private Button button;
         private CanvasGroup canvasGroup;
         private FaithRecolectableState state;
+        private Shrinkable shrinkable;
 
         private IRunningGame game;
         private int faithAmount;
@@ -40,12 +33,16 @@ namespace Sohg.SocietyAgg.UI
 
         public void Awake()
         {
+            button = GetComponent<Button>();
             canvasGroup = GetComponent<CanvasGroup>();
+            shrinkable = GetComponent<Shrinkable>();
+
             state = FaithRecolectableState.Disabled;
 
-            var button = GetComponent<Button>();
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(() => RecolectFaith());
+
+            shrinkable.OnChange(scale => SetAlpha(scale));
         }
 
         public void Initialize(IRunningGame game, ISociety society, ICell faithCell, int faithAmount)
@@ -54,20 +51,9 @@ namespace Sohg.SocietyAgg.UI
             this.society = society;
             this.faithAmount = faithAmount;
             transform.position = faithCell.WorldPosition;
-            shrinkingRate = shrinkingBaseRate + ((1 - shrinkingBaseRate) * society.State.FaithShrinkingRateBonus);
-            deShrinkingRate = (float)Math.Pow(shrinkingRate, 3);
-            SetScale(1);
-            canvasGroup.alpha = 1;
+            shrinkable.Initialize(society.State.FaithShrinkingRateBonus);
+            shrinkable.SetScale(1);
             state = FaithRecolectableState.Initialized;
-        }
-
-        private void RecolectFaith()
-        {
-            if (state == FaithRecolectableState.Initialized)
-            {
-                state = FaithRecolectableState.Recolected;
-                society.Species.AddFaith(faithAmount);
-            }
         }
 
         public void Update()
@@ -80,11 +66,17 @@ namespace Sohg.SocietyAgg.UI
             switch (state)
             {
                 case FaithRecolectableState.Initialized:
-                    UpdateShrinking();
+                    if (!shrinkable.UpdateShrinking())
+                    {
+                        End();
+                    }
                     break;
 
                 case FaithRecolectableState.Recolected:
-                    UpdateDeshrinking();
+                    if (!shrinkable.UpdateDeshrinking())
+                    {
+                        End();
+                    }
                     break;
             }
         }
@@ -97,36 +89,24 @@ namespace Sohg.SocietyAgg.UI
             ReturnToPool();
         }
 
-        private void SetScale(float newScale)
+        private void RecolectFaith()
         {
-            transform.localScale = new Vector3(newScale, newScale, 1);
-            canvasGroup.alpha = newScale;
-        }
-
-        private void UpdateShrinking()
-        {
-            var smallerScale = (transform.localScale.x * shrinkingRate);
-            if (smallerScale > shrinkingLimit)
+            if (state == FaithRecolectableState.Initialized)
             {
-                SetScale(smallerScale);
-            }
-            else
-            {
-                End();
+                state = FaithRecolectableState.Recolected;
+                society.Species.AddFaith(faithAmount);
             }
         }
 
-        private void UpdateDeshrinking()
+        private void SetAlpha(float alpha)
         {
-            var biggerScale = (transform.localScale.x / deShrinkingRate);
-            if (biggerScale < 1)
+            if (alpha < 1)
             {
-                SetScale(biggerScale);
-                canvasGroup.alpha = canvasGroup.alpha * deShrinkingRate;
+                canvasGroup.alpha = alpha;
             }
             else
             {
-                End();
+                canvasGroup.alpha = (1 / alpha);
             }
         }
     }
