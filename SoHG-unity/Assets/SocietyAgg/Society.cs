@@ -15,7 +15,6 @@ namespace Sohg.SocietyAgg
         private List<IRelationship> relationships;
         private List<ISkill> skills;
         private ISohgFactory sohgFactory;
-        private ISociety originSociety;
         
         public string Name { get; private set; }
         public Color Color { get; private set; }
@@ -25,6 +24,7 @@ namespace Sohg.SocietyAgg
         
         public Dictionary<ISocietyAction, bool> IsEffectActive { get; private set; }
 
+        public int TerritoryExtension { get { return Territory.CellCount; } }
         public bool IsDead { get { return State.Population == 0 || Territory.CellCount == 0; } }
         public IEnumerable<ISocietyAction> Actions { get { return actions; } }
         public IEnumerable<IRelationship> Relationships { get { return relationships; } }
@@ -37,7 +37,7 @@ namespace Sohg.SocietyAgg
             skills = new List<ISkill>();
             IsEffectActive = new Dictionary<ISocietyAction, bool>();
 
-            Name = species.NextSocietyName;
+            Name = species.GetNextSocietyName();
             Color = species.Color;
             this.sohgFactory = sohgFactory;
             Species = species;
@@ -51,6 +51,8 @@ namespace Sohg.SocietyAgg
             actions = originSociety.Actions.ToList();
             IsEffectActive = originSociety.IsEffectActive.ToDictionary(xx => xx.Key, xx => false);
             skills = originSociety.Skills.ToList();
+
+            State.InheritState(originSociety);
         }
 
         public void AddAction(ISocietyAction societyAction)
@@ -68,11 +70,6 @@ namespace Sohg.SocietyAgg
         {
             State.OnSkillAdded(skill);
             skills.Add(skill);
-        }
-
-        public void Initialize()
-        {
-            State.SetInitialPopulation();
         }
 
         public bool IsNeighbourOf(ISociety society)

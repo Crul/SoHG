@@ -22,7 +22,11 @@ namespace Sohg.GameAgg
 
         public void Log(string log, params object[] logParams)
         {
-            GameInfoPanel.LogOutput(string.Format(log, logParams));
+            var logInfo = string.Format("{0}: {1}", 
+                GameInfoPanel.GameStatusInfo.DisplayingYear, 
+                string.Format(log, logParams));
+
+            GameInfoPanel.LogOutput(logInfo);
         }
 
         public void NextStage()

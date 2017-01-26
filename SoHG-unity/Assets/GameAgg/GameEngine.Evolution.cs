@@ -2,19 +2,14 @@
 using Sohg.Grids2D.Contracts;
 using Sohg.SocietyAgg.Contracts;
 using System.Linq;
+using UnityEngine;
 
 namespace Sohg.GameAgg
 {
     public partial class GameEngine : IEvolvableGame
     {
         private bool? hasPlayerWon;
-
-        public void FinishEvolution(bool hasPlayerWon)
-        {
-            Log("evolution finish");
-            this.hasPlayerWon = hasPlayerWon;
-        }
-
+        
         public bool Invade(ICell from, ICell target)
         {
             var invadedTerritory = Grid.GetTerritory(target);
@@ -25,7 +20,7 @@ namespace Sohg.GameAgg
 
                 var invasorName = (invasor.Society != null ? invasor.Society.Name : "NONE");
                 var invadedName = (invadedTerritory.Society != null ? invadedTerritory.Society.Name : "NONE");
-                UnityEngine.Debug.Log(string.Format("{0} has invaded {1}", invasorName, invadedName));
+                Debug.Log(string.Format("{0} has invaded {1}", invasorName, invadedName));
 
                 if (invadedTerritory.Society.IsDead)
                 {
@@ -73,16 +68,22 @@ namespace Sohg.GameAgg
 
         public void Split(ISociety society)
         {
-            var newSocietyCells = Grid.SplitTerritory(society.Territory);
-
-            var newSociety = SohgFactory.CreateSociety(society, newSocietyCells.ToArray());
-            
+            var newSociety = SplitTerritory(society);
             var totalPopulation = society.State.Population + newSociety.State.Population;
             var totalResources = society.State.Resources + newSociety.State.Resources;
             society.State.OnSplit(newSociety, totalPopulation, totalResources);
             newSociety.State.OnSplit(society, totalPopulation, totalResources);
+        }
 
+        private ISociety SplitTerritory(ISociety society)
+        {
+            var newSocietyCells = Grid.SplitTerritory(society.Territory);
+
+            var newSociety = SohgFactory.CreateSociety(society, newSocietyCells.ToArray());
+            
             Grid.OnTerritorySplit(society.Territory, newSociety.Territory);
+
+            return newSociety;
         }
     }
 }

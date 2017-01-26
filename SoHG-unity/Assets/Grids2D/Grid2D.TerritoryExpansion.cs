@@ -1,7 +1,7 @@
 ﻿using Sohg.Grids2D.Contracts;
+using Sohg.SocietyAgg.Contracts;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace Grids2D
 {
@@ -9,10 +9,15 @@ namespace Grids2D
     {
         public void ContractSingleCell(ITerritory territory)
         {
+            if (territory.CellCount == 1)
+            {
+                return;
+            }
+
             var abandonedCell = territory.FrontierCellIndices
                 .Select(cellIndex => cells[cellIndex])
                 .Where(cell => cell.CanBeInvaded && !cell.IsInvolvedInAttack)
-                .OrderBy(cellIndex => Random.Range(0f, 1f))
+                .OrderBy(cell => cell.FertilityRatio)
                 .FirstOrDefault();
 
             if (abandonedCell == null)
@@ -57,7 +62,7 @@ namespace Grids2D
         public bool ExpandSingleCell(ITerritory territory)
         {
             var fromCellIndexsList = territory.FrontierCellIndices
-                .OrderBy(cellIndex => Random.Range(0f, 1f))
+                .OrderByDescending(cellIndex => cells[cellIndex].FertilityRatio)
                 .ToList();
 
             var fromCellIndexListIndex = 0;
@@ -66,7 +71,8 @@ namespace Grids2D
                 var fromCellIndex = fromCellIndexsList[fromCellIndexListIndex];
                 var target = CellGetNeighbours(fromCellIndex)
                     .Where(cell => cell.IsNonSocietyTerritory)
-                    .OrderBy(cells => Random.Range(0f, 1f))
+                    .OrderBy(cell => cell.DistanceToCoast)
+                    .ThenByDescending(cell => cell.FertilityRatio)
                     .FirstOrDefault();
 
                 if (target != null)
@@ -85,7 +91,7 @@ namespace Grids2D
 
             return false;
         }
-        
+
         public void RemoveSocietyTerritory(ITerritory territory)
         {
             if (territory.CellCount == 0)
@@ -100,6 +106,30 @@ namespace Grids2D
                 UpdateFrontiersAfterTerritoryChange(cell);
             });
             FixNonInvadableTerritories();
+
+            territoriesHaveChanged = true;
+        }
+
+        public bool SettleFromSea(ISociety society, ICell cell)
+        {
+            var targetLandCell = CellGetNeighbours(cell.CellIndex)
+                .Where(neighbour => neighbour.IsNonSocietyTerritory
+                    && !CellGetNeighbours(neighbour).Any(neighbourNeighbour => neighbourNeighbour.IsSocietyTerritory))
+                .OrderByDescending(neighbour => neighbour.FertilityRatio)
+                .FirstOrDefault();
+
+            if (targetLandCell == null)
+            {
+                return false;
+            }
+
+            var newSociety = sohgFactory.CreateSociety(society, targetLandCell);
+            newSociety.State.SetInitialPopulation(newSociety.State.PopulationDensity);
+            newSociety.Territory.InitializeFrontier(this);
+
+            territoriesHaveChanged = true;
+
+            return true;
         }
 
         private int ExpandTerritory(Territory territory, List<Cell> unassignedCells, int territorySizeLimit)

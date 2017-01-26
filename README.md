@@ -18,6 +18,7 @@ Work in progress...
 - [War icon](https://pixabay.com/en/swords-crossed-black-silhouette-311733/)
 - [Venus Willendorf](https://es.wikipedia.org/wiki/Archivo:Venus_of_Willendorf_frontview_retouched_2.jpg)
 - [Evolution icon](https://commons.wikimedia.org/wiki/File:Human_evolution_scheme.svg)
+- [Boating icon](https://pixabay.com/en/boat-sailing-sails-sea-water-42307/)
 
 ## Dependencies
 

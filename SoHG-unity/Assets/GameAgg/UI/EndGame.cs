@@ -14,10 +14,13 @@ namespace Sohg.GameAgg.UI
         [SerializeField]
         private Text contentText;
         [SerializeField]
+        private Button continueButton;
+        [SerializeField]
         private Button exitButton;
 
         public void Awake()
         {
+            continueButton.onClick.AddListener(() => gameObject.SetActive(false));
             exitButton.onClick.AddListener(() => SceneManager.LoadScene("Menu"));
             transform.SetAsLastSibling();
             gameObject.SetActive(false);
@@ -33,6 +36,7 @@ namespace Sohg.GameAgg.UI
             {
                 ShowLoose();
             }
+
             transform.SetAsLastSibling();
             gameObject.SetActive(true);
         }
@@ -41,6 +45,7 @@ namespace Sohg.GameAgg.UI
         {
             titleText.color = Color.yellow;
             titleText.text = "You WIN!";
+            continueButton.gameObject.SetActive(true);
 
             contentText.text = "Well, that was easy. Wait for the Hard-Mode...";
         }
@@ -49,6 +54,7 @@ namespace Sohg.GameAgg.UI
         {
             titleText.color = Color.red;
             titleText.text = "You LOOSE!";
+            continueButton.gameObject.SetActive(false);
 
             contentText.text = "Really? Well, at least you ended the game : )";
         }

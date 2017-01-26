@@ -12,6 +12,7 @@ namespace Sohg.SocietyAgg.Contracts
         ISocietyState State { get; }
         ITerritory Territory { get; }
         Color Color { get; }
+        int TerritoryExtension { get; }
         
         bool IsDead { get; }
         Dictionary<ISocietyAction, bool> IsEffectActive { get; }
@@ -26,7 +27,6 @@ namespace Sohg.SocietyAgg.Contracts
         IRelationship GetRelationship(ISociety society);
         void RemoveRelationship(ISociety deathSociety);
         
-        void Initialize();
         bool IsNeighbourOf(ISociety society);
     }
 }

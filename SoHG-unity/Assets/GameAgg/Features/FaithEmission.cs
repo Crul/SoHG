@@ -17,7 +17,7 @@ namespace Sohg.GameAgg.Features
 
         public void EmitFaith(IEvolvableGame game, ISociety society)
         {
-            society.State.GetFaithEmitted().ForEach(faithAmount =>
+            society.State.GetFaithEmitted(society.Territory).ForEach(faithAmount =>
             {
                 var faithCell = game.Grid
                     .GetRandomCell(cell => cell.TerritoryIndex == society.Territory.TerritoryIndex);

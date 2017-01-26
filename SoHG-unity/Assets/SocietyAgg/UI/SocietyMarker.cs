@@ -65,7 +65,7 @@ namespace Sohg.SocietyAgg.UI
             var isActive = (gameObject.activeSelf && society != null);
             if (isActive)
             {
-                var hasSocietyDied = (society.Territory.CellCount == 0);
+                var hasSocietyDied = (society.TerritoryExtension == 0);
                 if (hasSocietyDied)
                 {
                     Destroy(gameObject);

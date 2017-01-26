@@ -1,6 +1,6 @@
 ﻿using Sohg.CrossCutting.Contracts;
 using Sohg.Grids2D.Contracts;
-using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -25,12 +25,28 @@ namespace Grids2D
             return cells[cellIndex];
         }
 
-        public ICell GetRandomCell(Func<ICell, bool> cellFilter)
+        public List<ICell> GetCoast(ITerritory territory)
+        {
+            return ((Territory)territory).cells
+                .Where(cell => cell.IsCoast)
+                .Select(cell => (ICell)cell)
+                .ToList();
+        }
+
+        public ICell GetRandomCell(System.Func<ICell, bool> cellFilter)
         {
             var filteredCells = cells.Where(cell => cellFilter(cell));
             var randomIndex = UnityEngine.Random.Range(0, filteredCells.Count() - 1);
 
             return filteredCells.ElementAt(randomIndex);
+        }
+
+        public ICell GetSeaNextTo(ICell cell)
+        {
+            return CellGetNeighbours((Cell)cell)
+                .Where(neighbour => neighbour.IsSea)
+                .OrderBy(neighbour => Random.Range(0f, 1f))
+                .FirstOrDefault();
         }
 
         public ITerritory GetTerritory(ICell cell)

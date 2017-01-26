@@ -7,14 +7,18 @@ namespace Grids2D
 {
     public partial class Grid2D
     {
-        public void OnTerritorySplit(ITerritory territory1, ITerritory territory2)
+        public void OnTerritorySplit(ITerritory territory1, ITerritory territory2 = null)
         {
             territories.ForEach(territory => territory.InitializeFrontier(this));
 
             ((Territory)territory1).cells.ToList()
                 .ForEach(cell => cell.CanBeInvaded = CanCellBeInvaded(cell));
-            ((Territory)territory2).cells.ToList()
-                .ForEach(cell => cell.CanBeInvaded = CanCellBeInvaded(cell));
+
+            if (territory2 != null)
+            {
+                ((Territory)territory2).cells.ToList()
+                    .ForEach(cell => cell.CanBeInvaded = CanCellBeInvaded(cell));
+            }
 
             FixNonInvadableTerritories();
 

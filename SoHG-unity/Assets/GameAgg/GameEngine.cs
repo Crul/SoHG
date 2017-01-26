@@ -35,7 +35,6 @@ namespace Sohg.GameAgg
         [SerializeField]
         private SocietyInfo societyInfo;
 
-        private IEndGame EndGame { get { return endGame; } }
         private IInstructions Instructions { get { return instructions; } }
         private ISocietyInfo SocietyInfo { get { return societyInfo; } }
 
@@ -44,16 +43,27 @@ namespace Sohg.GameAgg
         public int Year { get; set; }
 
         public Canvas BoardOverCanvas { get { return boardOverCanvas; } }
+        public IEndGame EndGame { get { return endGame; } }
         public IGameDefinition GameDefinition { get { return SohgFactory.GameDefinition; } }
         public IGameInfoPanel GameInfoPanel { get { return gameInfoPanel; } }
         public IGrid Grid { get { return grid; } }
         public ISpecies PlayerSpecies { get { return GameDefinition.PlayerSpecies; } }
         public ISohgFactory SohgFactory { get { return sohgFactory; } }
 
+        public bool IsPlayerDead { get { return PlayerSpecies.Societies.Count == 0; } }
+        public bool AreNonPlayerSpeciesDead
+        {
+            get
+            {
+                // TODO: this should be enough (but is not): var hasPlayerWon = (game.Species.Count == 1);
+                return !Species.Any(species => species != PlayerSpecies && species.Societies.All(society => !society.IsDead));
+            }
+        }
+
         public void Awake()
         {
             SohgFactory.SetGame(this);
-            
+
             Grid.AddOnCellClick(cell => OnGridCellClick(cell));
             Grid.AddOnTerritoryClick(territory => OnGridTerritoryClick(territory));
 

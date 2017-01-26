@@ -1,12 +1,15 @@
 ﻿using Sohg.CrossCutting.Pooling;
+using Sohg.GameAgg.Contracts;
 using Sohg.Grids2D.Contracts;
 using Sohg.SocietyAgg.Contracts;
 using UnityEngine;
 
 namespace Sohg.SocietyAgg.UI
 {
+    [DisallowMultipleComponent]
     public class Fight : PooledObject, IFight
     {
+        private IRunningGame game;
         private int duration;
         private int time;
         private IRelationship relationship;
@@ -21,6 +24,11 @@ namespace Sohg.SocietyAgg.UI
 
         public void FixedUpdate()
         {
+            if (game == null || game.IsPaused())
+            {
+                return;
+            }
+
             if (time < duration)
             {
                 time++;
@@ -30,16 +38,27 @@ namespace Sohg.SocietyAgg.UI
 
         public void Update()
         {
+            if (game == null || game.IsPaused())
+            {
+                return;
+            }
+
             transform.position = GetPosition();
             CheckResult();
         }
 
-        public void Initialize(IRelationship relationship, ICell from, ICell target, int duration, System.Action resolveAttack)
+        public void Initialize(
+            IRelationship relationship,
+            ICell from,
+            ICell target,
+            IRunningGame game,
+            System.Action resolveAttack)
         {
+            this.game = game;
             this.relationship = relationship;
             this.from = from;
             this.target = target;
-            this.duration = duration;
+            duration = game.GameDefinition.FightDuration;
             this.resolveAttack = resolveAttack;
             time = 0;
 

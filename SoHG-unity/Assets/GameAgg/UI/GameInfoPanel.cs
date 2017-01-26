@@ -43,6 +43,13 @@ namespace Sohg.GameAgg.UI
             pauseButton.onClick.AddListener(() => PausedPanel.ShowPause());
             menuButton.onClick.AddListener(() => PausedPanel.ShowMenu());
             technologyButton.onClick.AddListener(() => technologyPanel.Open());
+
+            technologyButton.interactable = false;
+        }
+
+        public void EnableTechnologyTree()
+        {
+            technologyButton.interactable = true;
         }
 
         public void LogOutput(string log)

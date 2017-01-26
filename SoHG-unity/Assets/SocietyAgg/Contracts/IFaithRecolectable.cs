@@ -1,9 +1,10 @@
-﻿using Sohg.Grids2D.Contracts;
+﻿using Sohg.GameAgg.Contracts;
+using Sohg.Grids2D.Contracts;
 
 namespace Sohg.SocietyAgg.Contracts
 {
     public interface IFaithRecolectable
     {
-        void Initialize(ISociety society, ICell faithCell, int faithAmount);
+        void Initialize(IRunningGame game, ISociety society, ICell faithCell, int faithAmount);
     }
 }

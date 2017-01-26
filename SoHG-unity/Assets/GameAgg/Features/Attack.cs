@@ -31,33 +31,35 @@ namespace Sohg.GameAgg.Features
                 return;
             }
 
-            society.Relationships
-                .Where(relationship => relationship.AreWeNeighbours()
-                                    && relationship.WillingToAttack(game.GameDefinition))
-                .SelectMany(relationship => relationship.MyFrontierCellIndices
+            var availableAttacks = society.Relationships
+                .Where(relationship => relationship.WillingToAttack(game.GameDefinition))
+                .SelectMany(relationship => relationship.We.Territory.FrontierCellIndicesByTerritoryIndex[relationship.Them.Territory.TerritoryIndex]
                     .Select(cellIndex => new
                     {
                         from = cellIndex,
                         relationship = relationship
                     }))
                 .OrderBy(attackInfo => Random.Range(0f, 1f))
-                .ToList()
-                .ForEach(attackInfo => ExecuteAttack(game, attackInfo.from, attackInfo.relationship));
+                .ToList();
 
+            for (var i = 0; i < availableAttacks.Count; i++)
+            {
+                if (attackInvolvedCells[society].Count >= society.State.MaximumAttacks)
+                {
+                    return;
+                }
+
+                var attackInfo = availableAttacks[i];
+                ExecuteAttack(game, attackInfo.from, attackInfo.relationship);
+            }
         }
 
         private void ExecuteAttack(IEvolvableGame game, int fromCellIndex, IRelationship relationship)
         {
-            var we = relationship.We;
-            if (attackInvolvedCells[we].Count >= we.State.MaximumAttacks)
-            {
-                return;
-            }
-
             var fightCreated = CreateFight(game, relationship, fromCellIndex);
             if (fightCreated)
             {
-                attackInvolvedCells[we].Add(fromCellIndex);
+                attackInvolvedCells[relationship.We].Add(fromCellIndex);
             }
         }
 
@@ -89,18 +91,17 @@ namespace Sohg.GameAgg.Features
             return true;
         }
 
-
         public void ResolveAttack(IEvolvableGame game, IRelationship relationship, ICell from, ICell target)
         {
             var we = relationship.We;
             var them = relationship.Them;
-            
+
             var damageRate = (float)System.Math.Pow(we.State.Power / them.State.Power, 10);
             var result = GetResult(damageRate, game.GameDefinition);
-            
+
             var ourDeads = GetDeads(we, 1 / damageRate);
             var thriDeads = GetDeads(them, damageRate);
-            
+
             we.State.Kill(ourDeads);
             them.State.Kill(thriDeads);
 
@@ -129,12 +130,12 @@ namespace Sohg.GameAgg.Features
             attackInvolvedCells[we].Remove(from.CellIndex);
             from.IsInvolvedInAttack = false;
             target.IsInvolvedInAttack = false;
-            
+
             relationship.OnAttackEnded(game.GameDefinition, relationship.We, result);
             relationship.Them.GetRelationship(relationship.We)
                 .OnAttackEnded(game.GameDefinition, relationship.We, result);
         }
-        
+
         private long GetDeads(ISociety society, float damageRate)
         {
             return System.Convert.ToInt64

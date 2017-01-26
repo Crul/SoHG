@@ -30,15 +30,22 @@ namespace Sohg.CrossCutting.Factories
         public IFaithRecolectable CreateFaith(ISociety society, ICell faithCell, int faithAmount)
         {
             var faithRecolectable = prefabFactory.InstantiateFaithRecolectable(boardOverCanvas, "FaithRecolectable");
-            faithRecolectable.Initialize(society, faithCell, faithAmount);
+            faithRecolectable.Initialize(game, society, faithCell, faithAmount);
 
             return faithRecolectable;
+        }
+
+        public void CreateBoat(ISociety society, ICell boatCreationCell)
+        {
+            var boat = prefabFactory.InstantiateBoat(boardOverCanvas, society.Name + " Boat");
+            boat.Initialize(game, society, boatCreationCell);
+            society.State.Boats.Add(boat);
         }
 
         public IFight CreateFight(IRelationship relationship, ICell from, ICell target, Action resolveAttack)
         {
             var fight = prefabFactory.InstantiateFight(boardOverCanvas, "Fight");
-            fight.Initialize(relationship, from, target, game.GameDefinition.FightDuration, resolveAttack);
+            fight.Initialize(relationship, from, target, game, resolveAttack);
 
             return fight;
         }
@@ -49,6 +56,19 @@ namespace Sohg.CrossCutting.Factories
                 ((territory) => new Society(this, originSociety, territory));
 
             var society = CreateSociety(societyConstructor, cells);
+
+            game.Societies
+                .ForEach(otherSociety => AddSocietyRelationships(game.GameDefinition, society, otherSociety, originSociety));
+
+            return society;
+        }
+
+        public ISociety CreateSociety(ISociety originSociety, ITerritory societyTerritory)
+        {
+            var societyConstructor = (Func<ITerritory, Society>)
+                ((territory) => new Society(this, originSociety, territory));
+
+            var society = CreateSociety(societyConstructor, ((Territory)societyTerritory).cells.ToArray());
 
             game.Societies
                 .ForEach(otherSociety => AddSocietyRelationships(game.GameDefinition, society, otherSociety, originSociety));
@@ -81,6 +101,12 @@ namespace Sohg.CrossCutting.Factories
             effectIcon.Initialize(action, societyInfo);
 
             return effectIcon;
+        }
+
+        public void CreateSocietySkillDiscovery(ISkill skill, ISociety society)
+        {
+            var skillDiscovery = prefabFactory.InstantiateSocietySkillDiscovery(boardOverCanvas, "SocietySkillDiscovery"); // TODO SocietySkillDiscovery name
+            skillDiscovery.Initialize(game, skill, society);
         }
 
         public ISocietySkillIcon CreateSocietySkillIcon(ISkill skill, ISocietyInfo societyInfo)

@@ -12,6 +12,7 @@ namespace Sohg.GameAgg.Contracts
     {
         Canvas BoardOverCanvas { get; }
         IGameDefinition GameDefinition { get; }
+        IGameInfoPanel GameInfoPanel { get; }
         ISohgFactory SohgFactory { get; }
         IGrid Grid { get; }
 
@@ -19,6 +20,9 @@ namespace Sohg.GameAgg.Contracts
         List<ISociety> Societies { get; }
         List<ISpecies> Species { get; }
         int Year { get; set; }
+
+        bool IsPlayerDead { get; }
+        bool AreNonPlayerSpeciesDead { get; }
 
         Coroutine ExecuteRoutine(IEnumerator actionExecution);
         bool IsPaused();

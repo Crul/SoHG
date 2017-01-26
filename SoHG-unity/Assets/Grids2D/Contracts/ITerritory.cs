@@ -14,6 +14,7 @@ namespace Sohg.Grids2D.Contracts
         int TerritoryIndex { get; }
 
         Vector2 GetCenter();
+        float GetFertility();
         void InitializeFrontier(Grid2D grid);
         void SetSociety(ISociety society);
     }

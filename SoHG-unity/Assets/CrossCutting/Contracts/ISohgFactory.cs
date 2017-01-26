@@ -13,12 +13,15 @@ namespace Sohg.CrossCutting.Contracts
     {
         IGameDefinition GameDefinition { get; }
 
+        void CreateBoat(ISociety society, ICell boatCreationCell);
         IFaithRecolectable CreateFaith(ISociety society, ICell faithCell, int faithAmount);
         IFight CreateFight(IRelationship relationship, ICell from, ICell target, Action resolveAttack);
         ISociety CreateSociety(ISociety originSociety, params ICell[] cells);
+        ISociety CreateSociety(ISociety originSociety, ITerritory territory);
         void CreateSociety(ISpecies species, params ICell[] cells);
         ISocietyActionButton CreateSocietyActionButton(ISocietyAction action, ISocietyInfo societyInfo);
         ISocietyEffectIcon CreateSocietyEffectIcon(ISocietyAction action, ISocietyInfo societyInfo);
+        void CreateSocietySkillDiscovery(ISkill skill, ISociety society);
         ISocietySkillIcon CreateSocietySkillIcon(ISkill skill, ISocietyInfo societyInfo);
         ITechnologyCategoryColumn CreateTechnologyCategoryColumn(ITechnologyCategory technologyCategory,
             ITechnologyStatesSetter technologyStatesSetter, GameObject technologyPanel);

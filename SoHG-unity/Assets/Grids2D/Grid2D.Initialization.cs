@@ -4,6 +4,7 @@ using Sohg.GameAgg.Contracts;
 using System;
 using System.Linq;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace Grids2D
 {
@@ -26,9 +27,11 @@ namespace Grids2D
 
             SetGridProperties(gameDefinition);
 
-            Enumerable.Range(0, cells.Count).ToList()
-                .ForEach(cellIndex => InitializeCell(cellIndex));
-            
+            var cellIndices = Enumerable.Range(0, cells.Count).ToList();
+
+            cellIndices.ForEach(cellIndex => InitializeCell(cellIndex));
+            cellIndices.ForEach(cellIndex => SetCellDistanceToCoast(cellIndex));
+
             Redraw();
         }
 
@@ -47,15 +50,42 @@ namespace Grids2D
         {
             var cell = cells[cellIndex];
             var cellWorldPosition = CellGetPosition(cellIndex);
-            cell.Initialize(cellIndex, cellWorldPosition);
+            cell.Initialize(cellIndex, cellWorldPosition, rowCount);
             SetCellTerritory(cell);
+        }
+
+        private void SetCellDistanceToCoast(int cellIndex)
+        {
+            var cellToSetDistanceToCoast = cells[cellIndex];
+            if (cellToSetDistanceToCoast.IsSea)
+            {
+                cellToSetDistanceToCoast.SetDistanceToCoast(-1);
+
+                return;
+            }
+
+            var distanceToCoast = 0;
+            var exploredCells = new List<Cell>();
+            var nextRingCells = CellGetNeighbours(cellToSetDistanceToCoast);
+            while (!nextRingCells.Any(neighbour => neighbour.IsSea))
+            {
+                distanceToCoast++;
+
+                exploredCells.AddRange(nextRingCells);
+
+                nextRingCells = nextRingCells
+                    .SelectMany(cell => CellGetNeighbours(cell).Where(neighbour => !exploredCells.Contains(neighbour)))
+                    .ToList();
+            }
+
+            cellToSetDistanceToCoast.SetDistanceToCoast(distanceToCoast);
         }
 
         private void SetGridProperties(IGameDefinition gameDefinition)
         {
             gridTopology = GRID_TOPOLOGY.Hexagonal;
             SetGridSelectionToNone();
-            
+
             numTerritories = 1;
             columnCount = gameDefinition.BoardColumns;
             rowCount = gameDefinition.BoardRows;
@@ -63,8 +93,8 @@ namespace Grids2D
             colorizeTerritories = true;
             allowTerritoriesInsideTerritories = true;
             territoryHighlightColor = new Color(1, 1, 1, 0.3f);
-            cellBorderColor = new Color(0, 0, 0, 0.1f);
-            territoryFrontiersColor = new Color(0, 0, 0, 0.3f);
+            cellBorderColor = new Color(0.5f, 0.5f, 0.5f, 0.3f);
+            territoryFrontiersColor = new Color(0.5f, 0.5f, 0.5f, 0.3f);
 
             SetTexture(gameDefinition.BoardBackground);
             SetMask(gameDefinition.BoardMask);

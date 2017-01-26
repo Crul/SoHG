@@ -9,6 +9,11 @@ namespace Sohg.GameAgg.Features
     {
         public override void Run(IEvolvableGame game, ISociety society)
         {
+            SplitSociety(game, society);
+        }
+
+        private void SplitSociety(IEvolvableGame game, ISociety society)
+        {
             var splitingProbabitly = society.State.SplitingProbability;
             if (splitingProbabitly == 0)
             {

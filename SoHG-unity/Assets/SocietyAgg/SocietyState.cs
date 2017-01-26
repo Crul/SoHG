@@ -1,4 +1,5 @@
-﻿using Sohg.SocietyAgg.Contracts;
+﻿using Sohg.Grids2D.Contracts;
+using Sohg.SocietyAgg.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,14 +9,16 @@ namespace Sohg.SocietyAgg
     public class SocietyState : ISocietyState
     {
         private ISociety society;
-        private float aggressivityRate;
         private float resourcesConservationRate = 0.2f;
         private int minCellToSplit = 30;
         private float destabilizationFactorPerCell = 0.0001f;
 
+        public float AggressivityRate { get; private set; }
+        public List<IBoat> Boats { get; private set; }
         public long CivilizationLevel { get; private set; }
         public long Population { get; private set; }
         public long Resources { get; private set; }
+        public float SeaMovementCapacity { get; private set; }
         public float TechnologyLevelRate { get; private set; }
 
         public float FaithShrinkingRateBonus { get; set; }
@@ -26,39 +29,44 @@ namespace Sohg.SocietyAgg
             get { return Population; }
         }
 
-        private int territoryExtension { get { return society.Territory.CellCount; } }
-
-        public int MaximumAttacks
+        public int BoatCapacity
         {
-            get { return System.Math.Max(1, System.Convert.ToInt32(Power / 500)); } // TODO calculate MaximumAttacks
+            get
+            {
+                return 1; // TODO BoatCapacity
+            }
         }
 
         public int ExpansionCapacity
         {
             get
             {
-                var positiveExpansionFactor = 1.2f;
                 var expansionCapacity = 0;
-                if (positiveExpansionFactor * PopulationDensity > ProductionLimitPerCell)
+                if (PopulationDensity > ProductionLimitPerCell)
                 {
                     expansionCapacity = Convert.ToInt32(
-                        Math.Ceiling(positiveExpansionFactor * PopulationDensity / ProductionLimitPerCell));
+                        Math.Ceiling(PopulationDensity / ProductionLimitPerCell));
                 }
                 else
                 {
                     expansionCapacity = Math.Min(0, Convert.ToInt32(
-                        1 - (Math.Floor(1.4f * ProductionLimitPerCell / (1 + PopulationDensity)))));
+                        1 - (Math.Floor(ProductionLimitPerCell / (1 + PopulationDensity)))));
                 }
                 
                 return expansionCapacity;
             }
         }
 
+        public int MaximumAttacks
+        {
+            get { return System.Math.Max(1, System.Convert.ToInt32(Power / 500)); } // TODO calculate MaximumAttacks
+        }
+
         public float PopulationDensity
         {
             get
             {
-                return (float)Population / (float)System.Math.Max(1, society.Territory.CellCount);
+                return (float)Population / (float)System.Math.Max(1, society.TerritoryExtension);
             }
         }
 
@@ -66,7 +74,7 @@ namespace Sohg.SocietyAgg
         {
             get
             {
-                return PowerBonus + System.Math.Max(1, 100 * PopulationDensity * aggressivityRate * TechnologyLevelRate);
+                return PowerBonus + System.Math.Max(1, 100 * PopulationDensity * AggressivityRate * TechnologyLevelRate);
             }
         }
 
@@ -74,7 +82,8 @@ namespace Sohg.SocietyAgg
         {
             get
             {
-                return Convert.ToInt64(territoryExtension * ((99f * PopulationDensity) + (1f * ProductionLimitPerCell)) / 100);
+                return Convert.ToInt64(society.Territory.GetFertility()
+                    * ((99f * PopulationDensity) + ProductionLimitPerCell) / 100f);
             }
         }
 
@@ -87,32 +96,31 @@ namespace Sohg.SocietyAgg
         {
             get
             {   
-                if (territoryExtension < minCellToSplit)
+                if (society.TerritoryExtension < minCellToSplit)
                 {
                     return 0;
                 }
 
-                return territoryExtension * destabilizationFactorPerCell;
+                return society.TerritoryExtension * destabilizationFactorPerCell;
             }
         }
         
         public SocietyState(ISociety society)
         {
             this.society = society;
-            aggressivityRate = society.Species.InitialAggressivityRate;
+            AggressivityRate = society.Species.InitialAggressivityRate;
             TechnologyLevelRate = society.Species.InitialTechnologyLevelRate;
             CivilizationLevel = 0;
             Population = 0;
             Resources = 0;
+            SeaMovementCapacity = 0;
+            Boats = new List<IBoat>();
         }
 
         public void Evolve()
         {
             Resources = Convert.ToInt64(Resources * resourcesConservationRate);
-
-            var currentProduction = Production;
-            var currentConsume = consume;
-
+            
             var resourcesGrowth = (Production - consume);
             Resources += resourcesGrowth;
 
@@ -124,10 +132,17 @@ namespace Sohg.SocietyAgg
             }
             else
             {
-                populationGrowth = Convert.ToInt64((1 + TechnologyLevelRate) * Resources);
+                populationGrowth = Convert.ToInt64((1 + TechnologyLevelRate) * (1 + Resources));
             }
 
             Population += populationGrowth;
+        }
+
+        public void InheritState(ISociety originSociety)
+        {
+            AggressivityRate = originSociety.State.AggressivityRate;
+            SeaMovementCapacity = originSociety.State.SeaMovementCapacity;
+            TechnologyLevelRate = originSociety.State.TechnologyLevelRate;
         }
 
         public void Kill(long deads)
@@ -135,10 +150,10 @@ namespace Sohg.SocietyAgg
             Population -= deads;
         }
 
-        public List<int> GetFaithEmitted()
+        public List<int> GetFaithEmitted(ITerritory territory)
         {
             // TODO Society.State.GetFaithEmitted() configuration
-            return Enumerable.Range(0, territoryExtension)
+            return Enumerable.Range(0, territory.CellCount)
                 .Where(cell => UnityEngine.Random.Range(0f, 1f) > 0.995f)
                 .Select(cell => UnityEngine.Random.Range(3, 9))
                 .ToList();
@@ -158,14 +173,15 @@ namespace Sohg.SocietyAgg
             var populationOverProduction = (Population / ProductionLimitPerCell);
             TechnologyLevelRate += skill.TechnologyRateBonus;
             Population = populationOverProduction * ProductionLimitPerCell;
+            SeaMovementCapacity += skill.SeaMovementCapacityBonus;
 
             FaithShrinkingRateBonus += skill.FaithShrinkingRateBonus;
         }
 
         public void OnSplit(ISociety splitSociety, long totalPopulation, long totalResources)
         {
-            var totalTerritoryExtension = (territoryExtension + splitSociety.Territory.CellCount);
-            var territoryProportion = ((float)territoryExtension / totalTerritoryExtension);
+            var totalTerritoryExtension = (society.TerritoryExtension + splitSociety.TerritoryExtension);
+            var territoryProportion = ((float)society.TerritoryExtension / totalTerritoryExtension);
 
             Population = Convert.ToInt32(territoryProportion * totalPopulation);
             Resources = Convert.ToInt32(territoryProportion * totalResources);
@@ -174,9 +190,9 @@ namespace Sohg.SocietyAgg
             FaithShrinkingRateBonus = Math.Max(FaithShrinkingRateBonus, splitSociety.State.FaithShrinkingRateBonus);
         }
 
-        public void SetInitialPopulation()
+        public void SetInitialPopulation(float initialPopulationDensity)
         {
-            Population = territoryExtension * society.Species.InitialPopulationDensity;
+            Population = Convert.ToInt64(society.TerritoryExtension * initialPopulationDensity);
         }
     }
 }

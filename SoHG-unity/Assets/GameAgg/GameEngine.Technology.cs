@@ -1,4 +1,5 @@
-﻿using Sohg.TechnologyAgg.Contracts;
+﻿using Sohg.SocietyAgg.Contracts;
+using Sohg.TechnologyAgg.Contracts;
 using System.Linq;
 
 namespace Sohg.GameAgg
@@ -8,15 +9,20 @@ namespace Sohg.GameAgg
         public bool CheckDependentTechnologies(ITechnologyDependent technologyDependent)
         {
             var activeTechnologies = GameDefinition.TechnologyCategories.SelectMany
-                (
-                    technologyCategory => technologyCategory.Technologies
-                        .Where(technology => technology.IsActive)
-                );
+            (
+                technologyCategory => technologyCategory.Technologies
+                    .Where(technology => technology.IsActive)
+            );
 
             return technologyDependent.RequiredTechnologies
                 .All(requiredTechnology => activeTechnologies.Contains(requiredTechnology));
         }
-        
+
+        public void OnSkillActivated(ISkill skill, ISociety society)
+        {
+            SohgFactory.CreateSocietySkillDiscovery(skill, society);
+        }
+
         public void OnTechnologyActivated()
         {
             GameDefinition.SocietyActions.ToList()

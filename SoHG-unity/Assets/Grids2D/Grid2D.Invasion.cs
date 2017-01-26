@@ -33,7 +33,8 @@ namespace Grids2D
         public ICell GetInvadableCell(ICell from, ITerritory territory)
         {
             return CellGetNeighbours(from.CellIndex)
-                .Where(neighbour => neighbour.CanBeInvaded && neighbour.TerritoryIndex == territory.TerritoryIndex)
+                .Where(neighbour => neighbour.CanBeInvaded 
+                    && territory.TerritoryIndex == neighbour.TerritoryIndex)
                 .FirstOrDefault();
         }
 
@@ -41,8 +42,16 @@ namespace Grids2D
         {
             if (target.IsSocietyTerritory && !CanCellBeInvaded(target))
             {
-                // TODO Ring territories are not invaded
-                return false;
+                var isThereAnyInvadableCell = territories[target.TerritoryIndex]
+                    .cells.Any(cell => cell.CanBeInvaded);
+
+                // is no cell can be invaded > ring territory
+                // TODO multiple rings territories ?
+
+                if (isThereAnyInvadableCell)
+                {
+                    return false;
+                }
             }
 
             if (target.TerritoryIndex > -1)
