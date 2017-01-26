@@ -42,8 +42,16 @@ namespace Grids2D
         {
             if (target.IsSocietyTerritory && !CanCellBeInvaded(target))
             {
-                // TODO Ring territories are not invaded
-                return false;
+                var isThereAnyInvadableCell = territories[target.TerritoryIndex]
+                    .cells.Any(cell => cell.CanBeInvaded);
+
+                // is no cell can be invaded > ring territory
+                // TODO multiple rings territories ?
+
+                if (isThereAnyInvadableCell)
+                {
+                    return false;
+                }
             }
 
             if (target.TerritoryIndex > -1)
