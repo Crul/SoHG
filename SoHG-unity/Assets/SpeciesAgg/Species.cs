@@ -61,7 +61,7 @@ namespace Sohg.SpeciesAgg
 
         public string GetNextSocietyName()
         {
-            if (societyNames.Length == 0 || Societies.Count == 0)
+            if (societyNames.Length == 0)
             {
                 return Name;
             }
