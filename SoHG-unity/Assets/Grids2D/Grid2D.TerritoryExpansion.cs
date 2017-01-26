@@ -89,6 +89,7 @@ namespace Grids2D
         public void RemoveSocietyTerritories(List<ITerritory> territories)
         {
             territories.ForEach(territory => RemoveSocietyTerritory(territory));
+            territoriesHaveChanged = true;
         }
 
         private int ExpandTerritory(Territory territory, List<Cell> unassignedCells, int territorySizeLimit)
