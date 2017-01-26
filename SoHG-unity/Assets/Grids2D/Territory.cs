@@ -28,6 +28,11 @@ namespace Grids2D
             );
         }
 
+        public float GetFertility()
+        {
+            return cells.Sum(cell => cell.FertilityRatio);
+        }
+
         public void SetSociety(ISociety society)
         {
             Society = society;

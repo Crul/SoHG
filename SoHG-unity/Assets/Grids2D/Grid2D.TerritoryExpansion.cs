@@ -12,7 +12,7 @@ namespace Grids2D
             var abandonedCell = territory.FrontierCellIndices
                 .Select(cellIndex => cells[cellIndex])
                 .Where(cell => cell.CanBeInvaded && !cell.IsInvolvedInAttack)
-                .OrderBy(cellIndex => Random.Range(0f, 1f))
+                .OrderBy(cell => cell.FertilityRatio)
                 .FirstOrDefault();
 
             if (abandonedCell == null)
@@ -57,7 +57,7 @@ namespace Grids2D
         public bool ExpandSingleCell(ITerritory territory)
         {
             var fromCellIndexsList = territory.FrontierCellIndices
-                .OrderBy(cellIndex => Random.Range(0f, 1f))
+                .OrderByDescending(cellIndex => cells[cellIndex].FertilityRatio)
                 .ToList();
 
             var fromCellIndexListIndex = 0;
@@ -66,7 +66,8 @@ namespace Grids2D
                 var fromCellIndex = fromCellIndexsList[fromCellIndexListIndex];
                 var target = CellGetNeighbours(fromCellIndex)
                     .Where(cell => cell.IsNonSocietyTerritory)
-                    .OrderBy(cells => Random.Range(0f, 1f))
+                    .OrderBy(cell => cell.DistanceToCoast)
+                    .ThenByDescending(cell => cell.FertilityRatio)
                     .FirstOrDefault();
 
                 if (target != null)

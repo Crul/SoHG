@@ -50,7 +50,7 @@ namespace Grids2D
         {
             var cell = cells[cellIndex];
             var cellWorldPosition = CellGetPosition(cellIndex);
-            cell.Initialize(cellIndex, cellWorldPosition);
+            cell.Initialize(cellIndex, cellWorldPosition, rowCount);
             SetCellTerritory(cell);
         }
 
@@ -59,7 +59,7 @@ namespace Grids2D
             var cellToSetDistanceToCoast = cells[cellIndex];
             if (cellToSetDistanceToCoast.IsSea)
             {
-                cellToSetDistanceToCoast.DistanceToCoast = -1;
+                cellToSetDistanceToCoast.SetDistanceToCoast(-1);
 
                 return;
             }
@@ -78,7 +78,7 @@ namespace Grids2D
                     .ToList();
             }
 
-            cellToSetDistanceToCoast.DistanceToCoast = distanceToCoast;
+            cellToSetDistanceToCoast.SetDistanceToCoast(distanceToCoast);
         }
 
         private void SetGridProperties(IGameDefinition gameDefinition)
@@ -93,8 +93,8 @@ namespace Grids2D
             colorizeTerritories = true;
             allowTerritoriesInsideTerritories = true;
             territoryHighlightColor = new Color(1, 1, 1, 0.3f);
-            cellBorderColor = new Color(0, 0, 0, 0.1f);
-            territoryFrontiersColor = new Color(0, 0, 0, 0.3f);
+            cellBorderColor = new Color(0.5f, 0.5f, 0.5f, 0.3f);
+            territoryFrontiersColor = new Color(0.5f, 0.5f, 0.5f, 0.3f);
 
             SetTexture(gameDefinition.BoardBackground);
             SetMask(gameDefinition.BoardMask);

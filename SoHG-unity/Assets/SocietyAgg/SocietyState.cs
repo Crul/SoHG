@@ -36,6 +36,7 @@ namespace Sohg.SocietyAgg
                 return 1; // TODO BoatCapacity
             }
         }
+
         public int ExpansionCapacity
         {
             get
@@ -56,6 +57,7 @@ namespace Sohg.SocietyAgg
                 return expansionCapacity;
             }
         }
+
         public int MaximumAttacks
         {
             get { return System.Math.Max(1, System.Convert.ToInt32(Power / 500)); } // TODO calculate MaximumAttacks
@@ -81,7 +83,10 @@ namespace Sohg.SocietyAgg
         {
             get
             {
-                return Convert.ToInt64(society.TerritoryExtension * ((99f * PopulationDensity) + (1f * ProductionLimitPerCell)) / 100);
+                var territoryFertility = society.Territories.Sum(territory => territory.GetFertility());
+
+                return Convert.ToInt64(territoryFertility
+                    * ((99f * PopulationDensity) + ProductionLimitPerCell) / 100f);
             }
         }
 
@@ -117,10 +122,7 @@ namespace Sohg.SocietyAgg
         public void Evolve()
         {
             Resources = Convert.ToInt64(Resources * resourcesConservationRate);
-
-            var currentProduction = Production;
-            var currentConsume = consume;
-
+            
             var resourcesGrowth = (Production - consume);
             Resources += resourcesGrowth;
 
