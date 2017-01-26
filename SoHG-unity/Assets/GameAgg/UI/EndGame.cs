@@ -36,6 +36,7 @@ namespace Sohg.GameAgg.UI
             {
                 ShowLoose();
             }
+
             transform.SetAsLastSibling();
             gameObject.SetActive(true);
         }
@@ -44,6 +45,7 @@ namespace Sohg.GameAgg.UI
         {
             titleText.color = Color.yellow;
             titleText.text = "You WIN!";
+            continueButton.gameObject.SetActive(true);
 
             contentText.text = "Well, that was easy. Wait for the Hard-Mode...";
         }
@@ -52,6 +54,7 @@ namespace Sohg.GameAgg.UI
         {
             titleText.color = Color.red;
             titleText.text = "You LOOSE!";
+            continueButton.gameObject.SetActive(false);
 
             contentText.text = "Really? Well, at least you ended the game : )";
         }
