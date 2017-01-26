@@ -16,9 +16,14 @@ namespace Sohg.GameAgg.Features
             var margin = Random.Range(0, expansionMarginForOtherFeatures + 1);
             if (expansion > margin)
             {
-                Enumerable.Range(0, expansion - margin)
+                var hasExpanded = Enumerable.Range(0, expansion - margin)
                     .ToList()
-                    .ForEach(i => ExpandSociety(game, society));
+                    .Any(i => ExpandSociety(game, society));
+
+                if (hasExpanded)
+                {
+                    game.Log(society.Name + " has expanded");
+                }
             }
 
             if (expansion < 0)
@@ -29,7 +34,7 @@ namespace Sohg.GameAgg.Features
             }
         }
 
-        private void ExpandSociety(IEvolvableGame game, ISociety society)
+        private bool ExpandSociety(IEvolvableGame game, ISociety society)
         {
             for (int territoryIndex = 0; territoryIndex < society.Territories.Count; territoryIndex++)
             {
@@ -38,10 +43,12 @@ namespace Sohg.GameAgg.Features
                 if (hasBeenExpanded)
                 {
                     society.State.OnExpanded();
-                    game.Log(society.Name + " has expanded");
-                    return;
+
+                    return true;
                 }
             }
+
+            return false;
         }
     }
 }
