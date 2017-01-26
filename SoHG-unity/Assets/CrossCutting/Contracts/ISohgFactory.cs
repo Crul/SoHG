@@ -21,6 +21,7 @@ namespace Sohg.CrossCutting.Contracts
         void CreateSociety(ISpecies species, params ICell[] cells);
         ISocietyActionButton CreateSocietyActionButton(ISocietyAction action, ISocietyInfo societyInfo);
         ISocietyEffectIcon CreateSocietyEffectIcon(ISocietyAction action, ISocietyInfo societyInfo);
+        void CreateSocietySkillDiscovery(ISkill skill, ISociety society);
         ISocietySkillIcon CreateSocietySkillIcon(ISkill skill, ISocietyInfo societyInfo);
         ITechnologyCategoryColumn CreateTechnologyCategoryColumn(ITechnologyCategory technologyCategory,
             ITechnologyStatesSetter technologyStatesSetter, GameObject technologyPanel);

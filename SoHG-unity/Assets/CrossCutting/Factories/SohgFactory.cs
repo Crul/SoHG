@@ -102,6 +102,12 @@ namespace Sohg.CrossCutting.Factories
             return effectIcon;
         }
 
+        public void CreateSocietySkillDiscovery(ISkill skill, ISociety society)
+        {
+            var skillDiscovery = prefabFactory.InstantiateSocietySkillDiscovery(boardOverCanvas, "SocietySkillDiscovery"); // TODO SocietySkillDiscovery name
+            skillDiscovery.Initialize(game, skill, society);
+        }
+
         public ISocietySkillIcon CreateSocietySkillIcon(ISkill skill, ISocietyInfo societyInfo)
         {
             var skillIcon = prefabFactory.InstantiateSocietySkillIcon(societyInfo.SkillsPanel, "SocietySkillIcon"); // TODO SocietySkillIcon name

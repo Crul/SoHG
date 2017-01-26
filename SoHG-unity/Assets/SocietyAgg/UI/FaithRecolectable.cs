@@ -52,7 +52,6 @@ namespace Sohg.SocietyAgg.UI
             this.faithAmount = faithAmount;
             transform.position = faithCell.WorldPosition;
             shrinkable.Initialize(society.State.FaithShrinkingRateBonus);
-            shrinkable.SetScale(1);
             state = FaithRecolectableState.Initialized;
         }
 

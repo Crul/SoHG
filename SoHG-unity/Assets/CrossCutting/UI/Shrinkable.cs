@@ -13,14 +13,19 @@ namespace Sohg.CrossCutting.UI
         [Range(0, 1)]
         private float shrinkingLimit;
 
+        [SerializeField]
+        [Range(1, 10)]
+        private float deshrinkingLimit;
+
         private float shrinkingRate;
         private float deShrinkingRate;
         private Action<float> onChangeFn;
         
-        public void Initialize(float shrinkingRateBonus)
+        public void Initialize(float shrinkingRateBonus = 0)
         {
             shrinkingRate = shrinkingBaseRate + ((1 - shrinkingBaseRate) * shrinkingRateBonus);
             deShrinkingRate = (float)Math.Pow(shrinkingRate, 3);
+            SetScale(1);
         }
 
         public void OnChange(Action<float> onChangeFn)
@@ -31,7 +36,11 @@ namespace Sohg.CrossCutting.UI
         public void SetScale(float newScale)
         {
             transform.localScale = new Vector3(newScale, newScale, 1);
-            onChangeFn(newScale);
+
+            if (onChangeFn != null)
+            {
+                onChangeFn(newScale);
+            }
         }
 
         public bool UpdateShrinking()
@@ -49,7 +58,7 @@ namespace Sohg.CrossCutting.UI
         public bool UpdateDeshrinking()
         {
             var biggerScale = (transform.localScale.x / deShrinkingRate);
-            var shouldIDeshrink = (biggerScale < 1);
+            var shouldIDeshrink = (biggerScale < deshrinkingLimit);
             if (shouldIDeshrink)
             {
                 SetScale(biggerScale);
